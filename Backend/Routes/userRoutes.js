@@ -4,7 +4,7 @@ const UserController = require("../Controller/UserController");
 const DietController = require("../Controller/CalorieController.js/DietController");
 const CalorieTrackerController = require("../Controller/CalorieTrackerController");
 const { protectingRoutes } = require("../Controller/AuthController");
-
+const RequestController = require("../Controller/RequestController");
 router.get(
   "/trackedrecords",
   protectingRoutes,
@@ -42,4 +42,9 @@ router
   .route("/caloriecalculator/savedetail")
   .post(protectingRoutes, DietController.saveUserDetails);
 
+router.post(
+  "/request/:trainerID",
+  protectingRoutes,
+  RequestController.createRequest
+);
 module.exports = router;

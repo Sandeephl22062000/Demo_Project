@@ -35,7 +35,7 @@ const UserInput = () => {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user.token);
   const prorData = useSelector((state) => state?.food?.priorUserDetails);
-  console.log("prorData", prorData.data);
+  console.log("prorData", prorData?.data);
   const isLoading = useSelector((state) => state.food.loading);
   console.log(isLoading);
   console.log(!isLoading && prorData);

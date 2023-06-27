@@ -52,7 +52,6 @@ const SearchInput = () => {
       setLoading(false);
       setTotalPage(data.totalPages);
       setSearchResult(data.data);
-      setSearchResult(data.data);
     } catch (error) {
       throw new Error(error);
     }
@@ -121,8 +120,10 @@ const SearchInput = () => {
               onChange={handleInputChange}
             />
             <Button
-              onClick={submithandler}
-              color="primary"
+              sx={{ background: "black", color: "white" }}
+              onClick={(e) => {
+                submithandler(e);
+              }}
               variant="contained"
               type="submit"
             >

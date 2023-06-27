@@ -10,17 +10,35 @@ const initialTrainer = {
 export const loginTrainer = createAsyncThunk(
   "/trainer/loginTrainer",
   async ({ email, password }) => {
-    const postData = await axios.post(
-      "http://localhost:8000/api/users/login",
-      {
-        email,
-        password,
-      }
-    );
+    const postData = await axios.post("http://localhost:8000/api/users/login", {
+      email,
+      password,
+    });
     localStorage.setItem("TrainerInfo", JSON.stringify(postData.data));
     return postData.data;
   }
 );
+
+export const requestTrainer = createAsyncThunk(
+  "/trainer/requestTrainer",
+  async (data) => {
+    const { trainer, message, token } = data;
+    const postData = await axios.post(
+      `http://localhost:8000/api/users/request/${trainer}`,
+      {
+        message,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return postData.data;
+  }
+);
+
 export const TrainerById = createAsyncThunk(
   "/trainer/trainerDetail",
   async (id) => {
@@ -62,6 +80,18 @@ const trainerSlice = createSlice({
         state.trainer = action.payload;
       })
       .addCase(TrainerById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(requestTrainer.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(requestTrainer.fulfilled, (state, action) => {
+        state.loading = false;
+        state.trainer = action.payload;
+      })
+      .addCase(requestTrainer.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });

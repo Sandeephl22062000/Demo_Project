@@ -1,35 +1,60 @@
+import {
+  Avatar,
+  Box,
+  Card,
+  CardContent,
+  CardHeader,
+  CardMedia,
+  Container,
+  Typography,
+} from "@mui/material";
 import React from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { UserByID } from "../../store/user";
 
 const PRofilePostCard = (props) => {
+  const user = useSelector((state) => state?.user?.FindUserByID);
+  const dispatch = useDispatch();
+  const params = useParams();
+  const id = params.id;
+
+  useEffect(() => {
+    dispatch(UserByID(id));
+  }, []);
+
   return (
-    <Card sx={{ width: "20rem" }}>
-    
-      {console.log(props.post)}
-      <CardHeader
-        avatar={
-          <Avatar
-            src={user?.data?.photo}
-            sx={{ bgcolor: red[500] }}
-            aria-label="recipe"
-          >
-            R
-          </Avatar>
-        }
-        title={user?.data?.name}
-        subheader={new Date(props.post.createdAt).toLocaleString()}
-      />
-      <CardMedia
-        component="img"
-        height="194"
-        image={props.post.image}
-        alt="Paella dish"
-      />
-      <CardContent>
-        <Typography variant="body2" color="text.secondary">
-          {props.post.caption}
-        </Typography>
-      </CardContent>
-    </Card>
+    <Box sx={{ display: "flex", justifyContent: "center", flexWrap: "wrap" }}>
+      {user?.posts?.map((post) => (
+        <Card sx={{ width: "19.5rem", margin: "0.5rem" }}>
+          <CardHeader
+            avatar={
+              <Avatar
+                src={user?.photo}
+                sx={{ bgcolor: "red" }}
+                aria-label="recipe"
+              >
+                R
+              </Avatar>
+            }
+            title={user?.name}
+            subheader={new Date(post?.createdAt).toLocaleString()}
+          />
+          <CardMedia
+            component="img"
+            height="250"
+            image={post?.image}
+            alt="Paella dish"
+          />
+          <CardContent>
+            <Typography variant="body2" color="text.secondary">
+              {post?.caption}
+            </Typography>
+          </CardContent>
+        </Card>
+      ))}
+    </Box>
   );
 };
 
