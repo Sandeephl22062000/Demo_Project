@@ -10,17 +10,14 @@ import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { red } from "@mui/material/colors";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+
 import { useDispatch, useSelector } from "react-redux";
 import { postByID } from "../../store/post";
 import { useEffect } from "react";
-import { UserByID } from "../../store/user";
+
 import ZoomPost from "../Posts";
-import { Box, Zoom } from "@mui/material";
-import { useState } from "react";
+import { Box } from "@mui/material";
+
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
@@ -34,8 +31,8 @@ const ExpandMore = styled((props) => {
 
 export default function RecipeReviewCard(props) {
   const [expanded, setExpanded] = React.useState(false);
-  const [showPost, setShowPost] = useState(false);
-  const [selectedPost, setSelectedPost] = useState("");
+  const [showPost, setShowPost] = React.useState(false);
+  const [selectedPost, setSelectedPost] = React.useState("");
   const dispatch = useDispatch();
   const posts = props.post;
   console.log(posts);
@@ -53,7 +50,7 @@ export default function RecipeReviewCard(props) {
   return (
     <>
       {!showPost ? (
-        posts.map((post) => (
+        posts?.map((post) => (
           <Box
             key={post.id}
             sx={{

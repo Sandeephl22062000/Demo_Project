@@ -8,9 +8,9 @@ router.route("/approverequest").post(TrainerController.approveRequest);
 router.route("/trainertoapprove").get(TrainerController.TrainerToApprove);
 
 // router.route("/login").post(TrainerController.loginRegister);
-router.route("/:trainer").get(TrainerController.getAlltrainer);
-router.route("/").get(TrainerController.getTrainers);
 router.route("/trainerDetail/:id").get(TrainerController.getTrainerById);
+router.route("/:trainer/:page").get(TrainerController.getAlltrainer);
+router.route("/:page").get(TrainerController.getTrainers);
 // router.route("/updatePassword").post(UserController.updatePassword);
 
 module.exports = router;

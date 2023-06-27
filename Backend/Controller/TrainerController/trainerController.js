@@ -27,14 +27,24 @@ const getAlltrainer = async (req, res, next) => {
         ],
       }
     : {};
+
+  const page = parseInt(req.params.page) || 1;
+  const limit = parseInt(req.query.limit) || 2;
+  const skip = (page - 1) * limit;
+
   const users = await User.find(keyword);
   console.log(users);
   const trainers = users.filter((user) => user.role === 1);
   console.log(trainers);
-  if (trainers) {
+  const paginatedTrainers = trainers.slice(skip, skip + limit);
+  const totalPages = Math.ceil(trainers.length / limit);
+  console.log("gbdrtgbrtgbr", totalPages);
+  if (paginatedTrainers) {
     res.json({
-      message: "Successfully register",
-      data: trainers,
+      message: "Successfully registered",
+      data: paginatedTrainers,
+      totalPages: totalPages,
+      currentPage: page,
     });
   } else {
     return next(new AppError("Something went wrong", 500));
@@ -42,12 +52,21 @@ const getAlltrainer = async (req, res, next) => {
 };
 
 const getTrainers = async (req, res, next) => {
-  const trainers = await User.find({ role: 1 });
+  console.log("pagees", req.params);
+  const page = parseInt(req.params.page) || 1; // Current page number
+  const limit = parseInt(req.query.limit) || 2; // Number of trainers per page
+  const count = await User.countDocuments({ role: 1 }); // Total number of trainers
 
+  const trainers = await User.find({ role: 1 })
+    .skip((page - 1) * limit)
+    .limit(limit);
+  console.log("dsfbgtv ", trainers);
   if (trainers) {
     res.json({
-      message: "Successfully register",
+      message: "Successfully registered",
       data: trainers,
+      currentPage: page,
+      totalPages: Math.ceil(count / limit),
     });
   } else {
     return next(new AppError("Something went wrong", 500));

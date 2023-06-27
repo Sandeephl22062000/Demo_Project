@@ -3,7 +3,15 @@ import axios from "axios";
 // import UserListItem from "../miscelleneous/UserListItem";
 // import LoadingSkeleton from "../miscelleneous/LoadingSpinner";
 
-import { Box, Button, Container, InputBase, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  InputBase,
+  Pagination,
+  Stack,
+  Typography,
+} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
@@ -22,6 +30,9 @@ import { Link, useNavigate } from "react-router-dom";
 const SearchInput = () => {
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
+  const [page, setPage] = useState(1);
+  const [TotalPage, setTotalPage] = useState(1);
+
   const [trainer, setTrainer] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingtrainer, setloadingTrainer] = useState(false);
@@ -34,10 +45,13 @@ const SearchInput = () => {
         return;
       }
       const { data } = await axios.get(
-        `http://localhost:8000/api/trainer/${search}`
+        `http://localhost:8000/api/trainer/${search}/${page}`
       );
-      console.log(data.data);
+      console.log(data);
+      console.log(data.totalPages);
       setLoading(false);
+      setTotalPage(data.totalPages);
+      setSearchResult(data.data);
       setSearchResult(data.data);
     } catch (error) {
       throw new Error(error);
@@ -45,15 +59,19 @@ const SearchInput = () => {
   };
   console.log(searchResult);
   const getTrainerDetail = async () => {
-    const { data } = await axios.get(`http://localhost:8000/api/trainer`);
-    console.log(data.data);
-    setSearchResult(data.data);
+    const { data } = await axios.get(
+      `http://localhost:8000/api/trainer/${page}`
+    );
   };
 
   useEffect(() => {
-    getTrainerDetail();
-  }, []);
-
+    // getTrainerDetail();
+    submithandler();
+  }, [page]);
+  const handlePageChange = (event, page) => {
+    setPage(page);
+  };
+  console.log(page);
   const style = {
     position: "absolute",
     top: "50%",
@@ -175,6 +193,13 @@ const SearchInput = () => {
           </Box>
         </Box>
       </form>
+      <Stack spacing={2}>
+        <Pagination
+          count={TotalPage}
+          color="primary"
+          onChange={handlePageChange}
+        />
+      </Stack>
     </Container>
   );
 };

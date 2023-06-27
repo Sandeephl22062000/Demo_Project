@@ -9,7 +9,13 @@ const initialChallenge = {
 export const createChallenges = createAsyncThunk(
   "/challenge/createChallenge",
   async (data) => {
-    const { challengeName, challengeDescription, receiver, token } = data;
+    const {
+      challengeName,
+      challengeRules,
+      challengeDescription,
+      receiver,
+      token,
+    } = data;
     try {
       const postData = await axios.post(
         `http://localhost:8000/api/challenges/`,
@@ -17,6 +23,7 @@ export const createChallenges = createAsyncThunk(
           receiver,
           challengeName,
           challengeDescription,
+          challengeRules,
         },
         {
           headers: {

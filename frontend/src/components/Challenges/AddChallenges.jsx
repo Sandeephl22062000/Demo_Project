@@ -10,6 +10,7 @@ import {
   ListItemIcon,
   TextField,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { searchUserKeyword } from "../../store/user";
@@ -18,36 +19,47 @@ import { createChallenges } from "../../store/challenges";
 
 const AddChallenges = (props) => {
   const [search, setSearch] = useState("");
-  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [challengeRules, setChallengeRules] = useState("");
   const [receiver, setReceiver] = useState({});
   const [challengeName, setChallengeName] = useState("");
   const [challengeDescription, setChallengeDescription] = useState("");
   const token = useSelector((state) => state?.user?.token);
   const dispatch = useDispatch();
-  const handleOptionClick = (user, id) => {
-    setReceiver(user);
-    setSelectedUser(user);
-  };
-  console.log("user", receiver);
-  const users = useSelector((state) => state?.user?.SearchUserResult);
-
   const renderOption = (option) =>
     users?.map((user) => (
       <Box
         sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}
-        onClick={() => handleOptionClick(user)}
+        onClick={() => {
+          if (
+            !selectedUsers.find((selectedUser) => selectedUser._id === user._id)
+          ) {
+            setSelectedUsers((prevUsers) => [...prevUsers, user]);
+          }
+        }}
       >
         <Avatar src={user.photo} alt={user.name} />
         <span>{user.name}</span>
       </Box>
     ));
 
+  console.log("user", receiver);
+  const users = useSelector((state) => state?.user?.SearchUserResult);
+
+  const handleOptionClick = (event, user) => {
+    event.stopPropagation();
+    if (!selectedUsers.find((selectedUser) => selectedUser._id === user._id)) {
+      setSelectedUsers((prevUsers) => [...prevUsers, user]);
+    }
+  };
+
   const creatChallengeHandler = () => {
     dispatch(
       createChallenges({
-        receiver: receiver._id,
+        receiver: selectedUsers,
         challengeName,
         challengeDescription,
+        challengeRules,
         token,
       })
     );
@@ -79,6 +91,7 @@ const AddChallenges = (props) => {
               sx={{ width: "60%", margin: "12px" }}
               options={users || []}
               getOptionLabel={(option) => option.name}
+              onClick={(event, user) => handleOptionClick(event, user)}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -92,20 +105,44 @@ const AddChallenges = (props) => {
             />
           </Box>
           <List>
-            <ListItem disablePadding>
-              <ListItemButton>
-                {selectedUser && (
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <Avatar
-                      src={selectedUser.photo}
-                      alt={selectedUser.name}
-                      sx={{ marginRight: "8px" }}
-                    />
-                    <span>{selectedUser.name}</span>
-                  </Box>
-                )}
-              </ListItemButton>
-            </ListItem>
+            {selectedUsers.map((selectedUser) => (
+              <ListItem
+                disablePadding
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexWrap: "wrap",
+                }}
+              >
+                <Box
+                  key={selectedUser._id}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginRight: "16px",
+                    marginBottom: "8px",
+                  }}
+                >
+                  <Avatar
+                    src={selectedUser.photo}
+                    alt={selectedUser.name}
+                    sx={{ marginRight: "8px" }}
+                  />
+                  <span>{selectedUser.name}</span>
+                </Box>
+                <Button
+                  onClick={() => {
+                    setSelectedUsers((prevUsers) =>
+                      prevUsers.filter((user) => user._id !== selectedUser._id)
+                    );
+                  }}
+                >
+                  <CloseIcon />
+                </Button>
+              </ListItem>
+            ))}
           </List>
 
           <Box sx={{ display: "flex", justifyContent: "center" }}>
@@ -146,7 +183,17 @@ const AddChallenges = (props) => {
             }}
             sx={{ marginBottom: "16px" }}
           />
-
+          <TextField
+            label="Challenge Rules"
+            name="challengeRules"
+            variant="outlined"
+            fullWidth
+            value={challengeRules}
+            onChange={(e) => {
+              setChallengeRules(e.target.value);
+            }}
+            sx={{ marginBottom: "16px" }}
+          />
           <Button
             type="submit"
             sx={{

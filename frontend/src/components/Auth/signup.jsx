@@ -15,7 +15,7 @@ import { useToasts } from "react-toast-notifications";
 import profileImage from "../../images/Profile.png";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import GoogleIcon from "../../images/Google__G__Logo.svg.webp";
 const Signup = () => {
   const [images, setImages] = useState("");
   const [role, setRole] = useState("");
@@ -126,16 +126,6 @@ const Signup = () => {
           gap: "16px",
         }}
       >
-        {/* <div
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            gap: "16px",
-            marginBottom: "16px",
-          }}
-        >
-          <Button onClick={TrainerHandler}>Trainer</Button>
-        </div> */}
         <form
           onSubmit={formik.handleSubmit}
           autoComplete="off"
@@ -258,7 +248,35 @@ const Signup = () => {
             </Button>
           </Box>
         </form>
-        <Button onClick={() => login()}>Register with google</Button>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            height: "5rem",
+            width: "100%",
+            marginBottom: "5rem",
+          }}
+        >
+          <Typography sx={{ marginBottom: "10px" }}>OR</Typography>
+          <Button
+            sx={{
+              width: "70%",
+              border: "1px solid black",
+              display: "flex",
+              justifyContent: "center",
+              margin: "10px",
+            }}
+            onClick={() => login()}
+          >
+            <img
+              src={GoogleIcon}
+              style={{ height: "20px", width: "20px", margin: "5px" }}
+            />
+            Signup with Google
+          </Button>
+        </Box>
       </Container>
     </>
   );

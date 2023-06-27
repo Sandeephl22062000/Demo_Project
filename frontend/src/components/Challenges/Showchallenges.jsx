@@ -9,11 +9,13 @@ import {
   CardContent,
   Button,
   CardActions,
+  IconButton,
 } from "@mui/material";
 import DoubleArrowIcon from "@mui/icons-material/DoubleArrow";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { showAllChallenges } from "../../store/challenges";
+import { AspectRatio, CardOverflow } from "@mui/joy";
 
 const CirclePhotoGrid = () => {
   const token = useSelector((state) => state.user.token);
@@ -109,6 +111,7 @@ const CirclePhotoGrid = () => {
               </Box>
             </Card>
 
+          
             {/* <Typography></Typography>
           <h1></h1>
           <Box
