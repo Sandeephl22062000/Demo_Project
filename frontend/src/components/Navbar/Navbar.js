@@ -32,7 +32,6 @@ function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [anchorElRegister, setAnchorElRegister] = React.useState(null);
-  const [anchorElLogin, setAnchorElLogin] = React.useState(null);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -40,34 +39,23 @@ function ResponsiveAppBar() {
   const handleClickRegister = (event) => {
     setAnchorElRegister(event.currentTarget);
   };
-
-  const handleClickLogin = (event) => {
-    setAnchorElLogin(event.currentTarget);
-  };
   const handleUserSign = () => {
     navigate("/signup");
     setAnchorElRegister(null);
   };
-
   const handleTrainerSignup = () => {
     navigate("/trainersignup");
     setAnchorElRegister(null);
   };
-
   const handleUserLogin = () => {
     navigate("/login");
-    setAnchorElLogin(null);
+    setAnchorElUser(null);
   };
 
-  const handleTrainerLogin = () => {
-    navigate("/trainerlogin");
-    setAnchorElLogin(null);
-  };
-
-  const user = useSelector((state) => state.user.user);
-  console.log(user);
-  const token = useSelector((state) => state.user.token);
+  const token = useSelector((state) => state?.user?.token);
   console.log(token);
+
+  React.useEffect(() => {}, [token]);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -248,25 +236,11 @@ function ResponsiveAppBar() {
                 aria-controls={open ? "login-menu" : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? "true" : undefined}
-                onClick={handleClickLogin}
+                onClick={handleUserLogin}
                 sx={{ color: "white" }}
               >
                 Login
               </Button>
-              <Menu
-                id="basic-menu"
-                anchorEl={anchorElLogin}
-                open={Boolean(anchorElLogin)}
-                onClose={() => {
-                  setAnchorElLogin(null);
-                }}
-                MenuListProps={{
-                  "aria-labelledby": "login-button",
-                }}
-              >
-                <MenuItem onClick={handleUserLogin}>User</MenuItem>
-                <MenuItem onClick={handleTrainerLogin}>Trainer</MenuItem>
-              </Menu>
             </div>
           )}
         </Toolbar>

@@ -9,7 +9,7 @@ import {
 import storage from "../../utils/firebase";
 import React, { useState } from "react";
 import validationSchema from "../schema/schema";
-import { Box, Button, Container, TextField, Typography } from "@mui/material";
+import { Avatar, Box, Button, Container, TextField, Typography } from "@mui/material";
 import client from "../../features/client";
 import { useToasts } from "react-toast-notifications";
 import profileImage from "../../images/Profile.png";
@@ -115,7 +115,9 @@ const Signup = () => {
   });
   return (
     <>
-      <h3 style={{ textAlign: "center", marginTop: "50px" }}>REGISTER</h3>
+      <h3 style={{ textAlign: "center", marginTop: "50px" }}>
+        REGISTER AS USER
+      </h3>
       <Container
         sx={{
           display: "flex",
@@ -132,35 +134,27 @@ const Signup = () => {
           style={{ padding: "10px" }}
         >
           {!images ? (
-            <Box
+            <Avatar
+              src={profileImage}
+              alt="Preview"
               sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
                 width: "200px",
                 height: "200px",
-                borderRadius: "50%",
-                overflow: "hidden",
                 margin: "auto",
+                fontSize: "3.75rem",
               }}
-            >
-              <img src={profileImage} alt="Preview" style={{ width: "100%" }} />
-            </Box>
+            />
           ) : (
-            <Box
+            <Avatar
+              src={images}
+              alt="Preview"
               sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
                 width: "200px",
                 height: "200px",
-                borderRadius: "50%",
-                overflow: "hidden",
                 margin: "auto",
+                fontSize: "3.75rem",
               }}
-            >
-              <img src={images} alt="Preview" style={{ width: "100%" }} />
-            </Box>
+            />
           )}
           <TextField
             required

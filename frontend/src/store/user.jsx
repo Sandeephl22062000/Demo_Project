@@ -3,6 +3,7 @@ import client from "../features/client";
 import axios from "axios";
 import { useToasts } from "react-toast-notifications";
 const initialUser = {
+  token: "",
   userInfo: null,
   userInfoById: null,
   ApprovedTrainer: null,
@@ -25,6 +26,7 @@ export const loginUser = createAsyncThunk(
         }
       );
       const { token } = data;
+      console.log(data.data);
       localStorage.setItem("id", data.data);
       console.log(token);
       localStorage.setItem("token", token);
@@ -109,7 +111,7 @@ export const getAcceptedNoatifcation = createAsyncThunk(
         },
       }
     );
-    console.log("sasasasasasasa",getData?.data);
+    console.log("sasasasasasasa", getData?.data);
     return getData?.data?.request;
   }
 );
@@ -196,6 +198,7 @@ const userSlice = createSlice({
     logout: (state) => {
       state.token = null;
       localStorage.removeItem("token");
+      localStorage.removeItem("id");
     },
   },
   extraReducers: (builder) => {
@@ -206,7 +209,7 @@ const userSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
+        state.token = action.payload;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;

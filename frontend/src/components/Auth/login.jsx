@@ -3,13 +3,13 @@ import * as Yup from "yup";
 import React from "react";
 import validationSchema from "../schema/schema";
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
+import GoogleIcon from "../../images/Google__G__Logo.svg.webp";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { UserByID, loginUser } from "../../store/user";
 import { useToasts } from "react-toast-notifications";
 import { useGoogleLogin } from "@react-oauth/google";
-import GoogleIcon from "@mui/icons-material/Google";
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -38,7 +38,7 @@ const Login = () => {
       );
 
       console.log("vnsrsrdvbk");
-      dispatch(UserByID(localStorage.getItem("id")));
+      // dispatch(UserByID());
     },
   });
 
@@ -126,27 +126,35 @@ const Login = () => {
             </Box>
           </Box>{" "}
         </form>
-        <h4 style={{ marginLeft: "20px" }}>or</h4>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => login()}
+        <Box
           sx={{
-            color: "white",
-            backgroundColor: "red",
-            width: "85%",
-            height: "50px",
-            fontSize: "19px",
-            marginLeft: "20px",
+            display: "flex",
             justifyContent: "center",
-            "&:hover": {
-              backgroundColor: "red",
-            },
+            alignItems: "center",
+            flexDirection: "column",
+            height: "5rem",
+            width: "100%",
+            marginBottom: "5rem",
           }}
-          startIcon={<GoogleIcon />} // Replace with your Google icon
         >
-          Login with Google
-        </Button>
+          <Typography sx={{ marginBottom: "10px" }}>OR</Typography>
+          <Button
+            sx={{
+              width: "70%",
+              border: "1px solid black",
+              display: "flex",
+              justifyContent: "center",
+              margin: "10px",
+            }}
+            onClick={() => login()}
+          >
+            <img
+              src={GoogleIcon}
+              style={{ height: "20px", width: "20px", margin: "5px" }}
+            />
+            Login with Google
+          </Button>
+        </Box>
       </Container>
     </>
   );

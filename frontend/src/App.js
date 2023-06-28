@@ -13,7 +13,7 @@ import Signup from "./components/Auth/signup";
 import UserInput from "./components/Food/userInput";
 import Login from "./components/Auth/login";
 import CalorieDetail from "./components/Food/pageEdited";
-import Trainerlogin from "./components/Auth/trainerLogin";
+
 import TrainerSigup from "./components/Auth/trainerSignup";
 import Inbox from "./components/Chat/chat.jsx";
 import ClientsExperince from "./ClientsExperince";
@@ -39,7 +39,6 @@ const App = () => {
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/trainersignup" element={<TrainerSigup />} />
-              <Route path="/trainerlogin" element={<Trainerlogin />} />
 
               <Route path="/food" element={<UserInput />} />
               <Route

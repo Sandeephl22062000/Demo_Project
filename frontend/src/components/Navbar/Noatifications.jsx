@@ -14,6 +14,7 @@ import {
   ListSubheader,
   ListItemAvatar,
   ListItemButton,
+  Button,
 } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 
@@ -28,13 +29,9 @@ import {
 export default function NotificationsPopover() {
   const [notifications, setNotifications] = useState([]);
   const Request = useSelector((state) => state?.user?.GetAcceptedNoatifcation);
+  const dispatch = useDispatch();
+  const userInfo = useSelector((state) => state?.user?.FindUserByID);
   console.log(Request);
-
-  // console.log("acceptedRequest", acceptedRequest);
-
-  // const totalUnRead = notifications.filter(
-  //   (item) => item.is_read === false
-  // ).length;
 
   const [open, setOpen] = useState(null);
   const token = useSelector((state) => state?.user?.token);
@@ -48,21 +45,22 @@ export default function NotificationsPopover() {
     setOpen(null);
   };
 
-  const user = ((state) => state?.user?.getUserByID);
-  console.log(user);
-  const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(UserByID(localStorage.getItem("id")))
+    dispatch(UserByID(localStorage.getItem("id")));
+
     dispatch(getAcceptedNoatifcation({ token }));
   }, []);
+
   useEffect(() => {
     setNotifications(Request);
   }, [Request]);
+
   console.log(notifications);
-  const unReadMessage = Request?.filter((item) => item.isRead === false);
-  const ReadMessage = Request?.filter((item) => item.isRead === true);
+  const unReadMessage = notifications?.filter((item) => item.isRead === false);
+  const ReadMessage = notifications?.filter((item) => item.isRead === true);
 
   console.log(unReadMessage?.length);
+
   return (
     <>
       <IconButton
@@ -96,36 +94,29 @@ export default function NotificationsPopover() {
               You have {unReadMessage?.length} unread messages
             </Typography>
           </Box>
-
-          {/* {totalUnRead > 0 && (
-            <Tooltip title=" Mark all as read">
-              <IconButton color="primary" onClick={handleMarkAllAsRead}>
-                <NotificationsIcon />
-              </IconButton>
-            </Tooltip>
-          )} */}
         </Box>
 
         <Divider sx={{ borderStyle: "dashed" }} />
 
-        {unReadMessage?.map((notification) => (
-          <List
-            disablePadding
-            subheader={
-              <ListSubheader
-                disableSticky
-                sx={{ py: 1, px: 2.5, typography: "overline" }}
-              >
-                UnRead
-              </ListSubheader>
-            }
-          >
+        <List
+          disablePadding
+          subheader={
+            <ListSubheader
+              disableSticky
+              sx={{ py: 1, px: 2.5, typography: "overline" }}
+            >
+              UnRead
+            </ListSubheader>
+          }
+        >
+          {unReadMessage?.map((notification) => (
             <NotificationItem
               key={notification.id}
               notification={notification}
+              userRole={userInfo?.role}
             />
-          </List>
-        ))}
+          ))}
+        </List>
 
         <List
           disablePadding
@@ -142,6 +133,7 @@ export default function NotificationsPopover() {
             <NotificationItem
               key={notification.id}
               notification={notification}
+              userRole={userInfo?.role}
             />
           ))}
         </List>
@@ -152,8 +144,8 @@ export default function NotificationsPopover() {
   );
 }
 
-function NotificationItem({ notification }) {
-  const { avatar, title } = renderContent(notification);
+function NotificationItem({ notification, userRole }) {
+  const { avatar, title } = renderContent(notification, userRole);
   const createdDate = new Date(notification?.createdAt).toLocaleString();
   console.log(notification, "Notificatoin");
   return (
@@ -167,14 +159,25 @@ function NotificationItem({ notification }) {
         }),
       }}
     >
-      <ListItemAvatar>
-        <Avatar
-          src={notification?.trainer?.photo}
-          sx={{ bgcolor: "background.neutral" }}
-        >
-          {avatar}
-        </Avatar>
-      </ListItemAvatar>
+      {userRole === 0 ? (
+        <ListItemAvatar>
+          <Avatar
+            src={notification?.trainer?.photo}
+            sx={{ bgcolor: "background.neutral" }}
+          >
+            {avatar}
+          </Avatar>
+        </ListItemAvatar>
+      ) : (
+        <ListItemAvatar>
+          <Avatar
+            src={notification?.user?.photo}
+            sx={{ bgcolor: "background.neutral" }}
+          >
+            {avatar}
+          </Avatar>
+        </ListItemAvatar>
+      )}
       <ListItemText
         primary={title}
         secondary={
@@ -196,31 +199,51 @@ function NotificationItem({ notification }) {
   );
 }
 
-// ----------------------------------------------------------------------
-
-function renderContent(notification) {
-  const title = (
-    <Typography variant="subtitle2">
-      {notification?.trainer?.name}
-      {notification?.isAccepted ? (
+function renderContent(notification, userRole) {
+  let title;
+  if (userRole === 0) {
+    title = (
+      <Typography variant="subtitle2">
+        {notification?.trainer?.name}
+        {notification?.isAccepted ? (
+          <Typography
+            component="span"
+            variant="body2"
+            sx={{ color: "text.secondary" }}
+          >
+            &nbsp; has accepted your request
+          </Typography>
+        ) : (
+          <Typography
+            component="span"
+            variant="body2"
+            sx={{ color: "text.secondary" }}
+          >
+            &nbsp; has rejected your request
+          </Typography>
+        )}
+      </Typography>
+    );
+  } else if (userRole === 1) {
+    title = (
+      <Typography variant="subtitle2">
+        {notification?.user?.name}
         <Typography
           component="span"
           variant="body2"
           sx={{ color: "text.secondary" }}
         >
-          &nbsp; has accepted your request
+          &nbsp; has requested training from you
+          <Box>
+            <Button sx={{ background: "green", color: "white", margin: "5px" }}>
+              Accept
+            </Button>
+            <Button sx={{ background: "red", color: "white" }}>Reject</Button>
+          </Box>
         </Typography>
-      ) : (
-        <Typography
-          component="span"
-          variant="body2"
-          sx={{ color: "text.secondary" }}
-        >
-          &nbsp; has rejected your request
-        </Typography>
-      )}
-    </Typography>
-  );
+      </Typography>
+    );
+  }
   return {
     avatar: notification.avatar ? <NotificationsIcon /> : null,
     title,

@@ -3,6 +3,7 @@ import client from "../features/client";
 import axios from "axios";
 
 const initialTrainer = {
+  trainer: null,
   trainerInfo: null,
   trainerInfoById: null,
   getRequestWithTrainerId: null,
@@ -17,6 +18,42 @@ export const loginTrainer = createAsyncThunk(
     });
     localStorage.setItem("TrainerInfo", JSON.stringify(postData.data));
     return postData.data;
+  }
+);
+
+export const RegisterTrainer = createAsyncThunk(
+  "/trainer/loginTrainer",
+  async ({
+    email,
+    password,
+    name,
+    photo,
+    role,
+    specialization,
+    experiences,
+    addToast,
+    navigate,
+  }) => {
+    const { data } = await axios.post(
+      "http://localhost:8000/api/users/register",
+      {
+        name,
+        email,
+        password,
+        photo,
+        role,
+        specialization,
+        experiences,
+      }
+    );
+    console.log(data.data);
+    addToast(data.message, {
+      appearance: "success",
+      autoDismiss: true,
+      autoDismissTimeout: 3000,
+    });
+    // navigate("/login");
+    return data.data;
   }
 );
 
@@ -61,7 +98,7 @@ export const getRequestOfTrainer = createAsyncThunk(
 
 export const TrainerById = createAsyncThunk(
   "/trainer/trainerDetail",
-  async (id,token) => {
+  async (id, token) => {
     const postData = await axios.get(
       `http://localhost:8000/api/trainer/trainerDetail/${id}`
     );
@@ -79,6 +116,18 @@ const trainerSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(RegisterTrainer.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(RegisterTrainer.fulfilled, (state, action) => {
+        state.loading = false;
+        state.trainer = action.payload;
+      })
+      .addCase(RegisterTrainer.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
       .addCase(loginTrainer.pending, (state) => {
         state.loading = true;
         state.error = null;

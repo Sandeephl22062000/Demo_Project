@@ -138,6 +138,7 @@ const updateuserDetail = async (req, res, next) => {
 };
 const getUserById = async (req, res, next) => {
   const user = await User.findById(req.params.id).populate("posts");
+  console.log(user);
   res.status(201).json({
     message: "Succes",
     data: user,

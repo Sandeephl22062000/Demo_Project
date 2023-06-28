@@ -5,23 +5,39 @@ import CardContent from "@mui/joy/CardContent";
 import CardOverflow from "@mui/joy/CardOverflow";
 import Typography from "@mui/joy/Typography";
 import Box from "@mui/material/Box";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import { Button, Container, Pagination, Stack } from "@mui/material";
+import {
+  Button,
+  Container,
+  Pagination,
+  Stack,
+  Modal,
+  Backdrop,
+} from "@mui/material";
+import { Link, useParams } from "react-router-dom";
+import YouTube from "react-youtube";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
 
 const ExerciseVideo = () => {
   const [Videos, setVideos] = useState([]);
-  const navigate = useNavigate();
+  const [selectedVideo, setSelectedVideo] = useState(null);
   const params = useParams();
   const [page, setPage] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handlePageChange = (event, value) => {
     setPage(value);
   };
+
+  const handleVideoClick = (video) => {
+    setSelectedVideo(video);
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setSelectedVideo(null);
+    setIsModalOpen(false);
+  };
+
   const muscles = params.muscle;
   const exerciseName = params.exercise;
 
@@ -30,6 +46,7 @@ const ExerciseVideo = () => {
       console.log(params);
       const maxResults = 22;
       const apiKey = "AIzaSyD53f8EOZksI3yzYqusT85aaAFX5Gleec0";
+
       const { data } = await axios.get(
         `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${exerciseName} ${muscles} workout tutorial&type=video&maxResults=${maxResults}&key=${apiKey}`
       );
@@ -46,36 +63,6 @@ const ExerciseVideo = () => {
 
   return (
     <Container>
-      {/* <FormControl
-        sx={{
-          display: "flex",
-          width: "50%",
-          my: 10,
-        }}
-      > */}
-        {/* <InputLabel id="demo-simple-select-label">Muscle</InputLabel> */}
-        {/* <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={muscles}
-          label="muscles"
-          onChange={(e) => setMuscle(e.target.value)}
-        >
-          <MenuItem value="biceps">Biceps</MenuItem>
-          <MenuItem value="calves">Calves</MenuItem>
-          <MenuItem value="chest">Chest</MenuItem>
-          <MenuItem value="forearms">Forearms</MenuItem>
-          <MenuItem value="glutes">Glutes</MenuItem>
-          <MenuItem value="hamstrings">Hamstrings</MenuItem>
-          <MenuItem value="lats">Lats</MenuItem>
-          <MenuItem value="lower_back">Lower_back</MenuItem>
-          <MenuItem value="middle_back">Middle_back</MenuItem>
-          <MenuItem value="neck">Neck</MenuItem>
-          <MenuItem value="quadriceps">Quadriceps</MenuItem>
-          <MenuItem value="traps">Traps</MenuItem>
-          <MenuItem value="triceps">Triceps</MenuItem>
-        </Select> */}
-      {/* </FormControl> */}
       <Box
         sx={{
           display: "grid",
@@ -114,21 +101,17 @@ const ExerciseVideo = () => {
                   alignItems: "center",
                 }}
               >
-                <a
-                  href={`https://www.youtube.com/watch?v=${video.id.videoId}`}
-                  style={{ textDecoration: "none" }}
+                <Button
+                  onClick={() => handleVideoClick(video)}
+                  sx={{
+                    background: "black",
+                    color: "white",
+                    marginButtom: "30px",
+                    "&:hover": { backgroundColor: "black" },
+                  }}
                 >
-                  <Button
-                    sx={{
-                      background: "black",
-                      color: "white",
-                      marginButtom: "30px",
-                      "&:hover": { backgroundColor: "black" },
-                    }}
-                  >
-                    View Video
-                  </Button>
-                </a>
+                  View Video
+                </Button>
               </CardOverflow>
             </Card>
           )
@@ -142,7 +125,6 @@ const ExerciseVideo = () => {
           margin: "20px",
         }}
       >
-        {" "}
         <Stack spacing={2}>
           <Pagination
             count={totalPages}
@@ -152,6 +134,47 @@ const ExerciseVideo = () => {
           />
         </Stack>
       </Box>
+      <Modal
+        open={isModalOpen}
+        onClose={handleModalClose}
+        aria-labelledby="video-modal-title"
+        aria-describedby="video-modal-description"
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+          sx: { backdropFilter: "blur(8px)" },
+        }}
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "80%",
+            height: "80%",
+            maxWidth: "800px",
+            maxHeight: "80%",
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+          }}
+        >
+          {selectedVideo && (
+            <YouTube
+              videoId={selectedVideo.id.videoId}
+              opts={{
+                width: "100%",
+                height: "500rem",
+                playerVars: {
+                  autoplay: 1,
+                },
+              }}
+            />
+          )}
+        </Box>
+      </Modal>
     </Container>
   );
 };

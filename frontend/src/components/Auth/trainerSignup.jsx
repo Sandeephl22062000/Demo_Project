@@ -7,15 +7,20 @@ import {
 import storage from "../../utils/firebase";
 import React, { useState } from "react";
 import trainerValidationSchema from "../schema/trainerSchema";
-import { Box, Button, Container, TextField } from "@mui/material";
+import { Avatar, Box, Button, Container, TextField } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import profileImage from "../../images/Profile.png";
 import Signup from "./signup";
+import { RegisterTrainer } from "../../store/trainer";
+import { useDispatch } from "react-redux";
+import { useToasts } from "react-toast-notifications";
+
 const TrainerSignup = () => {
   const [images, setImages] = useState("");
-
+  const { addToast } = useToasts();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const photoupload = (event) => {
     let file = event.target.files[0];
 
@@ -54,8 +59,8 @@ const TrainerSignup = () => {
     onSubmit: (values, { resetForm }) => {
       console.log(values);
       console.log(images);
-      const sendData = async () => {
-        await axios.post("http://localhost:8000/api/users/register", {
+      dispatch(
+        RegisterTrainer({
           name: values.fullName,
           email: values.email,
           password: values.password,
@@ -63,15 +68,18 @@ const TrainerSignup = () => {
           role: 1,
           specialization: values.specialization,
           experiences: values.experience,
-        });
-        // resetForm();
-      };
-      sendData();
+          addToast,
+          navigate,
+        })
+      );
+      resetForm();
     },
   });
   return (
     <>
-      <h3 style={{ textAlign: "center", marginTop: "50px" }}>Register</h3>
+      <h3 style={{ textAlign: "center", marginTop: "50px" }}>
+        REGISTER AS TRAINER
+      </h3>
       <Container
         sx={{
           display: "flex",
@@ -80,46 +88,35 @@ const TrainerSignup = () => {
           justifyContent: "center",
           width: "40%",
           gap: "16px",
-          marginTop: "40px",
-          marginBottom: "50px",
-          padding: "20px",
         }}
       >
         <form
           onSubmit={formik.handleSubmit}
           autoComplete="off"
-          style={{ margin: "20px", padding: "10px" }}
+          style={{ padding: "10px" }}
         >
           {!images ? (
-            <Box
+            <Avatar
+              src={profileImage}
+              alt="Preview"
               sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                // width: "400px",
-                // height: "400px",
-                // borderRadius: "50%",
-                overflow: "hidden",
+                width: "200px",
+                height: "200px",
                 margin: "auto",
+                fontSize: "3.75rem",
               }}
-            >
-              <img src={profileImage} alt="Preview" style={{ width: "50%" }} />
-            </Box>
+            />
           ) : (
-            <Box
+            <Avatar
+              src={images}
+              alt="Preview"
               sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                // width: "400px",
-                // height: "400px",
-                // borderRadius: "50%",
-                overflow: "hidden",
+                width: "200px",
+                height: "200px",
                 margin: "auto",
+                fontSize: "3.75rem",
               }}
-            >
-              <img src={images} alt="Preview" style={{ width: "50%" }} />
-            </Box>
+            />
           )}
           <TextField
             required
@@ -228,18 +225,20 @@ const TrainerSignup = () => {
             sx={{ width: "100%", margin: "8px" }}
           />
 
-          <Button
-            type="submit"
-            sx={{
-              color: "white",
-              backgroundColor: "red",
-              width: "155px",
-              height: "63px",
-              fontSize: "19px",
-            }}
-          >
-            Submit
-          </Button>
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <Button
+              type="submit"
+              sx={{
+                color: "white",
+                backgroundColor: "red",
+                width: "155px",
+                height: "63px",
+                fontSize: "19px",
+              }}
+            >
+              Submit
+            </Button>
+          </Box>
         </form>
       </Container>
     </>
