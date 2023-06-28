@@ -42,9 +42,5 @@ router
   .route("/caloriecalculator/savedetail")
   .post(protectingRoutes, DietController.saveUserDetails);
 
-router.post(
-  "/request/:trainerID",
-  protectingRoutes,
-  RequestController.createRequest
-);
+
 module.exports = router;

@@ -9,6 +9,8 @@ const initialUser = {
   FindUserByID: null,
   TrainersYetToApproved: [],
   SearchUserResult: [],
+  getAcceptedNoatifcation: [],
+  MessageReaded: [],
 };
 
 export const loginUser = createAsyncThunk(
@@ -75,6 +77,61 @@ export const approveRequest = createAsyncThunk(
     return getData.data;
   }
 );
+
+export const getNoatifcation = createAsyncThunk(
+  "/user/getAllNoatification",
+  async ({ token }) => {
+    console.log(token, "fvrsdvrt");
+    const getData = await axios.get(
+      `http://localhost:8000/api/request/getallrequestOfuser/`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log(getData.data);
+    return getData.data;
+  }
+);
+
+export const getAcceptedNoatifcation = createAsyncThunk(
+  "/user/getAcceptedNoatifcation",
+  async ({ token }) => {
+    console.log("efwqefwe", token, "fvrsdvrt");
+    const getData = await axios.get(
+      `http://localhost:8000/api/request/getAcceptedNoatifcation`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log("sasasasasasasa",getData?.data);
+    return getData?.data?.request;
+  }
+);
+
+export const messageReaded = createAsyncThunk(
+  "/user/messageReaded",
+  async ({ token }) => {
+    console.log("efwqefwe", token, "fvrsdvrt");
+    const getData = await axios.get(
+      `http://localhost:8000/api/request/readedmessage`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log(getData.data);
+    return getData?.data?.request;
+  }
+);
+
 export const searchUserKeyword = createAsyncThunk(
   "/user/searchUser",
   async (search) => {
@@ -212,6 +269,42 @@ const userSlice = createSlice({
         state.SearchUserResult = action.payload;
       })
       .addCase(searchUserKeyword.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(getNoatifcation.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getNoatifcation.fulfilled, (state, action) => {
+        state.loading = false;
+        state.GetUserNoatification = action.payload;
+      })
+      .addCase(getNoatifcation.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(getAcceptedNoatifcation.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getAcceptedNoatifcation.fulfilled, (state, action) => {
+        state.loading = false;
+        state.GetAcceptedNoatifcation = action.payload;
+      })
+      .addCase(getAcceptedNoatifcation.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(messageReaded.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(messageReaded.fulfilled, (state, action) => {
+        state.loading = false;
+        state.MessageReaded = action.payload;
+      })
+      .addCase(messageReaded.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });

@@ -36,11 +36,9 @@ const Login = () => {
           navigate,
         })
       );
-      const user = JSON.parse(localStorage.getItem("UserInfo"));
-      if (user) {
-        console.log("vnsrsrdvbk");
-        dispatch(UserByID(user?.data));
-      }
+
+      console.log("vnsrsrdvbk");
+      dispatch(UserByID(localStorage.getItem("id")));
     },
   });
 

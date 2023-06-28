@@ -8,6 +8,7 @@ const trainerRoutes = require("./Routes/trainerRoute");
 const exerciseRoutes = require("./Routes/exercisesRoutes");
 const postRoutes = require("./Routes/postRoutes");
 const challengeRoutes = require("./Routes/challangesRoutes");
+const requestRoutes = require("./Routes/requestRoutes");
 const cors = require("cors");
 connectDB();
 
@@ -30,6 +31,8 @@ app.use("/api/trainer", trainerRoutes);
 app.use("/api/exercise", exerciseRoutes);
 app.use("/api/post", postRoutes);
 app.use("/api/challenges", challengeRoutes);
+app.use("/api/request", requestRoutes);
+
 // app.use("/api/trainerPortal", trainerRoutes);
 
 app.all("*", (req, res, next) => {

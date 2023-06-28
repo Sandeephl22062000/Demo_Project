@@ -5,6 +5,7 @@ import axios from "axios";
 const initialTrainer = {
   trainerInfo: null,
   trainerInfoById: null,
+  getRequestWithTrainerId: null,
 };
 
 export const loginTrainer = createAsyncThunk(
@@ -24,7 +25,7 @@ export const requestTrainer = createAsyncThunk(
   async (data) => {
     const { trainer, message, token } = data;
     const postData = await axios.post(
-      `http://localhost:8000/api/users/request/${trainer}`,
+      `http://localhost:8000/api/request/createrequest/${trainer}`,
       {
         message,
       },
@@ -35,13 +36,32 @@ export const requestTrainer = createAsyncThunk(
         },
       }
     );
+    console.log(postData.data);
+    return postData.data;
+  }
+);
+
+export const getRequestOfTrainer = createAsyncThunk(
+  "/trainer/requestTrainer",
+  async (data) => {
+    const { trainer, token } = data;
+    const postData = await axios.get(
+      `http://localhost:8000/api/request/getrequest/${trainer}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log(postData.data);
     return postData.data;
   }
 );
 
 export const TrainerById = createAsyncThunk(
   "/trainer/trainerDetail",
-  async (id) => {
+  async (id,token) => {
     const postData = await axios.get(
       `http://localhost:8000/api/trainer/trainerDetail/${id}`
     );
@@ -92,6 +112,18 @@ const trainerSlice = createSlice({
         state.trainer = action.payload;
       })
       .addCase(requestTrainer.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(getRequestOfTrainer.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getRequestOfTrainer.fulfilled, (state, action) => {
+        state.loading = false;
+        state.getRequestWithTrainerId = action.payload;
+      })
+      .addCase(getRequestOfTrainer.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });
