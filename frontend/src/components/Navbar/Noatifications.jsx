@@ -25,6 +25,7 @@ import {
   getNoatifcation,
   messageReaded,
 } from "../../store/user";
+import { acceptRequest, rejectRequest } from "../../store/trainer";
 
 export default function NotificationsPopover() {
   const [notifications, setNotifications] = useState([]);
@@ -145,9 +146,10 @@ export default function NotificationsPopover() {
 }
 
 function NotificationItem({ notification, userRole }) {
-  const { avatar, title } = renderContent(notification, userRole);
+  const { avatar, title } = RenderContent(notification, userRole);
   const createdDate = new Date(notification?.createdAt).toLocaleString();
   console.log(notification, "Notificatoin");
+
   return (
     <ListItemButton
       sx={{
@@ -199,8 +201,18 @@ function NotificationItem({ notification, userRole }) {
   );
 }
 
-function renderContent(notification, userRole) {
+function RenderContent(notification, userRole) {
   let title;
+  const dispatch = useDispatch();
+  const token = useSelector((state)=>state?.user?.token)
+  const acceptRequestHandler = (id) => {
+    console.log(id);
+    dispatch(acceptRequest({id,token}));
+  };
+  const rejectRequestHandler = ({id}) => {
+    dispatch(rejectRequest(id,token));
+  };
+
   if (userRole === 0) {
     title = (
       <Typography variant="subtitle2">
@@ -235,10 +247,18 @@ function renderContent(notification, userRole) {
         >
           &nbsp; has requested training from you
           <Box>
-            <Button sx={{ background: "green", color: "white", margin: "5px" }}>
+            <Button
+              onClick={acceptRequestHandler(notification?._id)}
+              sx={{ background: "green", color: "white", margin: "5px" }}
+            >
               Accept
             </Button>
-            <Button sx={{ background: "red", color: "white" }}>Reject</Button>
+            <Button
+              onClick={rejectRequestHandler(notification?._id)}
+              sx={{ background: "red", color: "white" }}
+            >
+              Reject
+            </Button>
           </Box>
         </Typography>
       </Typography>

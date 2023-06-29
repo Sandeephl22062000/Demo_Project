@@ -16,6 +16,8 @@ import { UserByID } from "../../store/user";
 import { TrainerById } from "../../store/trainer";
 
 const PRofilePostCard = (props) => {
+  
+
   const user = useSelector((state) => state?.user?.FindUserByID);
   const dispatch = useDispatch();
   const params = useParams();
@@ -26,9 +28,9 @@ const PRofilePostCard = (props) => {
   }, []);
 
   return (
-    <Box sx={{ display: "flex", justifyContent: "center", flexWrap: "wrap" }}>
+    <Box sx={{ display: "flex", flexWrap: "wrap" }}>
       {user?.posts?.map((post) => (
-        <Card sx={{ width: "19.5rem", margin: "0.5rem" }}>
+        <Card sx={{ width: "19.0rem", margin: "0.5rem" }}>
           <CardHeader
             avatar={
               <Avatar
@@ -55,6 +57,7 @@ const PRofilePostCard = (props) => {
           </CardContent>
         </Card>
       ))}
+      
     </Box>
   );
 };

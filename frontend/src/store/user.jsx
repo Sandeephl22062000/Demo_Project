@@ -50,11 +50,19 @@ export const loginUser = createAsyncThunk(
     }
   }
 );
-export const UserByID = createAsyncThunk("/user/userDetail", async (id) => {
-  const postData = await axios.get(`http://localhost:8000/api/users/${id}`);
-  console.log(postData.data);
-  return postData.data.data;
-});
+export const UserByID = createAsyncThunk(
+  "/user/userDetail",
+  async () => {
+    const Userid = localStorage.getItem("id")
+    console.log("Avdfvdfv")
+    console.log("sdfsdfs",Userid);
+    const postData = await axios.get(
+      `http://localhost:8000/api/users/${Userid}`
+    );
+    console.log(postData.data);
+    return postData.data.data;
+  }
+);
 
 export const trainerToBeApproved = createAsyncThunk(
   "/user/trainertoApprove",

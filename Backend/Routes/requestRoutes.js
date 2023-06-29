@@ -15,7 +15,7 @@ router.post(
 );
 
 router.get(
-  "/getrequest/:trainerID",
+  "/getrequest",
   protectingRoutes,
   RequestController.getAllRequestOfTrainer
 );
@@ -30,5 +30,17 @@ router.get(
   "/readedmessage",
   protectingRoutes,
   RequestController.unReadMessages
+);
+
+router.get(
+  "/acceptRequest/:requestID",
+  protectingRoutes,
+  RequestController.acceptRequest
+);
+
+router.get(
+  "/rejectRequest/:requestID",
+  protectingRoutes,
+  RequestController.acceptRequest
 );
 module.exports = router;

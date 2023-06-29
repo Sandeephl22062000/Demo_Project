@@ -11,10 +11,7 @@ import {
 } from "@mui/material";
 import { useParams } from "react-router-dom";
 import Stack from "@mui/joy/Stack";
-import Modal from "@mui/joy/Modal";
-import ModalClose from "@mui/joy/ModalClose";
-import ModalDialog from "@mui/joy/ModalDialog";
-import Typography from "@mui/joy/Typography";
+
 import Post from "./Trainer-Info/ProfilePost";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
@@ -39,7 +36,7 @@ const ProfilePage = () => {
   const { addToast } = useToasts();
   const Userid = localStorage.getItem("id");
   const token = useSelector((state) => state.user.token);
-
+  console.log("user-id", Userid);
   const handleEditClick = () => {
     console.log(name, email, experiences, specialization);
     dispatch(
@@ -60,7 +57,7 @@ const ProfilePage = () => {
   };
 
   useEffect(() => {
-    dispatch(UserByID(Userid));
+    dispatch(UserByID({ Userid }));
   }, []);
 
   const user = useSelector((state) => state.user.user);

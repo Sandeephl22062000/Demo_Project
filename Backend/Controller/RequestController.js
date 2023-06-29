@@ -35,7 +35,9 @@ const getAllRequestOfTrainer = async (req, res, next) => {
 const getAllRequestOFUser = async (req, res, next) => {
   const userID = req.params.userID;
 
-  const getRequests = await Request.findOne({ user: req?.user?._id });
+  const getRequests = await Request.findOne({ user: req?.user?._id }).sort({
+    createdAt: -1,
+  });
   console.log(getRequests);
   if (getRequests) {
     res.status(201).json({
@@ -44,12 +46,44 @@ const getAllRequestOFUser = async (req, res, next) => {
     });
   }
 };
+
+const acceptRequest = async (req, res, next) => {
+  const requestID = req.params.requestID;
+
+  const getRequest = await Request.findById(requestID);
+  getRequest.isAccepted = true;
+  getRequest.save();
+  if (getRequest) {
+    res.status(201).json({
+      message: "Success",
+      request: getRequest,
+    });
+  }
+};
+
+const rejectRequest = async (req, res, next) => {
+  const requestID = req.params.requestID;
+
+  const getRequests = await Request.findById(requestID);
+  getRequest.isRejected = true;
+  getRequest.save();
+  console.log(getRequests);
+  if (getRequests) {
+    res.status(201).json({
+      message: "Success",
+      request: getRequests,
+    });
+  }
+};
+
 const getAcceptedNoatifcation = async (req, res, next) => {
   console.log("fsdfsdfsdf", req.user.role === 0);
   let getRequests;
   if (req.user.role === 0) {
     getRequests = await Request.find({
       user: req?.user?._id,
+      isAccepted: true,
+      isRejected: false,
     })
       .sort({ createdAt: -1 })
       .populate("trainer", "name photo");
@@ -84,6 +118,8 @@ const unReadMessages = async (req, res, next) => {
   if (req.user.role === 0) {
     getRequests = await Request.find({
       user: req?.user?._id,
+      isAccepted: false,
+      isRejected: false,
     }).sort({ createdAt: -1 });
     console.log("dfvdfvdf", getRequests);
   } else {
@@ -113,4 +149,6 @@ module.exports = {
   getAcceptedNoatifcation,
   getAllRequestOFUser,
   unReadMessages,
+  rejectRequest,
+  acceptRequest,
 };

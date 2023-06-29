@@ -157,7 +157,21 @@ const ProfilePage = () => {
       </Card>
       {console.log(trainer?.posts?.length > 0)}
       {console.log(trainer?.posts)}
-      {trainer?.posts?.length > 0 && <Posts />}
+      {trainer?.posts?.length > 0 ? (
+        <Posts />
+      ) : (
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "40vh",
+          }}
+        >
+          <Typography sx={{ height: "50px" }}>No Post yet</Typography>
+        </Box>
+      )}
       <Modal open={!!variant} onClose={() => setVariant(undefined)}>
         <ModalDialog
           aria-labelledby="variant-modal-title"

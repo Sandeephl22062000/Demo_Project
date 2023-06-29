@@ -12,8 +12,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
-import { styled } from "@mui/material/styles";
+
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
@@ -21,12 +20,9 @@ import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import Avatar from "@mui/material/Avatar";
 import { red } from "@mui/material/colors";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 import { Link, useNavigate } from "react-router-dom";
+
 const SearchInput = () => {
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
@@ -38,6 +34,7 @@ const SearchInput = () => {
   const [loadingtrainer, setloadingTrainer] = useState(false);
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
+
   const submithandler = async (e) => {
     try {
       setLoading(true);
@@ -56,32 +53,25 @@ const SearchInput = () => {
       throw new Error(error);
     }
   };
-  console.log(searchResult);
+
   const getTrainerDetail = async () => {
     const { data } = await axios.get(
       `http://localhost:8000/api/trainer/${page}`
     );
+    setTrainer(data.data);
+    setTotalPage(data.totalPages);
   };
 
   useEffect(() => {
-    // getTrainerDetail();
-    submithandler();
+    getTrainerDetail();
   }, [page]);
+
   const handlePageChange = (event, page) => {
     setPage(page);
   };
+
   console.log(page);
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 4,
-  };
+
   const handleInputChange = (e) => {
     setSearch(e.target.value);
   };
@@ -89,8 +79,10 @@ const SearchInput = () => {
   useEffect(() => {
     if (search) {
       submithandler();
+    } else {
+      setSearchResult(trainer); // Display the data from getTrainerDetail() when search is empty
     }
-  }, [search]);
+  }, [search, trainer]);
 
   return (
     <Container>
@@ -194,13 +186,22 @@ const SearchInput = () => {
           </Box>
         </Box>
       </form>
-      <Stack spacing={2}>
-        <Pagination
-          count={TotalPage}
-          color="primary"
-          onChange={handlePageChange}
-        />
-      </Stack>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          margin: "20px 0 20px 0",
+        }}
+      >
+        <Stack spacing={2}>
+          <Pagination
+            count={TotalPage}
+            color="primary"
+            onChange={handlePageChange}
+          />
+        </Stack>
+      </Box>
     </Container>
   );
 };

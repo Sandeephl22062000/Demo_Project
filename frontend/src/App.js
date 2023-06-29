@@ -15,12 +15,11 @@ import Login from "./components/Auth/login";
 import CalorieDetail from "./components/Food/pageEdited";
 
 import TrainerSigup from "./components/Auth/trainerSignup";
-import Inbox from "./components/Chat/chat.jsx";
 import ClientsExperince from "./ClientsExperince";
 import ShowPost from "./components/ShowPost";
-import ChatInterface from "./components/Chat/chat.jsx";
+// import Chats from "./components/Chat/chat"
 import ExeprmientFoodApi from "./components/Food/ExeprmientFoodApi";
-import Profile from "./components/ProfileIndividuals.jsx";
+import Profile from "./components/MyProfile";
 import AdminDashboard from "./components/Admin/AdminDashboard";
 import ProfileToShow from "./components/ProfileToShow";
 import ViewAllRecords from "./components/Food/ViewAllRecords";
@@ -56,7 +55,7 @@ const App = () => {
               <Route path="/user/:id" element={<ProfileToShow />} />
 
               <Route path="/exercise" element={<Exercises />} />
-              <Route path="/chat" element={<ChatInterface />} />
+              {/* <Route path="/chat" element={<Chats />} /> */}
               <Route path="/clientexperiences" element={<ClientsExperince />} />
 
               <Route path="/profile" element={<Profile />} />

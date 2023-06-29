@@ -84,7 +84,7 @@ const CirclePhotoGrid = () => {
                 }}
               >
                 <Typography gutterBottom variant="h5" component="div">
-                  <b> Title:{challenge.challengeName}</b>
+                  <b> Title:</b>
                 </Typography>
                 <Typography variant="h6" color="text.secondary">
                   <b> Description:{challenge.challengeDescription}</b>

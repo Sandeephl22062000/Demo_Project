@@ -96,6 +96,42 @@ export const getRequestOfTrainer = createAsyncThunk(
   }
 );
 
+export const acceptRequest = createAsyncThunk(
+  "/trainer/acceptRequest",
+  async (data) => {
+    const { id, token } = data;
+    const postData = await axios.get(
+      `http://localhost:8000/api/request/acceptRequest/${id}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log(postData.data);
+    return postData.data;
+  }
+);
+
+export const rejectRequest = createAsyncThunk(
+  "/trainer/acceptRequest",
+  async (data) => {
+    const { id, token } = data;
+    const postData = await axios.get(
+      `http://localhost:8000/api/request/rejectRequest/${id}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log(postData.data);
+    return postData.data;
+  }
+);
+
 export const TrainerById = createAsyncThunk(
   "/trainer/trainerDetail",
   async (id, token) => {

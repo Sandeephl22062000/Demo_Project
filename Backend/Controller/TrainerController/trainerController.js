@@ -29,7 +29,7 @@ const getAlltrainer = async (req, res, next) => {
     : {};
 
   const page = parseInt(req.params.page) || 1;
-  const limit = parseInt(req.query.limit) || 2;
+  const limit = parseInt(req.query.limit) || 9;
   const skip = (page - 1) * limit;
 
   const users = await User.find(keyword);
@@ -53,10 +53,9 @@ const getAlltrainer = async (req, res, next) => {
 
 const getTrainers = async (req, res, next) => {
   console.log("pagees", req.params);
-  const page = parseInt(req.params.page) || 1; // Current page number
-  const limit = parseInt(req.query.limit) || 2; // Number of trainers per page
-  const count = await User.countDocuments({ role: 1 }); // Total number of trainers
-
+  const page = parseInt(req.params.page) || 1; 
+  const limit = parseInt(req.query.limit) || 9; 
+  const count = await User.countDocuments({ role: 1 }); 
   const trainers = await User.find({ role: 1 })
     .skip((page - 1) * limit)
     .limit(limit);
