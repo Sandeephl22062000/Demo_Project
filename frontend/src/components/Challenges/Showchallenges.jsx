@@ -110,42 +110,6 @@ const CirclePhotoGrid = () => {
                 </Button>
               </Box>
             </Card>
-
-          
-            {/* <Typography></Typography>
-          <h1></h1>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "100%",
-            }}
-          >
-            <Box
-              style={{
-                width: "200px",
-                height: "200px",
-                borderRadius: "50%",
-                background: "black",
-                backgroundImage: `url(${challenge?.sender?.photo})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-              }}
-            />
-            <DoubleArrowIcon /> <DoubleArrowIcon />
-            <Box
-              style={{
-                width: "200px",
-                height: "200px",
-                borderRadius: "50%",
-                background: "black",
-                backgroundImage: `url(${challenge?.receiver?.photo})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-              }}
-            />
-          </Box> */}
           </Box>
         ))}
       </Box>

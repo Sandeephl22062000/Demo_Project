@@ -9,12 +9,14 @@ import CardContent from "@mui/joy/CardContent";
 import Typography from "@mui/joy/Typography";
 import Sheet from "@mui/joy/Sheet";
 import Posts from "./Trainer-Info/PRofilePostCard";
+import Challenges from "./Challenges/ChallengesOnProfile";
 import axios from "axios";
 import UpdateProfileModal from "./UpdateProfileModal";
 import { Modal, ModalClose, ModalDialog } from "@mui/joy";
 import { useDispatch, useSelector } from "react-redux";
 import { UserByID } from "../store/user";
 import RequestTable from "./trainingRequestTable";
+
 const handleCommentButtonClick = () => {};
 
 const style = {
@@ -27,8 +29,8 @@ const ProfilePage = () => {
   const [trainer, setTrainer] = useState("");
   const [variant, setVariant] = useState(undefined);
   const [showRequests, setShowRequests] = useState(false);
-  const [post, showPost] = useState([]);
-  const [challenges, showChallenges] = useState(false);
+  const [showChallenges, setShowChallenges] = useState(false);
+  const [showPosts, setShowPosts] = useState(true);
   const params = useParams();
   const dispatch = useDispatch();
 
@@ -44,6 +46,16 @@ const ProfilePage = () => {
   console.log(trainer._id);
   const sendRequestHandler = () => {
     // dispatch(requestTrainer({ token, message, trainer: trainer._id }));
+  };
+
+  const toggleChallengesAndPosts = () => {
+    if (showChallenges) {
+      setShowChallenges(false);
+      setShowPosts(true);
+    } else {
+      setShowChallenges(true);
+      setShowPosts(false);
+    }
   };
 
   return (
@@ -205,23 +217,26 @@ const ProfilePage = () => {
               </>
             ) : (
               <Button
+                onClick={toggleChallengesAndPosts}
                 sx={{
                   background: "black",
                   color: "white",
                   height: "50px",
                   borderRadius: "15px",
+
                   "&:hover": {
                     background: "black",
                   },
                 }}
               >
-                Challenges
+                {showChallenges ? "View Posts" : "Challenges"}
               </Button>
             )}
           </Box>
         </CardContent>
         {user?.role === 1 && (showRequests ? <RequestTable /> : <Posts />)}
-        {!showRequests && user?.posts?.length > 0 ? (
+        {user?.role === 0 && showChallenges && <Challenges />}
+        {showPosts && !showRequests && user?.posts?.length > 0 ? (
           <Posts />
         ) : (
           <Box sx={{ display: "flex", flexWrap: "wrap" }}>No Post yet</Box>

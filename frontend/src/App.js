@@ -24,7 +24,7 @@ import AdminDashboard from "./components/Admin/AdminDashboard";
 import ProfileToShow from "./components/ProfileToShow";
 import ViewAllRecords from "./components/Food/ViewAllRecords";
 import { useState } from "react";
-import Challenges from "./components/Challenges/Challenges";
+import Challenges from "./components/Challenges/challengesTOShow";
 const App = () => {
   const [isAdmin, setIsAdmin] = useState(true);
   return (
