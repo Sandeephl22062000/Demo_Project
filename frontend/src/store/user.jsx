@@ -11,6 +11,8 @@ const initialUser = {
   TrainersYetToApproved: [],
   SearchUserResult: [],
   getAcceptedNoatifcation: [],
+  getRejectedNoatifcation: [],
+
   MessageReaded: [],
 };
 
@@ -50,19 +52,14 @@ export const loginUser = createAsyncThunk(
     }
   }
 );
-export const UserByID = createAsyncThunk(
-  "/user/userDetail",
-  async () => {
-    const Userid = localStorage.getItem("id")
-    console.log("Avdfvdfv")
-    console.log("sdfsdfs",Userid);
-    const postData = await axios.get(
-      `http://localhost:8000/api/users/${Userid}`
-    );
-    console.log(postData.data);
-    return postData.data.data;
-  }
-);
+export const UserByID = createAsyncThunk("/user/userDetail", async () => {
+  const Userid = localStorage.getItem("id");
+  console.log("Avdfvdfv");
+  console.log("sdfsdfs", Userid);
+  const postData = await axios.get(`http://localhost:8000/api/users/${Userid}`);
+  console.log(postData.data);
+  return postData.data.data;
+});
 
 export const trainerToBeApproved = createAsyncThunk(
   "/user/trainertoApprove",
@@ -107,11 +104,29 @@ export const getNoatifcation = createAsyncThunk(
 );
 
 export const getAcceptedNoatifcation = createAsyncThunk(
-  "/user/getAcceptedNoatifcation",
+  "/user/getacceptedrequest",
   async ({ token }) => {
     console.log("efwqefwe", token, "fvrsdvrt");
     const getData = await axios.get(
-      `http://localhost:8000/api/request/getAcceptedNoatifcation`,
+      `http://localhost:8000/api/request/getacceptedrequest`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log("sasasasasasasa", getData?.data);
+    return getData?.data?.request;
+  }
+);
+
+export const getRejectedNoatifcation = createAsyncThunk(
+  "/user/getrejectedrequest",
+  async ({ token }) => {
+    console.log("efwqefwe", token, "fvrsdvrt");
+    const getData = await axios.get(
+      `http://localhost:8000/api/request/getrejectedrequest`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -304,6 +319,18 @@ const userSlice = createSlice({
         state.GetAcceptedNoatifcation = action.payload;
       })
       .addCase(getAcceptedNoatifcation.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(getRejectedNoatifcation.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getRejectedNoatifcation.fulfilled, (state, action) => {
+        state.loading = false;
+        state.GetRejectedNoatifcation = action.payload;
+      })
+      .addCase(getRejectedNoatifcation.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       })

@@ -7,6 +7,7 @@ const initialTrainer = {
   trainerInfo: null,
   trainerInfoById: null,
   getRequestWithTrainerId: null,
+  getAllPendingRequest: [],
 };
 
 export const loginTrainer = createAsyncThunk(
@@ -115,7 +116,7 @@ export const acceptRequest = createAsyncThunk(
 );
 
 export const rejectRequest = createAsyncThunk(
-  "/trainer/acceptRequest",
+  "/trainer/rejectRequest",
   async (data) => {
     const { id, token } = data;
     const postData = await axios.get(
@@ -131,7 +132,23 @@ export const rejectRequest = createAsyncThunk(
     return postData.data;
   }
 );
-
+// export const PendingRequest = createAsyncThunk(
+//   "/trainer/pendingRequest",
+//   async (data) => {
+//     const { token } = data;
+//     const postData = await axios.get(
+//       `http://localhost:8000/api/request/pendingRequest/`,
+//       {
+//         headers: {
+//           "Content-Type": "application/json",
+//           Authorization: `Bearer ${token}`,
+//         },
+//       }
+//     );
+//     console.log("pendingRequests", postData.data.request);
+//     return postData.data.request;
+//   }
+// );
 export const TrainerById = createAsyncThunk(
   "/trainer/trainerDetail",
   async (id, token) => {
@@ -188,6 +205,18 @@ const trainerSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
+      // .addCase(PendingRequest.pending, (state) => {
+      //   state.loading = true;
+      //   state.error = null;
+      // })
+      // .addCase(PendingRequest.fulfilled, (state, action) => {
+      //   state.loading = false;
+      //   state.getAllPendingRequest = action.payload;
+      // })
+      // .addCase(PendingRequest.rejected, (state, action) => {
+      //   state.loading = false;
+      //   state.error = action.error.message;
+      // })
       .addCase(requestTrainer.pending, (state) => {
         state.loading = true;
         state.error = null;

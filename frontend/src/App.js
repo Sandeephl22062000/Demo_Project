@@ -23,6 +23,7 @@ import Profile from "./components/MyProfile";
 import AdminDashboard from "./components/Admin/AdminDashboard";
 import ProfileToShow from "./components/ProfileToShow";
 import ViewAllRecords from "./components/Food/ViewAllRecords";
+import Gym from "./components/Gyms/nearByGym";
 import { useState } from "react";
 import Challenges from "./components/Challenges/challengesTOShow";
 const App = () => {
@@ -53,6 +54,8 @@ const App = () => {
               <Route path="/trainer" element={<TrainerCards />} />
               <Route path="/trainer/:id" element={<TrainerProfile />} />
               <Route path="/user/:id" element={<ProfileToShow />} />
+
+              <Route path="/gyms" element={<Gym />} />
 
               <Route path="/exercise" element={<Exercises />} />
               {/* <Route path="/chat" element={<Chats />} /> */}

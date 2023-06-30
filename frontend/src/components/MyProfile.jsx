@@ -58,6 +58,16 @@ const ProfilePage = () => {
     }
   };
 
+  const handleViewRequest = () => {
+    setShowRequests(true);
+    setShowPosts(false);
+  };
+
+  const handleViewPost = () => {
+    setShowRequests(false);
+    setShowPosts(true);
+  };
+
   return (
     <Container
       sx={{
@@ -198,22 +208,11 @@ const ProfilePage = () => {
 
             {user?.role === 1 ? (
               <>
-                <Button
-                  onClick={() => {
-                    setShowRequests(true);
-                  }}
-                  sx={{
-                    background: "black",
-                    color: "white",
-                    height: "50px",
-                    borderRadius: "15px",
-                    "&:hover": {
-                      background: "black",
-                    },
-                  }}
-                >
-                  View Requests
-                </Button>
+                {showRequests ? (
+                  <Button onClick={handleViewPost} sx={{color:"white",background:"black"}}>View Post</Button>
+                ) : (
+                  <Button onClick={handleViewRequest}  sx={{color:"white",background:"black"}}>View Requests</Button>
+                )}
               </>
             ) : (
               <Button

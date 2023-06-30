@@ -50,9 +50,17 @@ const getAllRequestOFUser = async (req, res, next) => {
 const acceptRequest = async (req, res, next) => {
   const requestID = req.params.requestID;
 
-  const getRequest = await Request.findById(requestID);
-  getRequest.isAccepted = true;
-  getRequest.save();
+  const getRequest = await Request.findByIdAndUpdate(
+    requestID,
+    {
+      isAccepted: true,
+      isPending: false,
+      isRejected: false,
+    },
+    {
+      new: true,
+    }
+  );
   if (getRequest) {
     res.status(201).json({
       message: "Success",
@@ -64,9 +72,18 @@ const acceptRequest = async (req, res, next) => {
 const rejectRequest = async (req, res, next) => {
   const requestID = req.params.requestID;
 
-  const getRequests = await Request.findById(requestID);
-  getRequest.isRejected = true;
-  getRequest.save();
+  const getRequests = await Request.findByIdAndUpdate(
+    requestID,
+    {
+      isRejected: true,
+      isPending: false,
+      isAccepted: false,
+    },
+    {
+      new: true,
+    }
+  );
+
   console.log(getRequests);
   if (getRequests) {
     res.status(201).json({
@@ -83,7 +100,7 @@ const getAcceptedNoatifcation = async (req, res, next) => {
     getRequests = await Request.find({
       user: req?.user?._id,
       isAccepted: true,
-      isRejected: false,
+      isPending: false,
     })
       .sort({ createdAt: -1 })
       .populate("trainer", "name photo");
@@ -97,6 +114,8 @@ const getAcceptedNoatifcation = async (req, res, next) => {
   } else {
     getRequests = await Request.find({
       trainer: req?.user?._id,
+      isAccepted: true,
+      isPending: false,
     })
       .sort({ createdAt: -1 })
       .populate("user", "name photo");
@@ -113,18 +132,91 @@ const getAcceptedNoatifcation = async (req, res, next) => {
   console.log("dfvdfvdf", getRequests);
 };
 
+const getRejectedNoatifcation = async (req, res, next) => {
+  console.log("fsdfsdfsdf", req.user.role === 0);
+  let getRequests;
+  if (req.user.role === 0) {
+    getRequests = await Request.find({
+      user: req?.user?._id,
+      isRejected: true,
+      isPending: false,
+    })
+      .sort({ createdAt: -1 })
+      .populate("trainer", "name photo");
+    console.log("dfvdfvdf", getRequests);
+    if (getRequests) {
+      res.status(201).json({
+        message: "Success",
+        request: getRequests,
+      });
+    }
+  } else {
+    getRequests = await Request.find({
+      trainer: req?.user?._id,
+      isRejected: true,
+      isPending: false,
+    })
+      .sort({ createdAt: -1 })
+      .populate("user", "name photo");
+    console.log("dfvdfvdf", getRequests);
+
+    if (getRequests) {
+      res.status(201).json({
+        message: "Success",
+        request: getRequests,
+      });
+    }
+  }
+
+  console.log("dfvdfvdf", getRequests);
+};
+
+const isPendingRequest = async (req, res, next) => {
+  let getRequests;
+  if (req.user.role === 0) {
+    getRequests = await Request.find({
+      user: req?.user?._id,
+      isPending: true,
+    })
+      .sort({ createdAt: -1 })
+      .populate("trainer", "name photo");
+    console.log("dfvdfvdfpeenidng ", getRequests);
+    if (getRequests) {
+      res.status(201).json({
+        message: "Success",
+        request: getRequests,
+      });
+    }
+  } else {
+    const getRequest = await Request.find({
+      trainer: req?.user?._id,
+      isPending: true,
+    })
+      .sort({ createdAt: -1 })
+      .populate("user", "name photo");
+
+    console.log("dfvdfvdfhjmhjm", getRequest);
+
+    if (getRequest) {
+      res.status(201).json({
+        message: "Success",
+        request: getRequest,
+      });
+    }
+  }
+};
 const unReadMessages = async (req, res, next) => {
   let getRequests;
   if (req.user.role === 0) {
     getRequests = await Request.find({
       user: req?.user?._id,
-      isAccepted: false,
-      isRejected: false,
+      isPending: true,
     }).sort({ createdAt: -1 });
     console.log("dfvdfvdf", getRequests);
   } else {
     getRequests = await Request.find({
       trainer: req?.user?._id,
+      isPending: true,
     }).sort({ createdAt: -1 });
     console.log("dfvdfvdf", getRequests);
   }
@@ -147,6 +239,8 @@ module.exports = {
   createRequest,
   getAllRequestOfTrainer,
   getAcceptedNoatifcation,
+  isPendingRequest,
+  getRejectedNoatifcation,
   getAllRequestOFUser,
   unReadMessages,
   rejectRequest,

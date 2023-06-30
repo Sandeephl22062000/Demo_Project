@@ -21,15 +21,28 @@ router.get(
 );
 
 router.get(
-  "/getAcceptedNoatifcation",
+  "/getacceptedrequest",
   protectingRoutes,
   RequestController.getAcceptedNoatifcation
+);
+
+
+router.get(
+  "/getrejectedrequest",
+  protectingRoutes,
+  RequestController.getRejectedNoatifcation
 );
 
 router.get(
   "/readedmessage",
   protectingRoutes,
   RequestController.unReadMessages
+);
+
+router.get(
+  "/pendingRequest",
+  protectingRoutes,
+  RequestController.isPendingRequest
 );
 
 router.get(
@@ -41,6 +54,6 @@ router.get(
 router.get(
   "/rejectRequest/:requestID",
   protectingRoutes,
-  RequestController.acceptRequest
+  RequestController.rejectRequest
 );
 module.exports = router;

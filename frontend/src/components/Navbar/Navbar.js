@@ -23,6 +23,7 @@ const pages = [
   "Trainer",
   "Activities",
   "Challenges",
+  "Gyms",
   "Contact Us",
   "About Us",
 ];

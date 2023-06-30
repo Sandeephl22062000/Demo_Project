@@ -24,6 +24,10 @@ const requestSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isPending:{
+      type:Boolean,
+      default:true,
+    },
     isRejected: {
       type: Boolean,
       default: false,
