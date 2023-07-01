@@ -17,7 +17,6 @@ import CalorieDetail from "./components/Food/pageEdited";
 import TrainerSigup from "./components/Auth/trainerSignup";
 import ClientsExperince from "./ClientsExperince";
 import ShowPost from "./components/ShowPost";
-// import Chats from "./components/Chat/chat"
 import ExeprmientFoodApi from "./components/Food/ExeprmientFoodApi";
 import Profile from "./components/MyProfile";
 import AdminDashboard from "./components/Admin/AdminDashboard";
@@ -58,7 +57,9 @@ const App = () => {
               <Route path="/gyms" element={<Gym />} />
 
               <Route path="/exercise" element={<Exercises />} />
-              {/* <Route path="/chat" element={<Chats />} /> */}
+              
+             
+
               <Route path="/clientexperiences" element={<ClientsExperince />} />
 
               <Route path="/profile" element={<Profile />} />

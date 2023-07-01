@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/preset-react": "^7.22.5",
     "@cometchat-pro/chat": "^3.0.12",
     "@emotion/core": "^10.0.28",
     "@emotion/react": "^11.11.1",
@@ -11,6 +12,7 @@
     "@mui/joy": "^5.0.0-alpha.83",
     "@mui/material": "^5.13.4",
     "@mui/system": "^5.13.2",
+    "@pubnub/react-chat-components": "^0.28.0",
     "@react-oauth/google": "^0.11.0",
     "@reduxjs/toolkit": "^1.9.5",
     "@testing-library/jest-dom": "^4.2.4",
@@ -23,9 +25,12 @@
     "firebase": "^9.22.2",
     "fix": "^0.0.6",
     "formik": "^2.4.1",
+    "pubnub": "^7.2.3",
+    "pubnub-react": "^3.0.2",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.4",
     "react-chartjs-2": "^5.2.0",
+    "react-chat-engine": "^1.11.28",
     "react-chat-ui": "^0.4.0",
     "react-dom": "^18.2.0",
     "react-google-maps": "^9.4.5",
@@ -37,6 +42,8 @@
     "react-youtube": "^10.1.0",
     "recharts": "^2.7.2",
     "redux": "^4.2.1",
+    "stream-chat": "^8.9.0",
+    "stream-chat-react": "^10.8.5",
     "yup": "^1.2.0"
   },
   "scripts": {

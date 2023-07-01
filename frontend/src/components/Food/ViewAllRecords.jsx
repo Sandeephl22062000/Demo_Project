@@ -11,11 +11,6 @@ import { Box, Container } from "@mui/material";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { useState } from "react";
-import { PieChart, Pie, Tooltip, Legend } from "recharts";
-
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
 
 export default function BasicTable() {
   const [data, setData] = useState([]);
@@ -59,8 +54,18 @@ export default function BasicTable() {
       </Box>
       {data.map((meals) => (
         <>
-          <h2>{meals.name}</h2>
-          <TableContainer component={Paper} sx={{ margin: "50px 0" }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginTop: "30px",
+            }}
+          >
+            <h4>{meals.name}</h4>
+            <h6>{new Date(meals?.createdAt).toLocaleString()}</h6>
+          </Box>
+
+          <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
@@ -116,19 +121,6 @@ export default function BasicTable() {
           </TableContainer>
         </>
       ))}
-      <PieChart width={400} height={400}>
-        <Pie
-          dataKey="value"
-          data={chartData}
-          cx={200}
-          cy={200}
-          outerRadius={80}
-          fill="#8884d8"
-          label
-        />
-        <Tooltip />
-        <Legend />
-      </PieChart>
     </Container>
   );
 }

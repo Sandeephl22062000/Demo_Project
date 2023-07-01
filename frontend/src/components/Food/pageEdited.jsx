@@ -50,20 +50,26 @@ const CalorieDetail = () => {
       {" "}
       <h3>{`How much Weight do you want to ${data}?`}</h3>
       <Box
-        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "column",
+        }}
       >
-        <FormControl sx={{ m: 2, width: "40%", minWidth: "200px" }}>
+        <Typography>Mention your target in kg/week</Typography>
+        <FormControl sx={{ marginTop: 2, width: "40%", minWidth: "200px" }}>
           {Goal && (
             <Select
               labelId="demo-simple-select-autowidth-label"
               id="demo-simple-select-autowidth"
+              label="target"
               value={Target}
               placeholder="target"
               onChange={(e) => {
                 setTarget(e.target.value);
               }}
               autoWidth
-              label="target"
             >
               <MenuItem value="0.25">0.25</MenuItem>
               <MenuItem value="0.50">0.50</MenuItem>
@@ -81,25 +87,26 @@ const CalorieDetail = () => {
       const calculatedCalories = (Target * 7700) / 7 + maintainceCalory;
       const calculatedCarbs = (maintainceCalory * 0.65) / 4;
       const calculatedProtein = (maintainceCalory * 0.2) / 4;
-      setRequireCalories(calculatedCalories);
-      setCarbs(calculatedCarbs);
-      setProtein(calculatedProtein);
+      setRequireCalories(calculatedCalories.toFixed(2));
+      setCarbs(calculatedCarbs.toFixed(2));
+      setProtein(calculatedProtein.toFixed(2));
     } else if (Goal === "Loss") {
       const calculatedCalories =
         (maintainceCalory - Target * 7700) / 7 + maintainceCalory;
       const calculatedCarbs = (maintainceCalory * 0.45) / 4;
       const calculatedProtein = (maintainceCalory * 0.15) / 4;
 
-      setRequireCalories(calculatedCalories);
-      setCarbs(calculatedCarbs);
-      setProtein(calculatedProtein);
+      setRequireCalories(calculatedCalories.toFixed(2));
+      setCarbs(calculatedCarbs.toFixed(2));
+      setProtein(calculatedProtein.toFixed(2));
     } else {
       setRequireCalories(maintainceCalory);
 
       const calculatedCarbs = (maintainceCalory * 0.55) / 4;
       const calculatedProtein = (maintainceCalory * 0.17) / 4;
-      setCarbs(calculatedCarbs);
-      setProtein(calculatedProtein);
+      
+      setCarbs(calculatedCarbs.toFixed(2));
+      setProtein(calculatedProtein.toFixed(2));
     }
     return;
   };

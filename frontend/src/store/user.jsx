@@ -3,11 +3,11 @@ import client from "../features/client";
 import axios from "axios";
 import { useToasts } from "react-toast-notifications";
 const initialUser = {
+  FindUserByID: null,
   token: "",
   userInfo: null,
   userInfoById: null,
   ApprovedTrainer: null,
-  FindUserByID: null,
   TrainersYetToApproved: [],
   SearchUserResult: [],
   getAcceptedNoatifcation: [],

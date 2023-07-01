@@ -141,8 +141,12 @@ const SearchInput = () => {
                 <Card sx={{ width: 350 }}>
                   <CardHeader
                     avatar={
-                      <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                        R
+                      <Avatar
+                        sx={{ bgcolor: red[500] }}
+                        src={trainer?.photo}
+                        aria-label="recipe"
+                      >
+                        {trainer?.name[0].toUpperCase()}
                       </Avatar>
                     }
                     title={trainer.name}

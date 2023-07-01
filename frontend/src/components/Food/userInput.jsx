@@ -8,10 +8,12 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Typography,
 } from "@mui/material";
 
 import { useState } from "react";
-
+import { useFormik } from "formik";
+import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { calculateCalories, priorFoodDetails } from "../../store/food";
@@ -37,25 +39,40 @@ const UserInput = () => {
   const prorData = useSelector((state) => state?.food?.priorUserDetails);
   console.log("prorData", prorData?.data);
   const isLoading = useSelector((state) => state.food.loading);
-  console.log(isLoading);
-  console.log(!isLoading && prorData);
+  const validationSchema = yup.object().shape({
+    height: yup.number().required("Height is required"),
+    weight: yup.number().required("Weight is required"),
+    age: yup.number().required("Age is required"),
+    gender: yup.string().required("Gender is required"),
+    activity: yup.string().required("Activity is required"),
+  });
 
-  const changeHandler = async () => {
-    console.log(weight, height, age, gender, activity);
-    dispatch(
-      calculateCalories({
-        weight,
-        height,
-        age,
-        gender,
-        activity,
-        addToast,
-        token,
-      })
-    );
-    navigate(`/food/calculateCalories`);
-  };
-  console.log(dataAvailable?.data);
+  const formik = useFormik({
+    initialValues: {
+      height: "",
+      weight: "",
+      age: "",
+      gender: "",
+      activity: "",
+    },
+    validationSchema,
+    onSubmit: (values, { resetForm }) => {
+      dispatch(
+        calculateCalories({
+          weight: values.weight,
+          height: values.height,
+          age: values.age,
+          gender: values.gender,
+          activity: values.activity,
+          addToast,
+          token,
+        })
+      );
+      navigate(`/food/calculateCalories`);
+      console.log(values);
+    },
+  });
+
   useEffect(() => {
     dispatch(priorFoodDetails(token)).then((result) => {
       setDataAvailable(result.payload);
@@ -85,9 +102,7 @@ const UserInput = () => {
       {console.log("dsfvdfgvbrg", dataAvailable?.data?.length > 0)}
       {console.log("prorData.length > 0 ", prorData.length > 0)}
       {dataAvailable?.data?.length > 0 && (
-        <Box sx={{ textAlign: "center", marginTop: "50px" }}>
-          <Button onClick={openModal}>View Information</Button>
-
+        <Box sx={{ textAlign: "center", margin: "50px" }}>
           <PriorInfoModal
             open={modalOpen}
             handleClose={closeModal}
@@ -99,7 +114,6 @@ const UserInput = () => {
         Provide your details to calculate your Calories requirement
       </h3>
       <Container
-        component="form"
         sx={{
           display: "flex",
           flexDirection: "column",
@@ -113,92 +127,138 @@ const UserInput = () => {
         noValidate
         autoComplete="off"
       >
-        <TextField
-          required
-          id="outlined-required"
-          value={height}
-          label="Height in cm"
-          type="number"
-          onChange={(e) => {
-            setHeight(e.target.value);
-          }}
-          sx={{ width: "100%" }}
-        />
-        <TextField
-          required
-          id="outlined-disabled"
-          value={weight}
-          label="Weight in kg"
-          type="number"
-          onChange={(e) => {
-            setWeight(e.target.value);
-          }}
-          sx={{ width: "100%" }}
-        />
-        <TextField
-          required
-          id="outlined-disabled"
-          value={age}
-          label="Age"
-          type="number"
-          onChange={(e) => {
-            setAge(e.target.value);
-          }}
-          sx={{ width: "100%" }}
-        />
-        <FormControl sx={{ width: "100%" }}>
-          <InputLabel id="demo-simple-select-label">Gender</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={gender}
-            label="Gender"
-            onChange={(e) => {
-              setGender(e.target.value);
+        <form
+          onSubmit={formik.handleSubmit}
+          autoComplete="off"
+          style={{ padding: "10px" }}
+        >
+          <TextField
+            required
+            id="outlined-required"
+            name="height"
+            value={formik.values.height}
+            label="Height in cm"
+            type="number"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.height && Boolean(formik.errors.height)}
+            helperText={formik.touched.height && formik.errors.height}
+            sx={{ width: "100%", margin: "8px" }}
+          />
+          <TextField
+            required
+            id="outlined-disabled"
+            name="weight"
+            value={formik.values.weight}
+            label="Weight in kg"
+            type="number"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.weight && Boolean(formik.errors.weight)}
+            helperText={formik.touched.weight && formik.errors.weight}
+            sx={{ width: "100%", margin: "8px" }}
+          />
+          <TextField
+            required
+            id="outlined-disabled"
+            name="age"
+            value={formik.values.age}
+            label="Age"
+            type="number"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.age && Boolean(formik.errors.age)}
+            helperText={formik.touched.age && formik.errors.age}
+            sx={{ width: "100%", margin: "8px" }}
+          />
+          <FormControl sx={{ width: "100%", margin: "8px" }}>
+            <InputLabel id="demo-simple-select-label">Gender</InputLabel>
+            <Select
+              name="gender"
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={formik.values.gender}
+              label="Gender"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.gender && Boolean(formik.errors.gender)}
+              helperText={formik.touched.gender && formik.errors.gender}
+            >
+              <MenuItem value="Male">Male</MenuItem>
+              <MenuItem value="Female">Female</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl sx={{ width: "100%", margin: "8px" }}>
+            <InputLabel id="demo-simple-select-label">Activity</InputLabel>
+            <Select
+              name="activity"
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={formik.values.activity}
+              label="Activity"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.activity && Boolean(formik.errors.activity)}
+              helperText={formik.touched.activity && formik.errors.activity}
+            >
+              <MenuItem value="Sedentary">
+                Sedentary: little or no Exercise
+              </MenuItem>
+              <MenuItem value="Light">Light: exercise 1-3 times/week</MenuItem>
+              <MenuItem value="Moderate">
+                Moderate: exercise 4-5 times/week
+              </MenuItem>
+              <MenuItem value="VeryActive">
+                Very Active: exercise 6-7 times/week
+              </MenuItem>
+              <MenuItem value="ExtraActive">
+                Extra Active: very intense exercise daily, or physical job
+              </MenuItem>
+            </Select>
+          </FormControl>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
             }}
           >
-            <MenuItem value="Male">Male</MenuItem>
-            <MenuItem value="Female">Female</MenuItem>
-          </Select>
-        </FormControl>
-        <FormControl sx={{ width: "100%" }}>
-          <InputLabel id="demo-simple-select-label">Activity</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={activity}
-            label="Activity"
-            onChange={(e) => {
-              setActivity(e.target.value);
-            }}
-          >
-            <MenuItem value="Sedentary">
-              Sedentary: little or no Exercise
-            </MenuItem>
-            <MenuItem value="Light">Light: exercise 1-3 times/week</MenuItem>
-            <MenuItem value="Moderate">
-              Moderate: exercise 4-5 times/week
-            </MenuItem>
-            <MenuItem value="VeryActive">
-              Very Active: exercise 6-7 times/week
-            </MenuItem>
-            <MenuItem value="ExtraActive">
-              Extra Active: very intense exercise daily, or physical job
-            </MenuItem>
-          </Select>
-        </FormControl>
-        <Button
-          onClick={changeHandler}
+            <Button
+              type="submit"
+              sx={{
+                color: "white",
+                backgroundColor: "red",
+                width: "120px",
+                height: "40px",
+                fontSize: "15px",
+                marginTop: "10px",
+              }}
+            >
+              Submit
+            </Button>
+          </Box>
+        </form>
+        <Box
           sx={{
-            color: "white",
-            backgroundColor: "red",
-            width: "155px",
-            height: "63px",
-            fontSize: "19px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            height: "5rem",
+            width: "100%",
+            marginBottom: "5rem",
           }}
         >
-          Submit
-        </Button>
+          <Typography>OR</Typography>
+          <h4>Click here to use your previously submitted data</h4>
+          <Button
+            onClick={openModal}
+            sx={{ color: "white", background: "black" }}
+          >
+            Click Here
+          </Button>
+        </Box>
       </Container>
     </>
   );

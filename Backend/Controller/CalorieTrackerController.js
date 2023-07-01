@@ -22,7 +22,9 @@ const saveTrackedCalories = asyncHandler(async (req, res, next) => {
 
 const getCaloriesRecordByID = asyncHandler(async (req, res, next) => {
   console.log("cobficfcfbufb ibviw");
-  const data = await CalorieTracker.find({ user: req.user._id });
+  const data = await CalorieTracker.find({ user: req.user._id }).sort({
+    createdAt: -1,
+  });
 
   res.status(200).json({ message: "success", data });
 });

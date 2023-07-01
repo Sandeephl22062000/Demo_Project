@@ -7,6 +7,7 @@ import {
   Grid,
   Input,
   InputAdornment,
+  TextField,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
@@ -433,22 +434,6 @@ const ExeprmientFoodApi = () => {
                 color: "white",
                 height: "50px",
                 width: "150px",
-                marginRight: "10px",
-                margin: "20px 5px",
-              }}
-            >
-              View Result
-            </Button>
-            <Button
-              onClick={saveTrackedTable}
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                background: "black",
-                color: "white",
-                height: "50px",
-                width: "150px",
                 margin: "20px 5px",
               }}
             >
@@ -464,6 +449,42 @@ const ExeprmientFoodApi = () => {
             variant={variant}
           >
             <ModalClose />
+            <form
+              onSubmit={saveTrackedTable}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                flexDirection: "column",
+              }}
+            >
+              Give your meal a name
+              <TextField
+                required
+                id="outlined-required"
+                name="name"
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
+                label="Meal name"
+                type="String"
+                sx={{ width: "100%", margin: "8px", color: "white" }}
+              />
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Button
+                  type="submit"
+                  sx={{ background: "black", color: "white" }}
+                >
+                  Submit
+                </Button>
+              </Box>
+            </form>
           </ModalDialog>
         </Modal>
       </Container>
