@@ -12,9 +12,8 @@ import Posts from "../Trainer-Info/PRofilePostCard";
 import axios from "axios";
 import RequestModal from "../RequestModal";
 import { Modal, ModalClose, ModalDialog } from "@mui/joy";
-import { requestTrainer } from "../../store/trainer";
 import { useDispatch, useSelector } from "react-redux";
-
+import Viewplans from "./viewPlans";
 const handleCommentButtonClick = () => {};
 
 const style = {
@@ -27,7 +26,6 @@ const ProfilePage = () => {
   const [trainer, setTrainer] = useState("");
   const [variant, setVariant] = React.useState(undefined);
   const [post, showPost] = useState([]);
-  const [message, setMessage] = useState("");
   const params = useParams();
   const dispatch = useDispatch();
   const id = params.id;
@@ -46,9 +44,6 @@ const ProfilePage = () => {
   }, []);
 
   console.log(trainer._id);
-  const sendRequestHandler = () => {
-    dispatch(requestTrainer({ token, message, trainer: trainer._id }));
-  };
 
   return (
     <Container
@@ -179,19 +174,7 @@ const ProfilePage = () => {
           variant={variant}
         >
           <ModalClose />
-          <h2 id="variant-modal-title">Send Training Request</h2>
-          <p id="variant-modal-description">Enter a message for the trainer:</p>
-          <TextField
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            multiline
-            rows={4}
-            fullWidth
-            variant="outlined"
-          />
-          <Button onClick={sendRequestHandler} variant="contained">
-            Send Request
-          </Button>
+          <Viewplans trainer={trainer?.name} trainerPhoto={trainer?.photo} />
         </ModalDialog>
       </Modal>
     </Container>

@@ -24,11 +24,6 @@ import PriorInfoModal from "./priorData";
 // import ResultPage from "./ResultPage";
 
 const UserInput = () => {
-  const [age, setAge] = useState("");
-  const [gender, setGender] = useState("");
-  const [height, setHeight] = useState("");
-  const [weight, setWeight] = useState("");
-  const [activity, setActivity] = useState("");
   const { addToast } = useToasts();
   const [modalOpen, setModalOpen] = useState(false);
   const [dataAvailable, setDataAvailable] = useState(false);
@@ -239,26 +234,29 @@ const UserInput = () => {
             </Button>
           </Box>
         </form>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            flexDirection: "column",
-            height: "5rem",
-            width: "100%",
-            marginBottom: "5rem",
-          }}
-        >
-          <Typography>OR</Typography>
-          <h4>Click here to use your previously submitted data</h4>
-          <Button
-            onClick={openModal}
-            sx={{ color: "white", background: "black" }}
+        {console.log(prorData.data !== null)}
+        {prorData.data !== null && (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+              height: "5rem",
+              width: "100%",
+              marginBottom: "5rem",
+            }}
           >
-            Click Here
-          </Button>
-        </Box>
+            <Typography>OR</Typography>
+            <h4>Click here to use your previously submitted data</h4>
+            <Button
+              onClick={openModal}
+              sx={{ color: "white", background: "black" }}
+            >
+              Click Here
+            </Button>
+          </Box>
+        )}
       </Container>
     </>
   );

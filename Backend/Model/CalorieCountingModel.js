@@ -32,6 +32,7 @@ const CalorieSchema = mongoose.Schema(
     requireProtein: { type: Number },
     requireCarbs: { type: Number },
   },
+  { timestamps: true },
   { toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
 module.exports = mongoose.model("Food", CalorieSchema);

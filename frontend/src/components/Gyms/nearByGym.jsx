@@ -83,6 +83,7 @@ const NearByGym = () => {
         type="string"
         sx={{ width: "60%", margin: "10px" }}
       />
+      {console.log(gyms)}
       <GymMap
         gyms={gyms}
         center={center}

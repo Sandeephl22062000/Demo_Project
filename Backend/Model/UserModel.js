@@ -19,7 +19,6 @@ const UserSchema = mongoose.Schema(
       type: String,
       trim: true,
       minlength: 8,
-      // maxlength: 30,
       validate: [
         validator.isStrongPassword,
         "Password Must Contain Atleast one upperCase alphabet,Atleast One LowerCase Alphabet,and Atleast 1 Special Character",
@@ -45,23 +44,12 @@ const UserSchema = mongoose.Schema(
     experiences: {
       type: String,
     },
+    fees: {
+      type: Number,
+    },
   },
-  { toJSON: { virtuals: true }, toObject: { virtuals: true } }
+  { toJSON: { virtuals: true }, toObject: { virtuals: true } },
+  { timestamps: true }
 );
-
-// UserSchema.pre("save", async function (next) {
-//   await sendEmail({
-//     email: this.email,
-//     subject: "Registered",
-//     message: `Your Email ID is ${this.email} and your Login Password is ${this.password}`,
-//   });
-//   next();
-// });
-
-// UserSchema.pre("save", async function (next) {
-//   this.password = await bcrypt.hash(this.password, 12);
-//   console.log(this.password);
-//   next();
-// });
 
 module.exports = mongoose.model("User", UserSchema);

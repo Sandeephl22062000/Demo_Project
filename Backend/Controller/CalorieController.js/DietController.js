@@ -54,19 +54,8 @@ const calorieCounting = (req, res, next) => {
   } else {
     bmr = 447.593 + 9.247 * weight + 3.098 * height - 4.33 * age;
   }
-  //   const activityFactors = {
-  //     sedentary: 1.2,
-  //     lightlyActive: 1.375,
-  //     moderatelyActive: 1.55,
-  //     veryActive: 1.725,
-  //     extraActive: 1.9,
-  //   };
 
-  // Choose the appropriate activity factor based on your activity level
-  //   const activityFactor = activityFactors;
-  //https://preview.colorlib.com/#zacson
   const maintenanceCalories = bmr * activityFactors;
-  //dynamically from forntend
 
   if (maintenanceCalories) {
     res.json({
@@ -136,8 +125,8 @@ const updateNutrients = async (req, res) => {
 };
 
 const getMaintainceCalory = async (req, res, next) => {
-  const UserID = req.user._id;
-  const Data = await Food.find({ user: UserID });
+  const UserID = req?.user?._id;
+  const Data = await Food.find({ user: UserID }).sort({ createdAt: -1 });
   res.json({
     maintainceCalory: Data[0]?.requireCalories,
   });

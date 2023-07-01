@@ -26,16 +26,17 @@ const CalorieDetail = () => {
   const [Target, setTarget] = useState("");
   const [RequireCalories, setRequireCalories] = useState(0);
   const dispatch = useDispatch();
-  const token = useSelector((state) => state.user.token);
+  const token = useSelector((state) => state?.user?.token);
   const priorMaintainceData = useSelector(
-    (state) => state.food.priorFoodCaloryvalue
+    (state) => state?.food?.priorFoodCaloryvalue
   );
   let maintainceCalory;
-  const Calories = useSelector((state) => state.food.calculateFoodCalories);
-  if (priorMaintainceData === 0) {
-    maintainceCalory = Calories;
-  } else {
+  const Calories = useSelector((state) => state?.food?.calculateFoodCalories);
+  console.log(Calories, priorMaintainceData);
+  if (Calories === 0) {
     maintainceCalory = priorMaintainceData;
+  } else {
+    maintainceCalory = Calories;
   }
   const [protein, setProtein] = useState(0);
   const [carbs, setCarbs] = useState(0);
@@ -43,6 +44,7 @@ const CalorieDetail = () => {
   const navigate = useNavigate();
   useEffect(() => {
     dispatch(priorFoodCalory(token));
+    
   }, []);
   console.log(maintainceCalory);
   const showData = (data) => (
@@ -104,7 +106,7 @@ const CalorieDetail = () => {
 
       const calculatedCarbs = (maintainceCalory * 0.55) / 4;
       const calculatedProtein = (maintainceCalory * 0.17) / 4;
-      
+
       setCarbs(calculatedCarbs.toFixed(2));
       setProtein(calculatedProtein.toFixed(2));
     }
