@@ -39,8 +39,11 @@ router
 router.route("/caloriecalculator/:food").get(DietController.CaloriesPerFood);
 
 router
+  .route("/intelligentdiet")
+  .post(DietController.makeChatCompletionsRequest);
+
+router
   .route("/caloriecalculator/savedetail")
   .post(protectingRoutes, DietController.saveUserDetails);
-
 
 module.exports = router;

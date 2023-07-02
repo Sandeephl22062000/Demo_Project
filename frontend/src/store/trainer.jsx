@@ -7,6 +7,7 @@ const initialTrainer = {
   trainerInfo: null,
   trainerInfoById: null,
   getRequestWithTrainerId: null,
+  trainerServicesList: [],
   getAllPendingRequest: [],
 };
 
@@ -61,12 +62,11 @@ export const RegisterTrainer = createAsyncThunk(
 export const requestTrainer = createAsyncThunk(
   "/trainer/requestTrainer",
   async (data) => {
-    const { trainer, message, token } = data;
+    const { trainerID, token } = data;
+    console.log(trainerID, token);
     const postData = await axios.post(
-      `http://localhost:8000/api/request/createrequest/${trainer}`,
-      {
-        message,
-      },
+      `http://localhost:8000/api/request/createrequest/${trainerID}`,
+      {},
       {
         headers: {
           "Content-Type": "application/json",
@@ -80,7 +80,7 @@ export const requestTrainer = createAsyncThunk(
 );
 
 export const getRequestOfTrainer = createAsyncThunk(
-  "/trainer/requestTrainer",
+  "/trainer/getAllrequestTrainer",
   async (data) => {
     const { trainer, token } = data;
     const postData = await axios.get(
@@ -160,6 +160,49 @@ export const TrainerById = createAsyncThunk(
   }
 );
 
+export const createServices = createAsyncThunk(
+  "/trainer/createServices",
+  async ({ token, services, addToast, navigate }) => {
+    const postData = await axios.post(
+      `http://localhost:8000/api/trainer/services`,
+      { services },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    addToast(postData.data.message, {
+      appearance: "success",
+      autoDismiss: true,
+      autoDismissTimeout: 3000,
+    });
+    navigate("/profile");
+    console.log(postData.data);
+    return postData.data.data;
+  }
+);
+
+export const getservices = createAsyncThunk(
+  "/trainer/getServices",
+  async ({ trainerID, token }) => {
+    console.log("SDfsdfs", trainerID, "fvdsfv", token);
+    const postData = await axios.get(
+      `http://localhost:8000/api/trainer/getallservice/${trainerID}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    console.log(postData.data.services);
+    return postData?.data?.services;
+  }
+);
+
 const trainerSlice = createSlice({
   name: "trainer",
   initialState: {
@@ -181,18 +224,7 @@ const trainerSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
-      .addCase(loginTrainer.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(loginTrainer.fulfilled, (state, action) => {
-        state.loading = false;
-        state.trainer = action.payload;
-      })
-      .addCase(loginTrainer.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
+
       .addCase(TrainerById.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -202,6 +234,18 @@ const trainerSlice = createSlice({
         state.trainer = action.payload;
       })
       .addCase(TrainerById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(getservices.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getservices.fulfilled, (state, action) => {
+        state.loading = false;
+        state.trainerServicesList = action.payload;
+      })
+      .addCase(getservices.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       })

@@ -2,6 +2,7 @@ const axios = require("axios");
 const catchAsync = require("../../utils/catchAync");
 const Food = require("../../Model/CalorieCountingModel");
 const AppError = "../../Error-Handling";
+
 const saveUserDetails = async (req, res, next) => {
   const { weight, height, gender, age, activity } = req.body;
   console.log("req.user._id", req.user?._id);
@@ -133,6 +134,41 @@ const getMaintainceCalory = async (req, res, next) => {
 };
 // Call the function and pass the food name as an argument
 
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+
+const makeChatCompletionsRequest = async (req, res) => {
+  console.log(OPENAI_API_KEY);
+  try {
+    const calories = req.body.calories;
+    const protein = req.body.protein;
+    const carbs = req.body.carbs;
+    const response = await axios.post(
+      "https://api.openai.com/v1/chat/completions",
+      {
+        model: "gpt-3.5-turbo",
+        messages: [
+          { role: "system", content: "You are a helpful assistant." },
+          {
+            role: "user",
+            content: `Make me vegeterian diet with required calories:${calories}, required protein:${protein} and required carbohydrates: ${carbs}, but i want it in 5 meals seperated provide as Breakfast, Morning snacks, Lunch, Evening Snacks and Dinner`,
+          },
+        ],
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${OPENAI_API_KEY}`,
+        },
+      }
+    );
+
+    console.log(response.data);
+    res.json(response.data);
+  } catch (error) {
+    console.error("Error making API request:", error);
+  }
+};
+
 module.exports = {
   calorieCounting,
   CaloriesPerFood,
@@ -140,6 +176,7 @@ module.exports = {
   updatecalories,
   updateNutrients,
   getMaintainceCalory,
+  makeChatCompletionsRequest,
 };
 
 // For men:

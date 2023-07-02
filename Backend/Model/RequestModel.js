@@ -12,10 +12,7 @@ const requestSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    message: {
-      type: String,
-      required: true,
-    },
+
     isAccepted: {
       type: Boolean,
       default: false,
@@ -24,9 +21,9 @@ const requestSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    isPending:{
-      type:Boolean,
-      default:true,
+    isPending: {
+      type: Boolean,
+      default: true,
     },
     isRejected: {
       type: Boolean,

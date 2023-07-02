@@ -25,6 +25,8 @@ import ViewAllRecords from "./components/Food/ViewAllRecords";
 import Gym from "./components/Gyms/nearByGym";
 import { useState } from "react";
 import Challenges from "./components/Challenges/challengesTOShow";
+import Createservices from "./components/createservices";
+import IntelligentDiet from "./components/Food/IntelligentDiet"
 // import Payment from "./components/Trainer-Info/payment";
 const App = () => {
   const [isAdmin, setIsAdmin] = useState(true);
@@ -50,9 +52,13 @@ const App = () => {
                 element={<ExeprmientFoodApi />}
               />
               <Route path="/viewallrecords" element={<ViewAllRecords />} />
+              <Route path="/dietprovider" element={<IntelligentDiet />} />
+
 
               <Route path="/trainer" element={<TrainerCards />} />
               <Route path="/trainer/:id" element={<TrainerProfile />} />
+              <Route path="/services" element={<Createservices />} />
+
               {/* <Route path="/payment" element={<Payment />} /> */}
 
               <Route path="/user/:id" element={<ProfileToShow />} />

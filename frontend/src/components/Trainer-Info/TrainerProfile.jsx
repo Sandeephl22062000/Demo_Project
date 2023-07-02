@@ -14,7 +14,6 @@ import RequestModal from "../RequestModal";
 import { Modal, ModalClose, ModalDialog } from "@mui/joy";
 import { useDispatch, useSelector } from "react-redux";
 import Viewplans from "./viewPlans";
-const handleCommentButtonClick = () => {};
 
 const style = {
   width: "100%",
@@ -25,11 +24,20 @@ const style = {
 const ProfilePage = () => {
   const [trainer, setTrainer] = useState("");
   const [variant, setVariant] = React.useState(undefined);
+  const [showServices, setShowServices] = useState(false);
   const [post, showPost] = useState([]);
   const params = useParams();
   const dispatch = useDispatch();
   const id = params.id;
   const token = useSelector((state) => state?.user?.token);
+  const handleShowServices = () => {
+    setShowServices(true);
+    showPost(false);
+  };
+  const handleShowPost = () => {
+    setShowServices(false);
+    showPost(true);
+  };
   useEffect(() => {
     const trainerDetail = async () => {
       const { data } = await axios.get(
@@ -135,48 +143,40 @@ const ProfilePage = () => {
               "& > button": { flex: 1 },
             }}
           >
-            <Button variant="outlined" color="neutral">
-              Clients
+            <Button
+              variant="outlined"
+              color="neutral"
+              onClick={handleShowServices}
+            >
+              Services
             </Button>
             <Button
               variant="solid"
               sx={{ background: "black", color: "white" }}
-              onClick={() => {
-                setVariant("plain");
-              }}
+              onClick={handleShowPost}
             >
-              Send Request
+              Post
             </Button>
           </Box>
         </CardContent>
       </Card>
-      {console.log(trainer?.posts?.length > 0)}
-      {console.log(trainer?.posts)}
-      {trainer?.posts?.length > 0 ? (
-        <Posts />
-      ) : (
-        <Box
-          sx={{
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "40vh",
-          }}
-        >
-          <Typography sx={{ height: "50px" }}>No Post yet</Typography>
-        </Box>
-      )}
-      <Modal open={!!variant} onClose={() => setVariant(undefined)}>
-        <ModalDialog
-          aria-labelledby="variant-modal-title"
-          aria-describedby="variant-modal-description"
-          variant={variant}
-        >
-          <ModalClose />
-          <Viewplans trainer={trainer?.name} trainerPhoto={trainer?.photo} />
-        </ModalDialog>
-      </Modal>
+      {post &&
+        (trainer?.posts?.length > 0 ? (
+          <Posts />
+        ) : (
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "40vh",
+            }}
+          >
+            <Typography sx={{ height: "50px" }}>No Post yet</Typography>
+          </Box>
+        ))}
+      {showServices && <Viewplans trainerID={trainer?._id} />}
     </Container>
   );
 };

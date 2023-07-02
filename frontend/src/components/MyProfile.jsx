@@ -16,6 +16,7 @@ import { Modal, ModalClose, ModalDialog } from "@mui/joy";
 import { useDispatch, useSelector } from "react-redux";
 import { UserByID } from "../store/user";
 import RequestTable from "./trainingRequestTable";
+import TrainerServices from "./TrainerServices";
 
 const handleCommentButtonClick = () => {};
 
@@ -30,6 +31,7 @@ const ProfilePage = () => {
   const [variant, setVariant] = useState(undefined);
   const [showRequests, setShowRequests] = useState(false);
   const [showChallenges, setShowChallenges] = useState(false);
+  const [showServices, setShowServices] = useState(false);
   const [showPosts, setShowPosts] = useState(true);
   const params = useParams();
   const dispatch = useDispatch();
@@ -61,11 +63,18 @@ const ProfilePage = () => {
   const handleViewRequest = () => {
     setShowRequests(true);
     setShowPosts(false);
+    setShowServices(false);
   };
 
+  const handleViewServices = () => {
+    setShowServices(true);
+    setShowPosts(false);
+    setShowRequests(false);
+  };
   const handleViewPost = () => {
     setShowRequests(false);
     setShowPosts(true);
+    setShowServices(false);
   };
 
   return (
@@ -172,6 +181,7 @@ const ProfilePage = () => {
                   </Typography>
                   <Typography fontWeight="lg">980</Typography>
                 </div>
+
                 <div>
                   <Typography level="body3" fontWeight="lg">
                     Rating
@@ -208,10 +218,26 @@ const ProfilePage = () => {
 
             {user?.role === 1 ? (
               <>
+                <Button
+                  onClick={handleViewServices}
+                  sx={{ color: "white", background: "black" }}
+                >
+                  View Services
+                </Button>
                 {showRequests ? (
-                  <Button onClick={handleViewPost} sx={{color:"white",background:"black"}}>View Post</Button>
+                  <Button
+                    onClick={handleViewPost}
+                    sx={{ color: "white", background: "black" }}
+                  >
+                    View Post
+                  </Button>
                 ) : (
-                  <Button onClick={handleViewRequest}  sx={{color:"white",background:"black"}}>View Requests</Button>
+                  <Button
+                    onClick={handleViewRequest}
+                    sx={{ color: "white", background: "black" }}
+                  >
+                    View Requests
+                  </Button>
                 )}
               </>
             ) : (
@@ -233,16 +259,26 @@ const ProfilePage = () => {
             )}
           </Box>
         </CardContent>
-        {user?.role === 1 && (showRequests ? <RequestTable /> : <Posts />)}
-        {user?.role === 0 && showChallenges && <Challenges />}
-        {showPosts && !showRequests && user?.posts?.length > 0 ? (
-          <Posts />
-        ) : (
-          <Box sx={{ display: "flex", flexWrap: "wrap" }}>No Post yet</Box>
-        )}
       </Card>
-      <Modal open={!!variant} onClose={() => setVariant(undefined)}>
-        <UpdateProfileModal variant={variant} />
+      {showRequests ? (
+        <RequestTable trainer={user?._id} />
+      ) : showChallenges ? (
+        <Challenges trainer={user?._id} />
+      ) : showServices ? (
+        <TrainerServices trainer={user?._id} />
+      ) : (
+        <Posts />
+      )}
+      <Modal
+        open={variant === "solid"}
+        onClose={() => setVariant(undefined)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <ModalDialog>
+          <ModalClose onClick={() => setVariant(undefined)} />
+          <UpdateProfileModal />
+        </ModalDialog>
       </Modal>
     </Container>
   );
