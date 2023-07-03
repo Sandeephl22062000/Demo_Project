@@ -18,13 +18,15 @@ import {
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { priorFoodCalory } from "../../store/food";
+import { foodNutritionData, priorFoodCalory } from "../../store/food";
 
 const CalorieDetail = () => {
   const [showTrackPage, setShowTrackPage] = useState(false);
   const [Goal, setGoal] = useState("");
   const [Target, setTarget] = useState("");
   const [RequireCalories, setRequireCalories] = useState(0);
+  const [protein, setProtein] = useState(0);
+  const [carbs, setCarbs] = useState(0);
   const dispatch = useDispatch();
   const token = useSelector((state) => state?.user?.token);
   const priorMaintainceData = useSelector(
@@ -38,13 +40,17 @@ const CalorieDetail = () => {
   } else {
     maintainceCalory = Calories;
   }
-  const [protein, setProtein] = useState(0);
-  const [carbs, setCarbs] = useState(0);
 
   const navigate = useNavigate();
   useEffect(() => {
+    dispatch(
+      foodNutritionData({
+        RequireCalories,
+        protein,
+        carbs,
+      })
+    );
     dispatch(priorFoodCalory(token));
-    
   }, []);
   console.log(maintainceCalory);
   const showData = (data) => (

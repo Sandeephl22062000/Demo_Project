@@ -6,6 +6,7 @@ const initialFood = {
   priorUserDetails: {},
   loading: false,
   priorFoodCaloryvalue: 0,
+  foodNutrions: null,
 };
 
 export const calculateCalories = createAsyncThunk(
@@ -89,7 +90,11 @@ export const priorFoodCalory = createAsyncThunk(
 const foodSlice = createSlice({
   name: "food",
   initialState: initialFood,
-
+  reducers: {
+    foodNutritionData: (state, action) => {
+      state.foodNutrions = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(calculateCalories.pending, (state) => {
@@ -134,5 +139,5 @@ const foodSlice = createSlice({
       });
   },
 });
-
+export const { foodNutritionData } = foodSlice.actions;
 export default foodSlice.reducer;
