@@ -2,7 +2,7 @@ const axios = require("axios");
 const catchAsync = require("../../utils/catchAync");
 const Food = require("../../Model/CalorieCountingModel");
 const AppError = "../../Error-Handling";
-
+const TargetNutrients = require("../../Model/TargetCalories");
 const saveUserDetails = async (req, res, next) => {
   const { weight, height, gender, age, activity } = req.body;
   console.log("req.user._id", req.user?._id);
@@ -104,9 +104,11 @@ const updatecalories = async (req, res, next) => {
 };
 
 const updateNutrients = async (req, res) => {
-  const userId = req.user.id;
+  const userId = req?.user?._id;
   const { requireProtein, requireCalories, requireCarbs } = req.body;
   const UserData = await Food.find({ user: userId });
+
+  console.log(UserData);
 
   const updatedvalue = await Food.findByIdAndUpdate(
     UserData._id,
@@ -125,6 +127,35 @@ const updateNutrients = async (req, res) => {
   });
 };
 
+const targetCalories = async (req, res, next) => {
+  const { requireCalories, requireProtein, requireCarbs } = req.body;
+  const targetCalories = await TargetNutrients.create({
+    user: req?.user?._id,
+    requireCalories,
+    requireProtein,
+    requireCarbs,
+  });
+  if (targetCalories) {
+    res.status(201).json({
+      data: targetCalories,
+    });
+  } else {
+    return next(new AppError("Something went wrong", 404));
+  }
+};
+
+const getTargetNutrients = async (req, res, next) => {
+  const targetCalories = await TargetNutrients.find({
+    user: req?.user?._id,
+  }).sort({ createdAt: -1 });
+  if (targetCalories) {
+    res.status(201).json({
+      data: targetCalories[0],
+    });
+  } else {
+    return next(new AppError("Something went wrong", 404));
+  }
+};
 const getMaintainceCalory = async (req, res, next) => {
   const UserID = req?.user?._id;
   const Data = await Food.find({ user: UserID }).sort({ createdAt: -1 });
@@ -151,7 +182,7 @@ const makeChatCompletionsRequest = async (req, res) => {
           { role: "system", content: "You are a helpful assistant." },
           {
             role: "user",
-            content: `Make me ${foodtype} diet with required calories:${calories}, required protein:${protein} and required carbohydrates: ${carbs}, but i want it in 5 meals seperated provide as Breakfast, Morning snacks, Lunch, Evening Snacks and Dinner give output in json format give me atleast 3 item for each meal in output give me only json data no extra text`,
+            content: `Make me ${foodtype} diet with required calories:${calories}, required protein:${protein} and required carbohydrates: ${carbs}, but i want it in meals separated as Breakfast,Morning Snack,Lunch,Evening Snacks and dinner and each one has atleast 3 different types of dishes , provide me the data in html table for each meal times an each meals has the total value for the column, with proper styling`,
           },
         ],
       },
@@ -178,6 +209,8 @@ module.exports = {
   updateNutrients,
   getMaintainceCalory,
   makeChatCompletionsRequest,
+  targetCalories,
+  getTargetNutrients,
 };
 
 // For men:
@@ -185,3 +218,5 @@ module.exports = {
 
 // For women:
 // BMR = 447.593 + (9.247 × weight in kg) + (3.098 × height in cm) - (4.330 × age in years)
+
+/** but i want it in 5 meals seperated provide as Breakfast, MorningSnacks, Lunch, EveningSnacks and Dinner give output in json format give me atleast 3 item for each meal in output give me only json data in this format for each meal {Item: 'Oatmeal', Calories: 150, Protein: 6, Carbohydrates: 25},without any extra text,dont mention tis type of line Sure, here's a non-vegetarian diet plan divided into 5 meals as per your requirements */

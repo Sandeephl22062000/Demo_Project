@@ -15,8 +15,7 @@ import Login from "./components/Auth/login";
 import CalorieDetail from "./components/Food/pageEdited";
 
 import TrainerSigup from "./components/Auth/trainerSignup";
-import ClientsExperince from "./ClientsExperince";
-import ShowPost from "./components/ShowPost";
+import ShowPost from "./components/Activities/ShowPost";
 import ExeprmientFoodApi from "./components/Food/ExeprmientFoodApi";
 import Profile from "./components/MyProfile";
 import AdminDashboard from "./components/Admin/AdminDashboard";
@@ -26,7 +25,7 @@ import Gym from "./components/Gyms/nearByGym";
 import { useState } from "react";
 import Challenges from "./components/Challenges/challengesTOShow";
 import Createservices from "./components/createservices";
-import IntelligentDiet from "./components/Food/IntelligentDiet"
+import IntelligentDiet from "./components/Food/IntelligentDiet";
 // import Payment from "./components/Trainer-Info/payment";
 const App = () => {
   const [isAdmin, setIsAdmin] = useState(true);
@@ -54,7 +53,6 @@ const App = () => {
               <Route path="/viewallrecords" element={<ViewAllRecords />} />
               <Route path="/dietprovider" element={<IntelligentDiet />} />
 
-
               <Route path="/trainer" element={<TrainerCards />} />
               <Route path="/trainer/:id" element={<TrainerProfile />} />
               <Route path="/services" element={<Createservices />} />
@@ -66,8 +64,6 @@ const App = () => {
               <Route path="/gyms" element={<Gym />} />
 
               <Route path="/exercise" element={<Exercises />} />
-
-              <Route path="/clientexperiences" element={<ClientsExperince />} />
 
               <Route path="/profile" element={<Profile />} />
 

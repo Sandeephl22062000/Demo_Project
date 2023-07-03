@@ -7,7 +7,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useToasts } from "react-toast-notifications";
 import { Button, Table } from "@mui/material";
-import { updateUser } from "../store/user";
+import { updateUser } from "../../store/user";
 
 const UpdateProfileModal = (props) => {
   const [name, setName] = useState("");
@@ -71,29 +71,32 @@ const UpdateProfileModal = (props) => {
               />
             </td>
           </tr>
-          {user?.role === 1 && (<><tr>
-            <td>Experience:</td>
-            <td>
-              <input
-                type="text"
-                placeholder={user?.data?.experiences}
-                value={experiences}
-                onChange={(e) => setExperiences(e.target.value)}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>Specialization:</td>
-            <td>
-              <input
-                type="text"
-                placeholder={user?.data?.specialization}
-                value={specialization}
-                onChange={(e) => setSpecialization(e.target.value)}
-              />
-            </td>
-          </tr>
-          </>)}
+          {user?.role === 1 && (
+            <>
+              <tr>
+                <td>Experience:</td>
+                <td>
+                  <input
+                    type="text"
+                    placeholder={user?.data?.experiences}
+                    value={experiences}
+                    onChange={(e) => setExperiences(e.target.value)}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>Specialization:</td>
+                <td>
+                  <input
+                    type="text"
+                    placeholder={user?.data?.specialization}
+                    value={specialization}
+                    onChange={(e) => setSpecialization(e.target.value)}
+                  />
+                </td>
+              </tr>
+            </>
+          )}
         </tbody>
       </Table>
       <Button

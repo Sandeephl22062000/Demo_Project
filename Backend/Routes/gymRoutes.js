@@ -6,8 +6,12 @@ sdk.auth("fsq3mi67FjDcRIEQD8R528NyLFX6jboL7tu7+Jgx08jBpfQ=");
 router.get("/:latitude/:longitude", async (req, res) => {
   const { latitude, longitude } = req.params;
 
-  const data =sdk
-    .placesNearby({ ll: `${latitude},${longitude}`, query: "gym" })
+  const data = sdk
+    .placesNearby({
+      ll: `${latitude},${longitude}`,
+      query: "gym",
+      radius: 10000,
+    })
     .then(({ data }) => {
       console.log(data?.results);
       res.json(data?.results);

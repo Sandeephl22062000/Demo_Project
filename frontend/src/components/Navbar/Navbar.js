@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../store/user";
 import Noatification from "./Noatifications";
+import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 
 const pages = [
   "Food",
@@ -83,7 +84,6 @@ function ResponsiveAppBar() {
     <AppBar position="static" sx={{ background: "black" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
@@ -98,6 +98,9 @@ function ResponsiveAppBar() {
               textDecoration: "none",
             }}
           >
+            <FitnessCenterIcon
+              sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+            />
             Fitness
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>

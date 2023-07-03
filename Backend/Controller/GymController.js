@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const sdk = require('@fsq-developer/v1.0#78iknmrc2aljgfbp90');
 
-
 sdk.auth('fsq3mi67FjDcRIEQD8R528NyLFX6jboL7tu7+Jgx08jBpfQ=');
 
 app.get('/api/gyms', async (req, res) => {

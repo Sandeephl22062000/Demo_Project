@@ -6,47 +6,22 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { useDispatch, useSelector } from "react-redux";
-import { getNoatifcation } from "../store/user";
 import { useEffect } from "react";
-import { PendingRequest, acceptRequest, rejectRequest } from "../store/trainer";
-import axios from "axios";
-import { useState } from "react";
-import { Avatar, Box, Button, Container } from "@mui/material";
-import { Typography } from "@mui/joy";
+import { Avatar, Box, Button, Container, Typography } from "@mui/material";
 
-const TrainingRequestRejected = () => {
-  const [pendingRequest, setPendingReqeust] = useState([]);
+import { useDispatch, useSelector } from "react-redux";
+import { getAcceptedNoatifcation } from "../../store/user";
+
+const TrainingRequestAccepted = () => {
   const dispatch = useDispatch();
   const token = useSelector((state) => state?.user?.token);
-  //   const pendingRequest = useSelector(
-  //     (state) => state?.user?.getAllPendingRequest
-  //   );
-  //   console.log(pendingRequest);
-  const acceptRequestHandler = (id) => {
-    console.log(id);
-    console.log(token);
-    dispatch(acceptRequest({ id, token }));
-  };
-  const rejectRequestHandler = (id) => {
-    console.log(id);
-    dispatch(rejectRequest({id, token}));
-  };
+  const acceptedRequests = useSelector(
+    (state) => state?.user?.GetAcceptedNoatifcation
+  );
+  console.log(acceptedRequests);
+
   useEffect(() => {
-    // dispatch(PendingRequest({ token }));
-    const data = async () => {
-      const postData = await axios.get(
-        `http://localhost:8000/api/request/pendingRequest/`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setPendingReqeust(postData?.data?.request);
-    };
-    data();
+    dispatch(getAcceptedNoatifcation({ token }));
   }, []);
   return (
     <Container>
@@ -68,11 +43,11 @@ const TrainingRequestRejected = () => {
                   Message
                 </Box>
               </TableCell>
-              <TableCell align="right">Actions</TableCell>
+              <TableCell align="right">Accetped at</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {pendingRequest?.map((request) => (
+            {acceptedRequests?.map((request) => (
               <TableRow
                 key={request._id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -117,20 +92,10 @@ const TrainingRequestRejected = () => {
                   </Box>
                 </TableCell>
                 <TableCell align="right">
-                  <Button
-                    sx={{ background: "green", color: "white" }}
-                    onClick={acceptRequestHandler(request?._id)}
-                  >
-                    Accept
-                  </Button>
-                  <Button
-                    sx={{ background: "red", color: "white" }}
-                    onClick={rejectRequestHandler(request?._id)}
-                  >
-                    Reject
-                  </Button>
+                  <Typography sx={{ margin: "10px" }}>
+                    {new Date(request?.updatedAt).toLocaleString()}
+                  </Typography>
                 </TableCell>
-                {/* <TableCell align="right">{row.protein}</TableCell> */}
               </TableRow>
             ))}
           </TableBody>
@@ -140,4 +105,4 @@ const TrainingRequestRejected = () => {
   );
 };
 
-export default TrainingRequestRejected;
+export default TrainingRequestAccepted;

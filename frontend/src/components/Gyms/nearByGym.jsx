@@ -6,10 +6,36 @@ import { Box, Button, Container, TextField, Typography } from "@mui/material";
 const NearByGym = () => {
   const [gyms, setGyms] = useState([]);
   const [selectedGym, setSelectedGym] = React.useState(null);
+  const [currentLocation, setCurrentLocation] = useState({
+    latitude: "",
+    longitude: "",
+  });
   const [searchPlace, setSearchPlace] = useState("");
   const handleMarkerClick = (gym) => {
     console.log(gym);
     setSelectedGym(gym);
+  };
+
+  const getCurrentLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        function (position) {
+          const latitude = position.coords.latitude;
+          const longitude = position.coords.longitude;
+
+          console.log("Latitude: " + latitude + ", Longitude: " + longitude);
+          setCurrentLocation({
+            latitude,
+            longitude,
+          });
+        },
+        function (error) {
+          console.error("Error getting current location: " + error.message);
+        }
+      );
+    } else {
+      console.error("Geolocation is not supported by this browser.");
+    }
   };
 
   const getCoordinates = async (place) => {
@@ -31,19 +57,21 @@ const NearByGym = () => {
     }
   };
 
-  const YOUR_LATITUDE = 21.14564;
-  const YOUR_LONGITUDE = 72.77831;
-
+  const YOUR_LATITUDE = currentLocation.latitude;
+  const YOUR_LONGITUDE = currentLocation.longitude;
   useEffect(() => {
+    getCurrentLocation();
     const fetchData = async () => {
+      console.log(YOUR_LATITUDE, YOUR_LONGITUDE);
       const data = await axios.get(
         `http://localhost:8000/api/gyms/${YOUR_LATITUDE}/${YOUR_LONGITUDE}`
       );
+      console.log(data);
       setGyms(data.data);
     };
     fetchData();
   }, []);
-
+  console.log(gyms);
   const searchHandler = () => {
     getCoordinates(searchPlace);
   };

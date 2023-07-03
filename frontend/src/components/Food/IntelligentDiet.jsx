@@ -7,12 +7,15 @@ import {
   MenuItem,
   Select,
   TextField,
+  Typography,
 } from "@mui/material";
 import axios from "axios";
 import React from "react";
 import { useState } from "react";
 import MealCard from "./MealCard";
+import parse from "react-html-parser";
 import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 const IntelligentDiet = () => {
   const [response, setResponse] = useState("");
@@ -20,39 +23,52 @@ const IntelligentDiet = () => {
   const [calories, setCalories] = useState("");
   const [carbs, setCarbs] = useState("");
   const [protein, setProtein] = useState("");
-  const handleCaloriesChange = (event) => {
-    setCalories(event.target.value);
-  };
-
-  const handleCarbsChange = (event) => {
-    setCarbs(event.target.value);
-  };
-
-  const foodData = useSelector((state) => state?.food?.foodNutritions);
+  const foodData = useSelector((state) => state?.food);
+  const [parseResponse, setParseResponse] = useState(null);
   console.log("foodFdata", foodData);
 
-  const handleProteinChange = (event) => {
-    setProtein(event.target.value);
-  };
-
   const res = async () => {
+    console.log(calories, carbs, protein, foodType);
     const resp = await axios.post(
       "http://localhost:8000/api/users/intelligentdiet",
       {
         foodType,
         calories: calories,
-        protein: carbs,
-        carbs: protein,
+        protein: protein,
+        carbs: carbs,
       }
     );
-    setResponse(resp?.data?.choices[0].message?.content);
+    setParseResponse(parse(resp?.data?.choices[0].message?.content));
+    // if (response.length > 0) {
+    //   const parseResponse = JSON.parse(response);
+    //   setParseResponse(parseResponse);
+    // }
   };
-
+  console.log(setParseResponse);
   const sendRequest = () => {
     console.log(foodType);
     res();
   };
-
+  const token = useSelector((state) => state?.user?.token);
+  useEffect(() => {
+    const getData = async () => {
+      const { data } = await axios.get(
+        "http://localhost:8000/api/targetnutrients/targetnutritionofuser",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(data.data);
+      setCalories(data?.data?.requireCalories);
+      setCarbs(data?.data?.requireCarbs);
+      setProtein(data?.data?.requireProtein);
+    };
+    getData();
+  }, []);
+  console.log(parseResponse);
   return (
     <Container sx={{ minHeight: "80vh" }}>
       <Box
@@ -87,18 +103,77 @@ const IntelligentDiet = () => {
           Submit
         </Button>
       </Box>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          margin: "1rem",
-        }}
-      >
-        <MealCard />
-        <MealCard />
-        <MealCard />
-      </Box>
+      {parseResponse}
+      {/* {parseResponse?.Breakfast.map((meal) => (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            margin: "1rem",
+          }}
+        >
+          <MealCard meal={meal} />
+        </Box>
+      ))}
+      {parseResponse?.MorningSnacks.map((meal) => (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "row",
+
+            margin: "1rem",
+          }}
+        >
+          <Typography>Breakfast</Typography>
+          <MealCard meal={meal} />
+        </Box>
+      ))}
+      {parseResponse?.Lunch.map((meal) => (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "row",
+
+            margin: "1rem",
+          }}
+        >
+          <Typography>Lunch</Typography>
+          <MealCard meal={meal} />
+        </Box>
+      ))}
+      {parseResponse?.EveningSnacks.map((meal) => (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "row",
+            margin: "1rem",
+          }}
+        >
+          <Typography>Evening Snacks</Typography>
+
+          <MealCard meal={meal} />
+        </Box>
+      ))}
+      {parseResponse?.Dinner.map((meal) => (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "row",
+            margin: "1rem",
+          }}
+        >
+          <MealCard meal={meal} />
+        </Box>
+      ))} */}
     </Container>
   );
 };

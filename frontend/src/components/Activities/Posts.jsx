@@ -20,29 +20,30 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 const Post = (props) => {
-  const [like, AddLike] = React.useState(false);
+  const [likeCount, setLikeCount] = React.useState(props?.post?.likes?.length);
   const [comment, setComment] = useState("");
   const [showComment, setShowComment] = useState([]);
   const token = useSelector((state) => state.user.token);
   console.log(token);
 
-  const addLike = async () => {
-    const data = await axios.post(
-      `/api/post/likepost/${props.post._id}`,
-      {},
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    console.log(data);
+  const handleLike = () => {
+    const addLike = async () => {
+      const data = await axios.post(
+        `/api/post/likepost/${props.post._id}`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(data);
+    };
+    addLike();
+    setLikeCount(props?.post?.likes?.length + 1);
   };
 
-  // const getComments = () =>{
-  //   const data = await axios.get()
-  // }
   const addCommentHandler = async (e) => {
     e.preventDefault();
     const { data } = await axios.post(
@@ -134,9 +135,9 @@ const Post = (props) => {
               variant="plain"
               color="neutral"
               size="sm"
-              onClick={addLike}
+              onClick={handleLike}
             >
-              <FavoriteBorder /> {props?.post?.likes?.length}
+              <FavoriteBorder /> {likeCount}
             </IconButton>
             <IconButton variant="plain" color="neutral" size="sm">
               <ModeCommentOutlined /> {props.post?.comments?.length}

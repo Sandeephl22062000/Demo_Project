@@ -5,7 +5,6 @@ import {
   CardContent,
   CardHeader,
   CardMedia,
-  Container,
   Typography,
 } from "@mui/material";
 import React from "react";
@@ -13,7 +12,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { UserByID } from "../../store/user";
-import { TrainerById } from "../../store/trainer";
+
 
 const PRofilePostCard = (props) => {
   

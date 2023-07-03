@@ -87,6 +87,34 @@ export const priorFoodCalory = createAsyncThunk(
   }
 );
 
+export const updateNutritionValue = createAsyncThunk(
+  "/food/updatenutritionvalue",
+  async ({ token, requireCalories, requireProtein, requireCarbs }) => {
+    try {
+      console.log("Vzdfvdrvzdfvfz");
+      const response = await axios.put(
+        "http://localhost:8000/api/users/updatenutritionvalue",
+        {
+          requireCalories,
+          requireProtein,
+          requireCarbs,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const { data } = response;
+      console.log(data?.maintainceCalory);
+      return data?.maintainceCalory;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
 const foodSlice = createSlice({
   name: "food",
   initialState: initialFood,
@@ -135,6 +163,19 @@ const foodSlice = createSlice({
         state.priorFoodCaloryvalue = action.payload;
       })
       .addCase(priorFoodCalory.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(updateNutritionValue.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateNutritionValue.fulfilled, (state, action) => {
+        state.loading = false;
+
+        state.foodNutritions = action.payload;
+      })
+      .addCase(updateNutritionValue.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });

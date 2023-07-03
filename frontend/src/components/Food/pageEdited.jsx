@@ -18,7 +18,12 @@ import {
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { foodNutritionData, priorFoodCalory } from "../../store/food";
+import {
+  foodNutritionData,
+  priorFoodCalory,
+  updateNutritionValue,
+} from "../../store/food";
+import axios from "axios";
 
 const CalorieDetail = () => {
   const [showTrackPage, setShowTrackPage] = useState(false);
@@ -43,13 +48,6 @@ const CalorieDetail = () => {
 
   const navigate = useNavigate();
   useEffect(() => {
-    dispatch(
-      foodNutritionData({
-        RequireCalories,
-        protein,
-        carbs,
-      })
-    );
     dispatch(priorFoodCalory(token));
   }, []);
   console.log(maintainceCalory);
@@ -124,6 +122,23 @@ const CalorieDetail = () => {
 
   const clickHandler = () => {
     setShowTrackPage(true);
+    const sendResponse = async () => {
+      const data = await axios.post(
+        "http://localhost:8000/api/users/gettargetnutrition",
+        {
+          requireCalories: RequireCalories,
+          requireProtein: protein,
+          requireCarbs: carbs,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    };
+    sendResponse();
     navigate(`/calculatediet/${protein}/${carbs}/${RequireCalories}`);
   };
   return (

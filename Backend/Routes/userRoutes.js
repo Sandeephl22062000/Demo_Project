@@ -34,6 +34,14 @@ router.post(
 );
 
 router
+  .route("/updatenutritionvalue")
+  .put(protectingRoutes, DietController.updateNutrients);
+
+router
+  .route("/gettargetnutrition")
+  .post(protectingRoutes, DietController.targetCalories);
+
+router
   .route("/getMaintainceCalory")
   .post(protectingRoutes, DietController.getMaintainceCalory);
 router.route("/caloriecalculator/:food").get(DietController.CaloriesPerFood);

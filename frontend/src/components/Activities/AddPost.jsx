@@ -11,14 +11,14 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
-import storage from "../utils/firebase";
+import storage from "../../utils/firebase";
 import "./AddPost.css"; // Import the CSS file
 import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import ChallengesModel from "./Challenges/AddChallenges";
+import ChallengesModel from "../Challenges/AddChallenges";
 
 const AddPost = () => {
   const [images, setImages] = useState("");

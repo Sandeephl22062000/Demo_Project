@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-// import UserListItem from "../miscelleneous/UserListItem";
-// import LoadingSkeleton from "../miscelleneous/LoadingSpinner";
-
+import CircularProgress from "@mui/material/CircularProgress";
 import {
   Box,
   Button,
@@ -12,7 +10,6 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
@@ -30,8 +27,7 @@ const SearchInput = () => {
   const [TotalPage, setTotalPage] = useState(1);
 
   const [trainer, setTrainer] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [loadingtrainer, setloadingTrainer] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
 
@@ -46,9 +42,9 @@ const SearchInput = () => {
       );
       console.log(data);
       console.log(data.totalPages);
-      setLoading(false);
       setTotalPage(data.totalPages);
       setSearchResult(data.data);
+      setLoading(false);
     } catch (error) {
       throw new Error(error);
     }
@@ -85,7 +81,7 @@ const SearchInput = () => {
   }, [search, trainer]);
 
   return (
-    <Container>
+    <Container sx={{ minHeight: "80vh" }}>
       <form style={{ width: "100%" }} onSubmit={submithandler}>
         <Box
           sx={{
@@ -93,6 +89,7 @@ const SearchInput = () => {
             flexDirection: "column",
             alignItems: "center",
             padding: "10px",
+            minHeight: "80vh",
           }}
         >
           <Box
@@ -129,64 +126,70 @@ const SearchInput = () => {
               padding: "10px",
             }}
           >
-            <Box
-              sx={{
-                display: "grid",
-                gridTemplateColumns: "repeat(3, 1fr)",
-                justifyContent: "flex-end",
-                gap: "20px",
-              }}
-            >
-              {searchResult.map((trainer) => (
-                <Card sx={{ width: 350 }}>
-                  <CardHeader
-                    avatar={
-                      <Avatar
-                        sx={{ bgcolor: red[500] }}
-                        src={trainer?.photo}
-                        aria-label="recipe"
-                      >
-                        {trainer?.name[0].toUpperCase()}
-                      </Avatar>
-                    }
-                    title={trainer.name}
-                    // subheader="September 14, 2016"
-                  />
-                  <CardMedia
-                    component="img"
-                    height="194"
-                    image={trainer.photo}
-                    alt="Paella dish"
-                  />
-                  <CardContent>
-                    <Typography variant="body2" color="text.secondary">
-                      Email:{trainer.email}
-                      <br />
-                      specification:not created model yet
-                    </Typography>
-                  </CardContent>
-                  <CardActions
-                    disableSpacing
-                    sx={{ display: "flex", justifyContent: "center" }}
-                  >
-                    <a href={`/trainer/${trainer._id}`}>
-                      <Button
-                        sx={{
-                          backgroundColor: "black",
-                          color: "white",
-                          "&:hover": {
+            {!isLoading ? (
+              <Box
+                sx={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(3, 1fr)",
+                  justifyContent: "flex-end",
+                  gap: "20px",
+                }}
+              >
+                {searchResult.map((trainer) => (
+                  <Card sx={{ width: 350 }}>
+                    <CardHeader
+                      avatar={
+                        <Avatar
+                          sx={{ bgcolor: red[500] }}
+                          src={trainer?.photo}
+                          aria-label="recipe"
+                        >
+                          {trainer?.name[0].toUpperCase()}
+                        </Avatar>
+                      }
+                      title={trainer.name}
+                      // subheader="September 14, 2016"
+                    />
+                    <CardMedia
+                      component="img"
+                      height="194"
+                      image={trainer.photo}
+                      alt="Paella dish"
+                    />
+                    <CardContent>
+                      <Typography variant="body2" color="text.secondary">
+                        Email:{trainer.email}
+                        <br />
+                        specification:not created model yet
+                      </Typography>
+                    </CardContent>
+                    <CardActions
+                      disableSpacing
+                      sx={{ display: "flex", justifyContent: "center" }}
+                    >
+                      <a href={`/trainer/${trainer._id}`}>
+                        <Button
+                          sx={{
                             backgroundColor: "black",
-                          },
-                          textDecoration: "none !important",
-                        }}
-                      >
-                        View Profile
-                      </Button>
-                    </a>
-                  </CardActions>
-                </Card>
-              ))}
-            </Box>
+                            color: "white",
+                            "&:hover": {
+                              backgroundColor: "black",
+                            },
+                            textDecoration: "none !important",
+                          }}
+                        >
+                          View Profile
+                        </Button>
+                      </a>
+                    </CardActions>
+                  </Card>
+                ))}
+              </Box>
+            ) : (
+              <Box sx={{ display: "flex" }}>
+                <CircularProgress />
+              </Box>
+            )}
           </Box>
         </Box>
       </form>

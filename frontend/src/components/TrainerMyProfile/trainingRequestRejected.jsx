@@ -10,18 +10,21 @@ import { useEffect } from "react";
 import { Avatar, Box, Button, Container, Typography } from "@mui/material";
 
 import { useDispatch, useSelector } from "react-redux";
-import { getAcceptedNoatifcation } from "../store/user";
+import {
+  getAcceptedNoatifcation,
+  getRejectedNoatifcation,
+} from "../../store/user";
 
 const TrainingRequestAccepted = () => {
   const dispatch = useDispatch();
   const token = useSelector((state) => state?.user?.token);
-  const acceptedRequests = useSelector(
-    (state) => state?.user?.GetAcceptedNoatifcation
+  const rejectedRequest = useSelector(
+    (state) => state?.user?.GetRejectedNoatifcation
   );
-  console.log(acceptedRequests);
+  console.log(rejectedRequest);
 
   useEffect(() => {
-    dispatch(getAcceptedNoatifcation({ token }));
+    dispatch(getRejectedNoatifcation({ token }));
   }, []);
   return (
     <Container>
@@ -47,7 +50,7 @@ const TrainingRequestAccepted = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {acceptedRequests?.map((request) => (
+            {rejectedRequest?.map((request) => (
               <TableRow
                 key={request._id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -96,7 +99,7 @@ const TrainingRequestAccepted = () => {
                     {new Date(request?.updatedAt).toLocaleString()}
                   </Typography>
                 </TableCell>
-               
+                {/* <TableCell align="right">{row.protein}</TableCell> */}
               </TableRow>
             ))}
           </TableBody>

@@ -8,19 +8,24 @@ import { Button, Container } from "@mui/material";
 import axios from "axios";
 import Card from "react-bootstrap/Card";
 import { useNavigate } from "react-router-dom";
+
+import CircularProgress from "@mui/material/CircularProgress";
 export default function BasicSelect() {
   const [muscle, setMuscle] = useState("");
   const [data, setData] = useState([]);
   const [difficulty, setDifficulty] = useState("");
   const [exercise, setExercise] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const clickHandler = async () => {
+    setIsLoading(true);
     const { data } = await axios.get(
       `http://localhost:8000/api/exercise/sortedExercises?muscle=${muscle}&difficulty=${difficulty}`
     );
 
     // console.log(`https://www.youtube.com/watch?v=${videoId}`)
     setExercise(data.exercises);
+    setIsLoading(false);
   };
 
   const VideoHandler = (muscleName, exerciseName) => {
@@ -37,7 +42,7 @@ export default function BasicSelect() {
   }, []);
   return (
     <>
-      <Container>
+      <Container sx={{ minHeight: "80vh" }}>
         <Box
           sx={{
             minWidth: 700,
@@ -46,7 +51,7 @@ export default function BasicSelect() {
             my: 2,
           }}
         >
-          <FormControl sx={{ width: "30%", marginRight: "10%", my: 1 }}>
+          <FormControl sx={{ width: "27%", margin: "5%", my: 1 }}>
             <InputLabel id="demo-simple-select-label">muscle</InputLabel>
             <Select
               labelId="demo-simple-select-label"
@@ -103,46 +108,37 @@ export default function BasicSelect() {
           </Button>
         </Box>
         {/* <Button onClick={VideoHandler}>Video Tutorials</Button> */}
-        {exercise.length > 0
-          ? exercise.map((e) => (
-              <Box style={{ margin: "10px" }}>
-                <Card border="secondary" style={{ width: "100%" }}>
-                  <Card.Header>{e.name}</Card.Header>
-                  <Card.Body>
-                    <Card.Title>Equipment Required : {e.equipment}</Card.Title>
-                    <Card.Title>Targeted Muscle : {e.muscle}</Card.Title>
-                    <Card.Text>
-                      Instruction:
-                      <br />
-                      {e.instructions}
-                    </Card.Text>
-                  </Card.Body>
-                  <Button onClick={() => VideoHandler(e.name, e.muscle)}>
-                    View Video
-                  </Button>
-                </Card>
-              </Box>
-            ))
-          : data.map((e) => (
-              <Box style={{ margin: "10px" }}>
-                <Card border="secondary" style={{ width: "100%" }}>
-                  <Card.Header>{e.name}</Card.Header>
-                  <Card.Body>
-                    <Card.Title>Equipment Required : {e.equipment}</Card.Title>
-                    <Card.Title>Targeted Muscle : {e.muscle}</Card.Title>
-
-                    <Card.Text>
-                      Instruction:
-                      <br />
-                      {e.instructions}
-                    </Card.Text>
-                  </Card.Body>
-                  {/* <Button onClick={VideoHandler(e.name, e.muscle)}>
-                    View Video
-                  </Button> */}
-                </Card>
-              </Box>
-            ))}
+        {!isLoading ? (
+          exercise.map((e) => (
+            <Box style={{ margin: "10px" }}>
+              <Card border="secondary" style={{ width: "100%" }}>
+                <Card.Header>{e.name}</Card.Header>
+                <Card.Body>
+                  <Card.Title>Equipment Required : {e.equipment}</Card.Title>
+                  <Card.Title>Targeted Muscle : {e.muscle}</Card.Title>
+                  <Card.Text>
+                    Instruction:
+                    <br />
+                    {e.instructions}
+                  </Card.Text>
+                </Card.Body>
+                <Button onClick={() => VideoHandler(e.name, e.muscle)}>
+                  View Video
+                </Button>
+              </Card>
+            </Box>
+          ))
+        ) : (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <CircularProgress sx={{ color: "black" }} />
+          </Box>
+        )}
       </Container>
     </>
   );

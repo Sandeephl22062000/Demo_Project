@@ -1,17 +1,8 @@
-import {
-  Box,
-  Button,
-  Card,
-  Container,
-  Grid,
-  Paper,
-  Typography,
-} from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
+import { Box, Button, Card, Container, Typography } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getservices } from "../store/trainer";
+import { getservices } from "../../store/trainer";
 import { useEffect } from "react";
 
 const TrainerServices = () => {
@@ -23,7 +14,8 @@ const TrainerServices = () => {
   console.log(services?.length);
   // console.log("dsds", services[0]?.servicesOffered);
   useEffect(() => {
-    dispatch(getservices({ token }));
+    const trainerID = localStorage.getItem("id");
+    dispatch(getservices({ trainerID, token }));
   }, []);
   return (
     <Container sx={{ width: "100%", margin: "2rem 0" }}>

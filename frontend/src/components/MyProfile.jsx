@@ -11,12 +11,12 @@ import Sheet from "@mui/joy/Sheet";
 import Posts from "./Trainer-Info/PRofilePostCard";
 import Challenges from "./Challenges/ChallengesOnProfile";
 import axios from "axios";
-import UpdateProfileModal from "./UpdateProfileModal";
+import UpdateProfileModal from "./TrainerMyProfile/UpdateProfileModal";
 import { Modal, ModalClose, ModalDialog } from "@mui/joy";
 import { useDispatch, useSelector } from "react-redux";
 import { UserByID } from "../store/user";
-import RequestTable from "./trainingRequestTable";
-import TrainerServices from "./TrainerServices";
+import RequestTable from "./TrainerMyProfile/trainingRequestTable";
+import TrainerServices from "./TrainerMyProfile/TrainerServices";
 
 const handleCommentButtonClick = () => {};
 

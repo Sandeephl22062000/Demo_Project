@@ -1,22 +1,25 @@
-import { Box, Button, Container, Grid, TextField, Avatar } from "@mui/material";
+import { Box, Container, Grid, TextField, Avatar } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import AddPost from "./AddPost";
 import Posts from "./Posts";
 import axios from "axios";
-import { UserByID, searchUserKeyword } from "../store/user";
+import { UserByID, searchUserKeyword } from "../../store/user";
 import { useDispatch, useSelector } from "react-redux";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useNavigate } from "react-router-dom";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const ShowPost = () => {
   const [posts, setPosts] = useState([]);
   const [search, setSearch] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const users = useSelector((state) => state?.user?.SearchUserResult);
   console.log("users", users);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const getPost = () => {
     const data = async () => {
+      setIsLoading(true);
       const response = await axios.get(
         "http://localhost:8000/api/post/posts/all"
       );
@@ -24,6 +27,7 @@ const ShowPost = () => {
       setPosts(response.data.posts);
     };
     data();
+    setIsLoading(false);
   };
   useEffect(() => {
     if (search.length > 0) {
@@ -31,8 +35,6 @@ const ShowPost = () => {
       dispatch(searchUserKeyword(search));
     }
   }, [search]);
-  console.log(search);
-  const clickHandler = () => {};
   useEffect(() => {
     getPost();
   }, []);
@@ -81,11 +83,21 @@ const ShowPost = () => {
           />
         </Box>
       </Container>
-      <Container>
+      <Container sx={{ minHeight: "80vh" }}>
         <AddPost />
-        {posts.map((post) => (
-          <Posts post={post} />
-        ))}
+        {!isLoading ? (
+          posts.map((post) => <Posts post={post} />)
+        ) : (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <CircularProgress sx={{ color: "black" }} />
+          </Box>
+        )}
       </Container>
     </Box>
   );

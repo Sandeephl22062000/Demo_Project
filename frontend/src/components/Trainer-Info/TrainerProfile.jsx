@@ -10,8 +10,6 @@ import Typography from "@mui/joy/Typography";
 import Sheet from "@mui/joy/Sheet";
 import Posts from "../Trainer-Info/PRofilePostCard";
 import axios from "axios";
-import RequestModal from "../RequestModal";
-import { Modal, ModalClose, ModalDialog } from "@mui/joy";
 import { useDispatch, useSelector } from "react-redux";
 import Viewplans from "./viewPlans";
 
@@ -23,13 +21,10 @@ const style = {
 
 const ProfilePage = () => {
   const [trainer, setTrainer] = useState("");
-  const [variant, setVariant] = React.useState(undefined);
   const [showServices, setShowServices] = useState(false);
   const [post, showPost] = useState([]);
   const params = useParams();
-  const dispatch = useDispatch();
   const id = params.id;
-  const token = useSelector((state) => state?.user?.token);
   const handleShowServices = () => {
     setShowServices(true);
     showPost(false);
