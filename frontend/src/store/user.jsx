@@ -27,12 +27,8 @@ export const loginUser = createAsyncThunk(
         }
       );
       const { token } = data;
-      console.log(data.data);
       localStorage.setItem("id", data.data);
-      console.log(token);
       localStorage.setItem("token", token);
-
-      console.log("postData", data);
       addToast(data.message, {
         appearance: "success",
         autoDismiss: true,
@@ -41,13 +37,12 @@ export const loginUser = createAsyncThunk(
       navigate("/");
       return token;
     } catch (error) {
-      console.log(error.response.data.message);
-      // Handle error and show toast if necessary
       addToast(error.response.data.message, {
         appearance: "error",
         autoDismiss: true,
         autoDismissTimeout: 3000,
       });
+      throw error;
     }
   }
 );

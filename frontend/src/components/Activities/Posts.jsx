@@ -18,12 +18,16 @@ import { Container, Button } from "@mui/material";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
 const Post = (props) => {
+  const token = useSelector((state) => state.user.token);
   const [likeCount, setLikeCount] = React.useState(props?.post?.likes?.length);
+  const [isLiked, setIsLiked] = React.useState(
+    props?.post?.likes?.includes(token)
+  );
   const [comment, setComment] = useState("");
   const [showComment, setShowComment] = useState([]);
-  const token = useSelector((state) => state.user.token);
   console.log(token);
 
   const handleLike = () => {
@@ -40,8 +44,15 @@ const Post = (props) => {
       );
       console.log(data);
     };
-    addLike();
-    setLikeCount(props?.post?.likes?.length + 1);
+
+    if (isLiked) {
+      setIsLiked(false);
+      setLikeCount((prevCount) => prevCount - 1);
+    } else {
+      setIsLiked(true);
+      setLikeCount((prevCount) => prevCount + 1);
+      addLike();
+    }
   };
 
   const addCommentHandler = async (e) => {
@@ -58,15 +69,21 @@ const Post = (props) => {
         },
       }
     );
-    console.log(data.success.comments[0]);
+    const newComment = data.success.comments[0];
+    setShowComment((prevComments) => [newComment, ...prevComments]);
+    setComment("");
   };
+
   const calculateTime = Math.floor(
     (new Date() - new Date(props?.post?.createdAt)) / (1000 * 60 * 60 * 24)
   );
+
   useEffect(() => {
     setShowComment(props.post?.comments);
   }, []);
+
   console.log("nsjfdnbotn", props?.post);
+
   return (
     <Container
       sx={{
@@ -137,7 +154,7 @@ const Post = (props) => {
               size="sm"
               onClick={handleLike}
             >
-              <FavoriteBorder /> {likeCount}
+              {isLiked ? <FavoriteIcon /> : <FavoriteBorder />} {likeCount}
             </IconButton>
             <IconButton variant="plain" color="neutral" size="sm">
               <ModeCommentOutlined /> {props.post?.comments?.length}
@@ -208,6 +225,7 @@ const Post = (props) => {
               size="sm"
               placeholder="Add a comment…"
               sx={{ flexGrow: 1, "--Input-focusedThickness": "0px" }}
+              value={comment}
               onChange={(e) => {
                 setComment(e.target.value);
               }}
@@ -221,4 +239,5 @@ const Post = (props) => {
     </Container>
   );
 };
+
 export default Post;

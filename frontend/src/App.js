@@ -26,9 +26,14 @@ import { useState } from "react";
 import Challenges from "./components/Challenges/challengesTOShow";
 import Createservices from "./components/createservices";
 import IntelligentDiet from "./components/Food/IntelligentDiet";
+import { useSelector } from "react-redux";
+import Protected from "./ProtectingRoutes";
+import { Profiler } from "react";
 // import Payment from "./components/Trainer-Info/payment";
 const App = () => {
   const [isAdmin, setIsAdmin] = useState(true);
+  const isLoggedIn = useSelector((state) => state?.user?.token);
+
   return (
     <div>
       <BrowserRouter>
@@ -41,39 +46,120 @@ const App = () => {
               <Route path="/signup" element={<Signup />} />
               <Route path="/trainersignup" element={<TrainerSigup />} />
 
-              <Route path="/food" element={<UserInput />} />
+              <Route
+                path="/food"
+                element={
+                  <Protected isLoggedIn={isLoggedIn}>
+                    <UserInput />
+                  </Protected>
+                }
+              />
               <Route
                 path="/food/calculateCalories"
-                element={<CalorieDetail />}
+                element={
+                  <Protected isLoggedIn={isLoggedIn}>
+                    <CalorieDetail />
+                  </Protected>
+                }
               />
               <Route
                 path="/calculatediet/:protein/:carbs/:calories"
-                element={<ExeprmientFoodApi />}
+                element={
+                  <Protected isLoggedIn={isLoggedIn}>
+                    <ExeprmientFoodApi />
+                  </Protected>
+                }
               />
-              <Route path="/viewallrecords" element={<ViewAllRecords />} />
-              <Route path="/dietprovider" element={<IntelligentDiet />} />
+              <Route
+                path="/viewallrecords"
+                element={
+                  <Protected isLoggedIn={isLoggedIn}>
+                    <ViewAllRecords />
+                  </Protected>
+                }
+              />
+              <Route
+                path="/dietprovider"
+                element={
+                  <Protected isLoggedIn={isLoggedIn}>
+                    <IntelligentDiet />
+                  </Protected>
+                }
+              />
 
-              <Route path="/trainer" element={<TrainerCards />} />
-              <Route path="/trainer/:id" element={<TrainerProfile />} />
-              <Route path="/services" element={<Createservices />} />
+              <Route
+                path="/trainer"
+                element={
+                  <Protected isLoggedIn={isLoggedIn}>
+                    <TrainerCards />
+                  </Protected>
+                }
+              />
+              <Route
+                path="/trainer/:id"
+                element={
+                  <Protected isLoggedIn={isLoggedIn}>
+                    <TrainerProfile />
+                  </Protected>
+                }
+              />
+              <Route
+                path="/services"
+                element={
+                  <Protected isLoggedIn={isLoggedIn}>
+                    <Createservices />
+                  </Protected>
+                }
+              />
 
               {/* <Route path="/payment" element={<Payment />} /> */}
 
-              <Route path="/user/:id" element={<ProfileToShow />} />
+              <Route
+                path="/user/:id"
+                element={
+                  <Protected isLoggedIn={isLoggedIn}>
+                    <ProfileToShow />
+                  </Protected>
+                }
+              />
 
               <Route path="/gyms" element={<Gym />} />
 
               <Route path="/exercise" element={<Exercises />} />
 
-              <Route path="/profile" element={<Profile />} />
+              <Route
+                path="/profile"
+                element={
+                  <Protected isLoggedIn={isLoggedIn}>
+                    <Profile />
+                  </Protected>
+                }
+              />
 
               <Route
                 path="/execiseVideos/:muscle/:exercise"
-                element={<ExerciseVideos />}
+                element={
+                  <Protected isLoggedIn={isLoggedIn}>
+                    <ExerciseVideos />
+                  </Protected>
+                }
               />
-              <Route path="/activities" element={<ShowPost />} />
-
-              <Route path="/challenges" element={<Challenges />} />
+              <Route
+                path="/activities"
+                element={
+                  <Protected isLoggedIn={isLoggedIn}>
+                    <ShowPost />
+                  </Protected>
+                }
+              />
+              <Route
+                path="/challenges"
+                element={
+                  <Protected isLoggedIn={isLoggedIn}>
+                    <Challenges />
+                  </Protected>
+                }
+              />
             </Routes>
             <Footer />
           </>

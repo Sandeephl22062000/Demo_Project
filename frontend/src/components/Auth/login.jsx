@@ -28,25 +28,46 @@ const Login = () => {
       password: Yup.string().min(6).required("Password is required"),
     }),
     onSubmit: (values, { resetForm }) => {
-      dispatch(
-        loginUser({
-          email: values.email,
-          password: values.password,
-          addToast,
-          navigate,
-        })
-      );
-
-      console.log("vnsrsrdvbk");
-      // dispatch(UserByID());
+      try {
+        dispatch(
+          loginUser({
+            email: values.email,
+            password: values.password,
+            addToast,
+            navigate,
+          })
+        );
+      } catch (error) {
+        console.log(error);
+      }
     },
   });
 
   const handleGoogleLoginSuccess = async (tokenResponse) => {
-    const { data } = await axios.post("http://localhost:8000/api/users/login", {
-      googleAccessToken: tokenResponse.access_token,
-    });
-    console.log(data);
+    try {
+      const { data } = await axios.post(
+        "http://localhost:8000/api/users/login",
+        {
+          googleAccessToken: tokenResponse.access_token,
+        }
+      );
+      console.log(data);
+      localStorage.setItem("id", data?.data);
+      localStorage.setItem("token", data?.token);
+      addToast(data?.message, {
+        appearance: "success",
+        autoDismiss: true,
+        autoDismissTimeout: 3000,
+      });
+      navigate("/");
+    } catch (error) {
+      addToast(error.message, {
+        appearance: "error",
+        autoDismiss: true,
+        autoDismissTimeout: 3000,
+      });
+      throw error;
+    }
   };
   const login = useGoogleLogin({ onSuccess: handleGoogleLoginSuccess });
   const trainerLogin = () => {

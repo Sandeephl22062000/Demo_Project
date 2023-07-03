@@ -171,29 +171,35 @@ const loginUser = async (req, res, next) => {
       return next(new AppError("Something went wrong", 500));
     }
   } else {
-    let email = req.body.email;
-    let password = req.body.password;
-    if (!email || !password) {
-      return next(new AppError("Provide email and password both", 401));
-    }
+    try {
+      let email = req.body.email;
+      let password = req.body.password;
+      if (!email || !password) {
+        return next(new AppError("Provide email and password both", 401));
+      }
+      const UserInfo = await User.findOne({ email });
+      if (!UserInfo) return next(new AppError("Please Register First", 401));
 
-    const UserInfo = await User.findOne({ email });
-    if (!UserInfo) return next(new AppError("Please Register First", 401));
+      const PasswordChecking = await bcrypt.compare(
+        password,
+        UserInfo.password
+      );
+      if (!PasswordChecking)
+        return next(new AppError("Please provide Correct Password", 401));
 
-    const PasswordChecking = await bcrypt.compare(password, UserInfo.password);
-    if (!PasswordChecking)
-      return next(new AppError("Please provide Correct Password", 401));
-
-    const token = jwt.sign({ id: UserInfo._id }, process.env.SECRET_KEY);
-    console.log(token);
-    if (UserInfo) {
-      res.json({
-        message: "Successfully login",
-        data: UserInfo._id,
-        token,
-      });
-    } else {
-      return next(new AppError("Something went wrong", 500));
+      const token = jwt.sign({ id: UserInfo._id }, process.env.SECRET_KEY);
+      console.log(token);
+      if (UserInfo) {
+        res.json({
+          message: "Successfully login",
+          data: UserInfo._id,
+          token,
+        });
+      } else {
+        return next(new AppError("Something went wrong", 500));
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
 };

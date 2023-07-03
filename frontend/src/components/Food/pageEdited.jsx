@@ -222,19 +222,48 @@ const CalorieDetail = () => {
               </Table>
             </TableContainer>
           )}
-          <Box></Box>
-          <Button
-            onClick={clickHandler}
+          <Box
             sx={{
-              background: "black",
-              color: "white",
-              marginTop: "10px",
-              height: "60px",
-              width: "180px",
+              display: "flex",
+              justifyContent: "center",
+              flexDirection: "center",
             }}
           >
-            Track Calories
-          </Button>
+            <Button
+              onClick={clickHandler}
+              sx={{
+                background: "black",
+                color: "white",
+                marginTop: "10px",
+                height: "60px",
+                width: "200px",
+                margin: "0.5rem",
+                "&:hover": {
+                  background: "black",
+                },
+              }}
+            >
+              Track Calories
+            </Button>
+            <Button
+              onClick={()=>{
+                navigate("/dietprovider")
+              }}
+              sx={{
+                background: "black",
+                color: "white",
+                marginTop: "10px",
+                height: "60px",
+                width: "200px",
+                margin: "0.5rem",
+                "&:hover": {
+                  background: "black",
+                },
+              }}
+            >
+              Personalized Diet
+            </Button>
+          </Box>
         </Container>
       </>
       )

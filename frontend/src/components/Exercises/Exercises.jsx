@@ -32,10 +32,11 @@ export default function BasicSelect() {
     navigate(`/execiseVideos/${exerciseName}/${muscleName}`);
   };
   const fetchData = async () => {
+    setIsLoading(true);
     const { data } = await axios.get("http://localhost:8000/api/exercise");
     const dataToShow = data.exercises;
-
     setData(dataToShow.slice(0, 4));
+    setIsLoading(false);
   };
   useEffect(() => {
     fetchData();
@@ -109,25 +110,57 @@ export default function BasicSelect() {
         </Box>
         {/* <Button onClick={VideoHandler}>Video Tutorials</Button> */}
         {!isLoading ? (
-          exercise.map((e) => (
-            <Box style={{ margin: "10px" }}>
-              <Card border="secondary" style={{ width: "100%" }}>
-                <Card.Header>{e.name}</Card.Header>
-                <Card.Body>
-                  <Card.Title>Equipment Required : {e.equipment}</Card.Title>
-                  <Card.Title>Targeted Muscle : {e.muscle}</Card.Title>
-                  <Card.Text>
-                    Instruction:
-                    <br />
-                    {e.instructions}
-                  </Card.Text>
-                </Card.Body>
-                <Button onClick={() => VideoHandler(e.name, e.muscle)}>
-                  View Video
-                </Button>
-              </Card>
-            </Box>
-          ))
+          <>
+            {exercise.length > 0
+              ? exercise.map((e) => (
+                  <Box style={{ margin: "10px" }}>
+                    <Card border="secondary" style={{ width: "100%" }}>
+                      <Card.Header>{e.name}</Card.Header>
+                      <Card.Body>
+                        <Card.Title>
+                          Equipment Required : {e.equipment}
+                        </Card.Title>
+                        <Card.Title>Targeted Muscle : {e.muscle}</Card.Title>
+                        <Card.Text>
+                          Instruction:
+                          <br />
+                          {e.instructions}
+                        </Card.Text>
+                      </Card.Body>
+                      <Button
+                        sx={{ color: "black" }}
+                        onClick={() => VideoHandler(e.name, e.muscle)}
+                      >
+                        View Video
+                      </Button>
+                    </Card>
+                  </Box>
+                ))
+              : data.map((e) => (
+                  <Box style={{ margin: "10px" }}>
+                    <Card border="secondary" style={{ width: "100%" }}>
+                      <Card.Header>{e.name}</Card.Header>
+                      <Card.Body>
+                        <Card.Title>
+                          Equipment Required : {e.equipment}
+                        </Card.Title>
+                        <Card.Title>Targeted Muscle : {e.muscle}</Card.Title>
+                        <Card.Text>
+                          Instruction:
+                          <br />
+                          {e.instructions}
+                        </Card.Text>
+                      </Card.Body>
+                      <Button
+                        sx={{ color: "black" }}
+                        onClick={() => VideoHandler(e.name, e.muscle)}
+                      >
+                        View Video
+                      </Button>
+                    </Card>
+                  </Box>
+                ))}
+          </>
         ) : (
           <Box
             sx={{

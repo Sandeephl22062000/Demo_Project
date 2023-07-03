@@ -5,14 +5,15 @@ import { Box, Button, Container, TextField, Typography } from "@mui/material";
 
 const NearByGym = () => {
   const [gyms, setGyms] = useState([]);
-  const [selectedGym, setSelectedGym] = React.useState(null);
+  const [selectedGym, setSelectedGym] = useState(null);
   const [currentLocation, setCurrentLocation] = useState({
     latitude: "",
     longitude: "",
   });
   const [searchPlace, setSearchPlace] = useState("");
+  const [initialGym, setInitialGym] = useState(null); // Added state for initial gym
+
   const handleMarkerClick = (gym) => {
-    console.log(gym);
     setSelectedGym(gym);
   };
 
@@ -49,6 +50,12 @@ const NearByGym = () => {
         const { lat, lon } = response.data[0];
         console.log("Latitude:", lat);
         console.log("Longitude:", lon);
+        setCurrentLocation({
+          latitude: lat,
+          longitude: lon,
+        });
+        setSearchPlace("");
+        return { latitude: lat, longitude: lon };
       } else {
         console.log("No results found");
       }
@@ -57,67 +64,81 @@ const NearByGym = () => {
     }
   };
 
-  const YOUR_LATITUDE = currentLocation.latitude;
-  const YOUR_LONGITUDE = currentLocation.longitude;
   useEffect(() => {
     getCurrentLocation();
+  }, []);
+
+  useEffect(() => {
     const fetchData = async () => {
-      console.log(YOUR_LATITUDE, YOUR_LONGITUDE);
-      const data = await axios.get(
-        `http://localhost:8000/api/gyms/${YOUR_LATITUDE}/${YOUR_LONGITUDE}`
-      );
-      console.log(data);
-      setGyms(data.data);
+      if (currentLocation.latitude && currentLocation.longitude) {
+        const data = await axios.get(
+          `http://localhost:8000/api/gyms/${currentLocation.latitude}/${currentLocation.longitude}`
+        );
+        console.log(data);
+        setGyms(data.data);
+        setSelectedGym(null);
+        setInitialGym(data.data[0]); // Set the initial gym
+      }
     };
     fetchData();
-  }, []);
-  console.log(gyms);
-  const searchHandler = () => {
-    getCoordinates(searchPlace);
+  }, [currentLocation]);
+
+  const searchHandler = async () => {
+    const coordinates = await getCoordinates(searchPlace);
+    if (coordinates) {
+      const { latitude, longitude } = coordinates;
+      const data = await axios.get(
+        `http://localhost:8000/api/gyms/${latitude}/${longitude}`
+      );
+      setGyms(data.data);
+      setInitialGym(data.data[0]); // Set the first gym as the initial gym
+      setCurrentLocation({ latitude, longitude });
+    }
   };
-  const center = { lat: YOUR_LATITUDE, lng: YOUR_LONGITUDE };
-  console.log(searchPlace);
+
+  const center = {
+    lat: currentLocation.latitude,
+    lng: currentLocation.longitude,
+  };
+
   return (
     <Container
       sx={{
         display: "flex",
         justifyContent: "center",
         flexDirection: "column",
+        alignItems: "center",
       }}
     >
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        {" "}
-        <Typography sx={{ width: "70%" }}>
-          Find the Gym's near any place
-        </Typography>
-        <Button onClick={searchHandler}>search</Button>
-      </Box>
+      <Typography variant="h5" align="center" sx={{ mb: 2 }}>
+        Find gyms near your location
+      </Typography>
+
       <TextField
         required
         id="outlined-required"
         name="place"
         value={searchPlace}
-        label="searchplace"
+        label="Enter location"
         onChange={(e) => {
           setSearchPlace(e.target.value);
         }}
         type="string"
         sx={{ width: "60%", margin: "10px" }}
       />
-      {console.log(gyms)}
+
+      <Button onClick={searchHandler} variant="contained" color="primary">
+        Search
+      </Button>
+
       <GymMap
         gyms={gyms}
         center={center}
-        googleMapURL={`https://maps.googleapis.com/maps/api/js?key=AIzaSyBkA1fdPi5_I43IVxS4Zlw57iUrwlGdBv8&`}
+        initialGym={initialGym} // Pass the initial gym to the map
+        onMarkerClick={handleMarkerClick} // Rename prop to onMarkerClick
+        googleMapURL={`https://maps.googleapis.com/maps/api/js?key=AIzaSyBkA1fdPi5_I43IVxS4Zlw57iUrwlGdBv8&libraries=places`} // Replace YOUR_API_KEY with your actual API key
         loadingElement={<div style={{ height: `100%` }} />}
-        containerElement={<div style={{ height: `500px` }} />}
+        containerElement={<div style={{ height: `500px`, width: "100%" }} />}
         mapElement={<div style={{ height: `100%` }} />}
       />
     </Container>

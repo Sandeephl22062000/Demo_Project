@@ -9,12 +9,14 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import LinearProgress from "@mui/joy/LinearProgress";
 import axios from "axios";
 import React from "react";
 import { useState } from "react";
 import MealCard from "./MealCard";
 import parse from "react-html-parser";
 import { useSelector } from "react-redux";
+import CircularProgress from "@mui/joy/CircularProgress";
 import { useEffect } from "react";
 
 const IntelligentDiet = () => {
@@ -25,9 +27,11 @@ const IntelligentDiet = () => {
   const [protein, setProtein] = useState("");
   const foodData = useSelector((state) => state?.food);
   const [parseResponse, setParseResponse] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   console.log("foodFdata", foodData);
 
   const res = async () => {
+    setIsLoading(true);
     console.log(calories, carbs, protein, foodType);
     const resp = await axios.post(
       "http://localhost:8000/api/users/intelligentdiet",
@@ -39,10 +43,7 @@ const IntelligentDiet = () => {
       }
     );
     setParseResponse(parse(resp?.data?.choices[0].message?.content));
-    // if (response.length > 0) {
-    //   const parseResponse = JSON.parse(response);
-    //   setParseResponse(parseResponse);
-    // }
+    setIsLoading(false);
   };
   console.log(setParseResponse);
   const sendRequest = () => {
@@ -99,11 +100,46 @@ const IntelligentDiet = () => {
             </Select>
           </FormControl>
         </Box>
-        <Button variant="contained" onClick={sendRequest}>
+        <Button
+          sx={{
+            background: "black",
+            color: "white",
+            width: "100px",
+            marginLeft: "1rem",
+            "&:hover": {
+              background: "black",
+            },
+          }}
+          onClick={sendRequest}
+        >
           Submit
         </Button>
       </Box>
-      {parseResponse}
+      <Container sx={{ width: "100%" }}>
+        {!isLoading ? (
+          <Box>{parseResponse}</Box>
+        ) : (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+            }}
+          >
+            <CircularProgress color="neutral" size="lg" />
+            <Typography
+              variant="h6"
+              fontSize="xl"
+              sx={{ mb: 0.5, textAlign: "center" }}
+            >
+              Please wait patiently! We are diligently preparing your
+              personalized diet plan to ensure it is perfect and tailored
+              specifically to your needs.
+            </Typography>
+          </Box>
+        )}
+      </Container>
       {/* {parseResponse?.Breakfast.map((meal) => (
         <Box
           sx={{
