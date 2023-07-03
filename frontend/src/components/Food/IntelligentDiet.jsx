@@ -12,6 +12,7 @@ import axios from "axios";
 import React from "react";
 import { useState } from "react";
 import MealCard from "./MealCard";
+import { useSelector } from "react-redux";
 
 const IntelligentDiet = () => {
   const [response, setResponse] = useState("");
@@ -27,6 +28,9 @@ const IntelligentDiet = () => {
     setCarbs(event.target.value);
   };
 
+  const foodData = useSelector((state) => state?.food?.foodNutritions);
+  console.log("foodFdata", foodData);
+
   const handleProteinChange = (event) => {
     setProtein(event.target.value);
   };
@@ -35,6 +39,7 @@ const IntelligentDiet = () => {
     const resp = await axios.post(
       "http://localhost:8000/api/users/intelligentdiet",
       {
+        foodType,
         calories: calories,
         protein: carbs,
         carbs: protein,
@@ -45,7 +50,7 @@ const IntelligentDiet = () => {
 
   const sendRequest = () => {
     console.log(foodType);
-    // res();
+    res();
   };
 
   return (

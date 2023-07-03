@@ -142,6 +142,7 @@ const makeChatCompletionsRequest = async (req, res) => {
     const calories = req.body.calories;
     const protein = req.body.protein;
     const carbs = req.body.carbs;
+    const foodtype = req.body.foodType;
     const response = await axios.post(
       "https://api.openai.com/v1/chat/completions",
       {
@@ -150,7 +151,7 @@ const makeChatCompletionsRequest = async (req, res) => {
           { role: "system", content: "You are a helpful assistant." },
           {
             role: "user",
-            content: `Make me vegeterian diet with required calories:${calories}, required protein:${protein} and required carbohydrates: ${carbs}, but i want it in 5 meals seperated provide as Breakfast, Morning snacks, Lunch, Evening Snacks and Dinner give output in json format give me atleast 3 item for each meal in output give me only json data no extra text`,
+            content: `Make me ${foodtype} diet with required calories:${calories}, required protein:${protein} and required carbohydrates: ${carbs}, but i want it in 5 meals seperated provide as Breakfast, Morning snacks, Lunch, Evening Snacks and Dinner give output in json format give me atleast 3 item for each meal in output give me only json data no extra text`,
           },
         ],
       },
