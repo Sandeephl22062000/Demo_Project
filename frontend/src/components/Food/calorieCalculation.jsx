@@ -84,6 +84,9 @@ const CalorieDetail = () => {
             </Select>
           )}
         </FormControl>
+        {Target && (
+          <Typography>{`To effectively ${data} weight, it is recommended for you to consume this much amount of nutritional value every day.`}</Typography>
+        )}
       </Box>
     </>
   );
@@ -139,7 +142,7 @@ const CalorieDetail = () => {
       );
     };
     sendResponse();
-    navigate(`/calculatediet/${protein}/${carbs}/${RequireCalories}`);
+    navigate(`/calculatediet`);
   };
   return (
     <>
@@ -149,16 +152,22 @@ const CalorieDetail = () => {
           sx={{
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center",
+            // justifyContent: "center",
             alignItems: "center",
-            height: "80vh",
+            height: "100vh",
           }}
         >
           {maintainceCalory && (
-            <h2 style={{ margin: "50px" }}>
-              According to the Details provided your Maintaince Calory is{" "}
-              {maintainceCalory}
-            </h2>
+            <>
+              <h3 style={{ margin: "50px" }}>
+                According to the Details provided your Maintaince Calory is{" "}
+                {maintainceCalory}
+              </h3>
+              <h6>
+                Please select your fitness goal,and according know your body
+                nutrition requirements
+              </h6>
+            </>
           )}
           <FormControl sx={{ m: 1, width: "40%" }}>
             <InputLabel id="demo-simple-select-autowidth-label">
@@ -190,8 +199,8 @@ const CalorieDetail = () => {
             <TableContainer
               component={Paper}
               sx={{
-                width: "40%", // Adjust the width as needed
-                marginTop: "1rem", // Add margin for spacing
+                width: "60%",
+                marginTop: "1rem",
               }}
             >
               <Table
@@ -246,8 +255,8 @@ const CalorieDetail = () => {
               Track Calories
             </Button>
             <Button
-              onClick={()=>{
-                navigate("/dietprovider")
+              onClick={() => {
+                navigate("/dietprovider");
               }}
               sx={{
                 background: "black",

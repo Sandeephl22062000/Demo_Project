@@ -41,12 +41,7 @@ const UpdateProfileModal = (props) => {
   };
 
   return (
-    <ModalDialog
-      aria-labelledby="variant-modal-title"
-      aria-describedby="variant-modal-description"
-      variant={props.variant}
-    >
-      <ModalClose />
+    <>
       <Table aria-label="basic table" sx={{ marginTop: "30px" }}>
         <tbody>
           <tr>
@@ -105,7 +100,7 @@ const UpdateProfileModal = (props) => {
       >
         EDIT
       </Button>
-    </ModalDialog>
+    </>
   );
 };
 

@@ -2,17 +2,43 @@
 import { css, jsx } from "@emotion/core";
 import Container from "../Global/Container";
 import FooterCard from "./FooterCard";
-import Button from "../Global/Button/Button";
-
+import { Button } from "@mui/material";
+import { useState } from "react";
+import axios from "axios";
 const Footer = () => {
+  const [reviews, setReviews] = useState("");
+  const [email, setEmail] = useState("");
+
+  const addReview = async (email, reviews) => {
+    try {
+      const review = await axios.post(
+        "http://localhost:8000/api/reviews/create",
+        {
+          email,
+          reviews,
+        }
+      );
+      console.log(review);
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const addReviewHandler = () => {
+    console.log(email, reviews);
+    addReview(email, reviews);
+    setEmail("");
+    setReviews("");
+  };
+
   return (
     <div className="footer" css={styles}>
       <Container>
-        <FooterCard cardHeading="Gym">
+        <FooterCard cardHeading="Contact Us">
           <div className="firstCard">
-            <p>5th flora, 700/D kings road, green lane New York-1782</p>
-            <a href="">+10 367 826 2567</a>
-            <a href="">contact@carpenter.com</a>
+            {/* <p>5th flora, 700/D kings road, green lane New York-1782</p> */}
+            <a href="">+91 367 826 2567</a>
+            <a href="">sandeep.h.lohar@gmail.com</a>
             <div className="social">
               <i className="fab fa-facebook-f"></i>
               <i className="fab fa-twitter"></i>
@@ -24,30 +50,57 @@ const Footer = () => {
         </FooterCard>
         <FooterCard cardHeading="Useful Links">
           <div className="usefulLinks">
-            <a href="">Pricing</a>
-            <a href="">About</a>
-            <a href="">Gallery</a>
-            <a href="">Contact</a>
+            <a href="/food">Food</a>
+            <a href="/exercise">Exercise</a>
+            <a href="/trainer">Trainer</a>
+            <a href="activities">Activities</a>
           </div>
         </FooterCard>
-        <FooterCard cardHeading="Subscribe">
+        <FooterCard cardHeading="Reviews">
           <div className="subscribe">
-            <div className="input">
-              <input type="text" placeholder="Enter your Email" />
-              <Button />
+            <div className="input" style={{ margin: "1rem 1rem 1rem 0" }}>
+              <input
+                type="text"
+                name="email"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+                placeholder="Enter your Email"
+              />
             </div>
-            <p>
+            <div className="input" style={{ margin: "1rem 1rem 1rem 0" }}>
+              <input
+                type="text"
+                name="reviews"
+                value={reviews}
+                onChange={(e) => {
+                  setReviews(e.target.value);
+                }}
+                placeholder="Enter Reviews"
+              />
+            </div>
+            <Button
+              onClick={addReviewHandler}
+              sx={{
+                background: "red",
+                color: "white",
+                "&:hover": {
+                  background: "red",
+                },
+              }}
+            >
+              Send
+            </Button>
+            {/* <p>
               Esteem spirit temper too say adieus who direct esteem esteems
               luckily.
-            </p>
+            </p> */}
           </div>
         </FooterCard>
       </Container>
       <div className="copyright">
-        <p>
-          Copyright ©2020 All rights reserved | This template is made with
-          <i className="far fa-heart"></i> by Colorlib
-        </p>
+        <p>Copyright ©2020 All rights reserved</p>
       </div>
     </div>
   );

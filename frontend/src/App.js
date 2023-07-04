@@ -12,11 +12,11 @@ import ExerciseVideos from "./components/Exercises/ExerciseVideo";
 import Signup from "./components/Auth/signup";
 import UserInput from "./components/Food/userInput";
 import Login from "./components/Auth/login";
-import CalorieDetail from "./components/Food/pageEdited";
+import CalorieDetail from "./components/Food/calorieCalculation";
 
 import TrainerSigup from "./components/Auth/trainerSignup";
 import ShowPost from "./components/Activities/ShowPost";
-import ExeprmientFoodApi from "./components/Food/ExeprmientFoodApi";
+import ExeprmientFoodApi from "./components/Food/FoodTracking";
 import Profile from "./components/MyProfile";
 import AdminDashboard from "./components/Admin/AdminDashboard";
 import ProfileToShow from "./components/ProfileToShow";
@@ -28,8 +28,6 @@ import Createservices from "./components/createservices";
 import IntelligentDiet from "./components/Food/IntelligentDiet";
 import { useSelector } from "react-redux";
 import Protected from "./ProtectingRoutes";
-import { Profiler } from "react";
-// import Payment from "./components/Trainer-Info/payment";
 const App = () => {
   const [isAdmin, setIsAdmin] = useState(true);
   const isLoggedIn = useSelector((state) => state?.user?.token);
@@ -63,7 +61,7 @@ const App = () => {
                 }
               />
               <Route
-                path="/calculatediet/:protein/:carbs/:calories"
+                path="/calculatediet"
                 element={
                   <Protected isLoggedIn={isLoggedIn}>
                     <ExeprmientFoodApi />
@@ -111,9 +109,6 @@ const App = () => {
                   </Protected>
                 }
               />
-
-              {/* <Route path="/payment" element={<Payment />} /> */}
-
               <Route
                 path="/user/:id"
                 element={

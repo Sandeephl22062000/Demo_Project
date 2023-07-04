@@ -1,18 +1,24 @@
 import { Box, Button, Card, Container, Typography } from "@mui/material";
+import Modal from "@mui/joy/Modal";
+import ModalClose from "@mui/joy/ModalClose";
+import ModalDialog from "@mui/joy/ModalDialog";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getservices } from "../../store/trainer";
 import { useEffect } from "react";
-
+import DeleteIcon from "@mui/icons-material/Delete";
 const TrainerServices = () => {
+  const [variant, setVariant] = React.useState(undefined);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const token = useSelector((state) => state?.user?.token);
   console.log(token);
   const services = useSelector((state) => state?.trainer?.trainerServicesList);
-  console.log(services?.length);
-  // console.log("dsds", services[0]?.servicesOffered);
+
+  const setEditHandle = (id) => {
+    dispatch(editServices(id));
+  };
   useEffect(() => {
     const trainerID = localStorage.getItem("id");
     dispatch(getservices({ trainerID, token }));
@@ -30,46 +36,34 @@ const TrainerServices = () => {
         <h3>
           <b>Your Services</b>
         </h3>
-        {services?.length === 0 && (
-          <Button
-            omClick={() => {
-              navigate("/services");
-            }}
-            sx={{
-              background: "black",
-              color: "white",
-              width: "10rem",
-              height: "2rem",
-            }}
-          >
-            Create Services
-          </Button>
-        )}
       </Box>
       <Box>
         {services?.map((service) => (
           <Box>
-            {service?.servicesOffered?.map((serviceOffered) => (
-              <Card
+            <Card
+              sx={{
+                minHeight: "100px",
+                border: "black 2px solid",
+                marginTop: "1rem",
+              }}
+            >
+              <Box
                 sx={{
-                  minHeight: "100px",
-                  border: "black 2px solid",
-                  marginTop: "1rem",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  background: "#D1CBCB",
                 }}
               >
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    background: "#D1CBCB",
-                  }}
-                >
-                  <Typography sx={{ marginLeft: "1rem" }}>
-                    {serviceOffered?.duration} Month
-                  </Typography>
-
-                  <Button sx={{ color: "black", marginLeft: "auto" }}>
+                <Typography sx={{ marginLeft: "1rem" }}>
+                  {service?.duration} Month
+                </Typography>
+                <Box sx={{ marginLeft: "auto" }}>
+                  <DeleteIcon />
+                  <Button
+                    sx={{ color: "black" }}
+                    onClick={setEditHandle(service._id)}
+                  >
                     {" "}
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -90,27 +84,61 @@ const TrainerServices = () => {
                     </svg>
                   </Button>
                 </Box>
-                <Box>
-                  <b style={{ margin: "10px" }}>Includes</b>
-                  <p style={{ margin: "10px" }}>
-                    {serviceOffered?.description}
-                  </p>
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    background: "#D1CBCB",
-                  }}
-                >
-                  <Typography>Charges: {serviceOffered?.charges}</Typography>
-                </Box>
-              </Card>
-            ))}
+              </Box>
+              <Box>
+                <b style={{ margin: "10px" }}>Includes</b>
+                <p style={{ margin: "10px" }}>{service?.description}</p>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  background: "#D1CBCB",
+                }}
+              >
+                <Typography>Charges: {service?.charges}</Typography>
+              </Box>
+            </Card>
           </Box>
         ))}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Button
+            onClick={() => {
+              navigate("/services");
+            }}
+            sx={{
+              background: "black",
+              color: "white",
+              width: "10rem",
+              height: "2rem",
+            }}
+          >
+            Create Services
+          </Button>
+        </Box>
       </Box>
+      <Modal open={!!variant} onClose={() => setVariant(undefined)}>
+        <ModalDialog
+          aria-labelledby="variant-modal-title"
+          aria-describedby="variant-modal-description"
+          variant={variant}
+        >
+          <ModalClose />
+          <Typography id="variant-modal-title" component="h2" level="inherit">
+            Modal Dialog
+          </Typography>
+          <Typography id="variant-modal-description" textColor="inherit">
+            This is a `{variant}` modal dialog.
+          </Typography>
+        </ModalDialog>
+      </Modal>
     </Container>
   );
 };

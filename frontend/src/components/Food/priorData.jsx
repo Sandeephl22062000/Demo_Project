@@ -71,13 +71,27 @@ const PriorInfoModal = ({ open, handleClose, priorDataArray }) => {
             </TableBody>
           </Table>
         </TableContainer>
-        <Button
-          onClick={() => {
-            navigate("/food/calculateCalories");
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            margin: "0.5rem",
           }}
         >
-          Use
-        </Button>
+          <Button
+            onClick={() => {
+              navigate("/food/calculateCalories");
+            }}
+            sx={{
+              background: "black",
+              color: "white",
+              "&:hover": { background: "black" },
+            }}
+          >
+            Use
+          </Button>
+        </Box>
       </Box>
     </Modal>
   );

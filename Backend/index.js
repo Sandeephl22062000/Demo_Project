@@ -12,6 +12,7 @@ const gymRoutes = require("./Routes/gymRoutes");
 const requestRoutes = require("./Routes/requestRoutes");
 const paymentRoutes = require("./Routes/paymentRoutes");
 const targetNutrientsRoutes = require("./Routes/targetNutrition");
+const ExtraReviewRoutes = require("./Routes/extraReviewsRoutes")
 const cors = require("cors");
 connectDB();
 
@@ -38,6 +39,8 @@ app.use("/api/request", requestRoutes);
 app.use("/api/gyms", gymRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/targetnutrients", targetNutrientsRoutes);
+app.use("/api/reviews", ExtraReviewRoutes);
+
 
 // app.use("/api/trainerPortal", trainerRoutes);
 

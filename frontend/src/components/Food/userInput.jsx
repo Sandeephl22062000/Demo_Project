@@ -105,9 +105,9 @@ const UserInput = () => {
           />
         </Box>
       )}
-      <h3 style={{ textAlign: "center", marginTop: "50px" }}>
+      <h4 style={{ textAlign: "center", marginTop: "50px" }}>
         Provide your details to calculate your Calories requirement
-      </h3>
+      </h4>
       <Container
         sx={{
           display: "flex",
@@ -115,7 +115,7 @@ const UserInput = () => {
           alignItems: "center",
           width: "50%",
           gap: "16px",
-          marginTop: "60px",
+          marginTop: "1.4rem",
           marginBottom: "40px",
           padding: "20px",
         }}
@@ -224,6 +224,7 @@ const UserInput = () => {
               sx={{
                 color: "white",
                 backgroundColor: "red",
+                "&:hover": { background: "red" },
                 width: "120px",
                 height: "40px",
                 fontSize: "15px",
@@ -251,7 +252,11 @@ const UserInput = () => {
             <h4>Click here to use your previously submitted data</h4>
             <Button
               onClick={openModal}
-              sx={{ color: "white", background: "black" }}
+              sx={{
+                color: "white",
+                background: "black",
+                "&:hover": { background: "black" },
+              }}
             >
               Click Here
             </Button>

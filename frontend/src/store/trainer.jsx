@@ -132,23 +132,7 @@ export const rejectRequest = createAsyncThunk(
     return postData.data;
   }
 );
-// export const PendingRequest = createAsyncThunk(
-//   "/trainer/pendingRequest",
-//   async (data) => {
-//     const { token } = data;
-//     const postData = await axios.get(
-//       `http://localhost:8000/api/request/pendingRequest/`,
-//       {
-//         headers: {
-//           "Content-Type": "application/json",
-//           Authorization: `Bearer ${token}`,
-//         },
-//       }
-//     );
-//     console.log("pendingRequests", postData.data.request);
-//     return postData.data.request;
-//   }
-// );
+
 export const TrainerById = createAsyncThunk(
   "/trainer/trainerDetail",
   async (id, token) => {
@@ -162,10 +146,10 @@ export const TrainerById = createAsyncThunk(
 
 export const createServices = createAsyncThunk(
   "/trainer/createServices",
-  async ({ token, services, addToast, navigate }) => {
+  async ({ token, service, addToast, navigate }) => {
     const postData = await axios.post(
       `http://localhost:8000/api/trainer/services`,
-      { services },
+      { service },
       {
         headers: {
           "Content-Type": "application/json",
@@ -178,9 +162,9 @@ export const createServices = createAsyncThunk(
       autoDismiss: true,
       autoDismissTimeout: 3000,
     });
-    navigate("/profile");
+    // navigate("/profile");
     console.log(postData.data);
-    return postData.data.data;
+    return postData.data.service;
   }
 );
 
@@ -190,6 +174,24 @@ export const getservices = createAsyncThunk(
     console.log("SDfsdfs", trainerID, "fvdsfv", token);
     const postData = await axios.get(
       `http://localhost:8000/api/trainer/getallservice/${trainerID}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    console.log(postData.data.services);
+    return postData?.data?.services;
+  }
+);
+
+export const editServices = createAsyncThunk(
+  "/trainer/editServices",
+  async ({ serviceID, token }) => {
+    const postData = await axios.get(
+      `http://localhost:8000/api/trainer/editServices/${serviceID}`,
       {
         headers: {
           "Content-Type": "application/json",

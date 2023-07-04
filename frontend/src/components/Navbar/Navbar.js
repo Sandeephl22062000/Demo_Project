@@ -25,10 +25,7 @@ const pages = [
   "Activities",
   "Challenges",
   "Gyms",
-  "Contact Us",
-  "About Us",
 ];
-const settings = ["logout"];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);

@@ -7,25 +7,17 @@ const ServiceSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    servicesOffered: [
-      {
-        duration: {
-          type: Number,
-          required: true,
-        },
-        description: {
-          type: String,
-          required: true,
-        },
-        charges: {
-          type: Number,
-          required: true,
-        },
-      },
-    ],
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+    duration: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      required: true,
+    },
+    charges: {
+      type: String,
+      required: true,
     },
   },
   { timestamps: true },

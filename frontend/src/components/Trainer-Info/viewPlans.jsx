@@ -93,15 +93,21 @@ export default function OverlayRadio(props) {
     trainerDetail();
   }, []);
   return (
-    <Container>
-      <Box sx={{ display: "flex", justifyContent: "center" }}>
-        <FormLabel>Selected Plans</FormLabel>
+    <Container sx={{ minHeight: "100vh" }}>
+      <Box
+        sx={{ display: "flex", justifyContent: "center", marginTop: "2rem" }}
+      >
+        <Typography variant="h6">Select the Plan</Typography>
       </Box>
       <>
         {services?.map((service) => (
           <Box
             key={service._id}
-            sx={{ display: "flex", flexDirection: "column" }}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              flexDirection: "column",
+            }}
           >
             {service?.servicesOffered?.map((serviceOffered) => (
               <Card
@@ -109,11 +115,12 @@ export default function OverlayRadio(props) {
                 sx={{
                   minHeight: "100px",
                   width: "100%",
+                  marginTop: "2rem",
                   border:
                     selectedOption === serviceOffered?.charges
                       ? "black 2px solid"
                       : "1px solid rgba(0, 0, 0, 0.23)",
-                  margin: "1rem",
+                  // margin: "1rem",
                   cursor: "pointer",
                 }}
                 onClick={() => handleCardClick(serviceOffered?.charges)}

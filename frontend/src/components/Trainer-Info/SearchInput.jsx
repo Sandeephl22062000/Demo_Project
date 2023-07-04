@@ -8,6 +8,7 @@ import {
   InputBase,
   Pagination,
   Stack,
+  TextField,
   Typography,
 } from "@mui/material";
 import Card from "@mui/material/Card";
@@ -99,20 +100,19 @@ const SearchInput = () => {
               padding: "20px",
             }}
           >
-            <InputBase
-              sx={{ bgcolor: "white", padding: "10px", width: "500px" }}
+            <TextField
+              autoComplete="off"
+              sx={{ bgcolor: "white", width: "30rem" }}
               fullWidth={true}
               id="search"
               name="search"
-              label="search"
+              label="search trainer"
               placeholder="Name or Email"
               onChange={handleInputChange}
             />
             <Button
               sx={{ background: "black", color: "white" }}
-              onClick={(e) => {
-                submithandler(e);
-              }}
+              onClick={submithandler}
               variant="contained"
               type="submit"
             >

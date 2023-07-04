@@ -1,10 +1,13 @@
 import React from "react";
 import { Box, Button, Container, Typography } from "@mui/material";
 import backgroundImage from "../../images/backGorund.jpg";
+import { useNavigate } from "react-router-dom";
 
 const BackgroundImageContainer = ({ text }) => {
-  // const navigate = useNavigate();
-  // navigate("/")
+  const navigate = useNavigate();
+  const handleFood = () => {
+    navigate("/food");
+  };
   return (
     <Box
       sx={{
@@ -29,24 +32,27 @@ const BackgroundImageContainer = ({ text }) => {
           sx={{
             display: "flex",
             justifyContent: "flex-start",
-            alignItems: "flex-start", // Align text and button to the left
+            alignItems: "flex-start",
             flexDirection: "column",
             height: "100%",
             padding: "0 20px",
           }}
         >
           <Typography variant="h5" color="white" textAlign="left">
-          Track your Calories,Nutrients and Micros according to your Goals.<br/>
-          Calucalate the amount of calorie you need to achieve your goals
+            Track your Calories,Nutrients and Micros according to your Goals.
+            <br />
+            Calucalate the amount of calorie you need to achieve your goals
           </Typography>
           <Button
-          // onClick={handleFood}
+            onClick={handleFood}
             sx={{
               padding: "20px",
               color: "white",
               bgcolor: "red",
               width: "150px",
               alignSelf: "flex-start",
+              "&:hover": { backgroundColor: "red" },
+
               marginTop: "20px",
             }}
           >
@@ -59,4 +65,3 @@ const BackgroundImageContainer = ({ text }) => {
 };
 
 export default BackgroundImageContainer;
-

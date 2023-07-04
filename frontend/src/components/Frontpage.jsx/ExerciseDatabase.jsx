@@ -1,9 +1,10 @@
 import React from "react";
 import { Box, Button, Container, Typography } from "@mui/material";
 import SummerBg from "../../images/summerBg.webp";
+import { useNavigate } from "react-router-dom";
 
-// import backgroundImage from "../../images/backGorund.jpg";
 const BackgroundImageContainer = ({ text }) => {
+  const navigate = useNavigate();
   return (
     <Box
       sx={{
@@ -39,10 +40,13 @@ const BackgroundImageContainer = ({ text }) => {
             database offers an extensive collection of exercises, complete with
             detailed instructions and video tutorials. Whether you're a beginner
             or a seasoned fitness enthusiast, you'll find exercises tailored to
-            your needs. 
+            your needs.
           </Typography>
 
           <Button
+            onClick={() => {
+              navigate("/exercise");
+            }}
             sx={{
               padding: "20px",
               color: "white",
@@ -50,6 +54,7 @@ const BackgroundImageContainer = ({ text }) => {
               width: "150px",
               alignSelf: "flex-end",
               marginTop: "20px",
+              "&:hover": { backgroundColor: "red" },
             }}
           >
             Exercises

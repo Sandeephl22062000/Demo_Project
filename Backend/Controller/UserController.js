@@ -121,10 +121,19 @@ const searchusersWithKeyword = async (req, res) => {
 const updateuserDetail = async (req, res, next) => {
   try {
     const id = req.params.id;
-    console.log("id", id);
-    const user = await User.findByIdAndUpdate(id, req.body, {
-      new: true,
-    });
+    const { email, name, specialization, experiences } = req.body;
+    const user = await User.findByIdAndUpdate(
+      id,
+      {
+        email,
+        name,
+        specialization,
+        experiences,
+      },
+      {
+        new: true,
+      }
+    );
     console.log(user);
     if (user) {
       res.status(200).json({

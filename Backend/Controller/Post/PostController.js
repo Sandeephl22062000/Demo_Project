@@ -1,7 +1,7 @@
 const Post = require("../../Model/PostModel/PostModel");
 const User = require("../../Model/UserModel");
 const catchAsync = require("../../utils/catchAync");
-const ErrorHandler = require("../../Error-Handling/error");
+const AppError = require("../../Error-Handling/error");
 // const deleteFile = require("../utils/deleteFile");
 const mongoose = require("mongoose");
 
@@ -35,7 +35,7 @@ exports.likeUnlikePost = catchAsync(async (req, res, next) => {
   const post = await Post.findById(req.params.id);
 
   if (!post) {
-    return next(new ErrorHandler("Post Not Found", 404));
+    return next(new AppError("Post Not Found", 404));
   }
 
   if (post.likes.includes(req.user._id)) {
@@ -65,11 +65,11 @@ exports.deletePost = catchAsync(async (req, res, next) => {
   const post = await Post.findById(req.params.id);
 
   if (!post) {
-    return next(new ErrorHandler("Post Not Found", 404));
+    return next(new AppError("Post Not Found", 404));
   }
 
   if (post.postedBy.toString() !== req.user._id.toString()) {
-    return next(new ErrorHandler("Unauthorized", 401));
+    return next(new AppError("Unauthorized", 401));
   }
 
   //   await deleteFile("posts/", post.image);
@@ -93,11 +93,11 @@ exports.updateCaption = catchAsync(async (req, res, next) => {
   const post = await Post.findById(req.params.id);
 
   if (!post) {
-    return next(new ErrorHandler("Post Not Found", 404));
+    return next(new AppError("Post Not Found", 404));
   }
 
   if (post.postedBy.toString() !== req.user._id.toString()) {
-    return next(new ErrorHandler("Unauthorized", 401));
+    return next(new AppError("Unauthorized", 401));
   }
 
   post.caption = req.body.caption;
@@ -115,11 +115,11 @@ exports.newComment = catchAsync(async (req, res, next) => {
   const post = await Post.findById(req.params.postID);
 
   if (!post) {
-    return next(new ErrorHandler("Post Not Found", 404));
+    return next(new AppError("Post Not Found", 404));
   }
   console.log(post);
   if (post.comments.includes(req.user._id)) {
-    return next(new ErrorHandler("Already Commented", 500));
+    return next(new AppError("Already Commented", 500));
   }
 
   post.comments.push({
@@ -165,12 +165,12 @@ exports.newLike = catchAsync(async (req, res, next) => {
 
   console.log(post);
   if (!post) {
-    return next(new ErrorHandler("Post Not Found", 404));
+    return next(new AppError("Post Not Found", 404));
   }
   console.log("post.likes", post.likes);
   console.log(post.likes.includes(req.user._id));
   if (post.likes.includes(req.user._id)) {
-    return next(new ErrorHandler("Already Liked", 500));
+    return next(new AppError("Already Liked", 500));
   }
   post.likes.push(req.user._id);
 
@@ -183,6 +183,12 @@ exports.newLike = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.existingLikes = async (req, res, next) => {
+  const post = await Post.findById(id);
+  if (post.likes.includes(req.user._id)) {
+    return next(new AppError("Already Liked", 500));
+  }
+};
 // Posts of Following
 exports.getPostsOfFollowing = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.user._id);
@@ -227,7 +233,7 @@ exports.saveUnsavePost = catchAsync(async (req, res, next) => {
   const post = await Post.findById(req.params.id);
 
   if (!post) {
-    return next(new ErrorHandler("Post Not Found", 404));
+    return next(new AppError("Post Not Found", 404));
   }
 
   if (user.saved.includes(post._id.toString())) {
@@ -268,7 +274,7 @@ exports.getPostDetails = catchAsync(async (req, res, next) => {
     });
 
   if (!post) {
-    return next(new ErrorHandler("Post Not Found", 404));
+    return next(new AppError("Post Not Found", 404));
   }
 
   res.status(200).json({

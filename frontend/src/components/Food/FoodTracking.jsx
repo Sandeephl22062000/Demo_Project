@@ -25,6 +25,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { PieChart, Pie, Tooltip, Legend } from "recharts";
 import { useEffect } from "react";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const ExeprmientFoodApi = () => {
   const [search, setSearch] = useState("");
@@ -34,18 +35,40 @@ const ExeprmientFoodApi = () => {
   const [sumFat, setSumFat] = useState(0);
   const [sumCarbs, setSumCarbs] = useState(0);
   const [sumProtein, setSumProtein] = useState(0);
+  const [notFound, setNotFound] = useState(false);
   const [variant, setVariant] = useState(undefined);
   const [chartProteinData, setChartProteinData] = useState([]);
   const [chartCarbsData, setChartCarbsData] = useState([]);
   const [chartCaloriesData, setChartCaloriesData] = useState([]);
-
+  const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState("");
+  const [TargetProtein, setTargetProtein] = useState(0);
+  const [TargetCarbs, setTargetCarbs] = useState(0);
+  const [TargetCalories, setTargetCalories] = useState(0);
   const params = useParams();
-  const TargetCarbs = params.carbs;
-  const TargetProtein = params.protein;
-  const TargetCalories = params.calories;
+
+  const getTargetData = async () => {
+    const { data } = await axios.get(
+      "http://localhost:8000/api/targetnutrients/targetnutritionofuser",
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log(data);
+    setTargetCalories(data?.data?.requireCalories);
+    setTargetCarbs(data?.data?.requireCarbs);
+    setTargetProtein(data?.data?.requireProtein);
+  };
+  useEffect(() => {
+    getTargetData();
+  }, []);
+
   const navigate = useNavigate();
   const clickHandler = async () => {
+    setIsLoading(true);
     const data = await axios.get(
       `https://api.api-ninjas.com/v1/nutrition?query=${search}`,
       {
@@ -54,8 +77,10 @@ const ExeprmientFoodApi = () => {
         },
       }
     );
-    console.log(data.data);
+    console.log(data);
+    if (data?.data.length === 0) setNotFound(true);
     setResult(data.data);
+    setIsLoading(false);
   };
   const removeItem = (index) => {
     const updatedRows = [...rows];
@@ -167,25 +192,37 @@ const ExeprmientFoodApi = () => {
     const chartCaloriesData = [
       {
         name: "Calories left",
-        value: differenceCalories,
+        value: +differenceCalories.toFixed(2),
         fill: "#EA706D",
       },
-      { name: "Calories taken", value: sumCalorie, fill: "#82ca9d" },
+      {
+        name: "Calories taken",
+        value: +sumCalorie.toFixed(2),
+        fill: "#82ca9d",
+      },
     ];
     setChartCaloriesData(chartCaloriesData);
   }, [differenceCalories, sumCalorie]);
   useEffect(() => {
     const updateProteinChart = [
-      { name: "Protein left", value: differenceProtein, fill: "#8884d8" },
-      { name: "Protein taken", value: sumProtein, fill: "#82ca9d" },
+      {
+        name: "Protein left",
+        value: +differenceProtein.toFixed(2),
+        fill: "#8884d8",
+      },
+      { name: "Protein taken", value: +sumProtein.toFixed(2), fill: "#82ca9d" },
     ];
     setChartProteinData(updateProteinChart);
   }, [differenceProtein, sumProtein]);
 
   useEffect(() => {
     const chartCarbsData = [
-      { name: "Carbs left", value: differenceCarbs, fill: "#BB7341" },
-      { name: "Carbs taken", value: sumCarbs, fill: "#82ca9d" },
+      {
+        name: "Carbs left",
+        value: +differenceCarbs.toFixed(2),
+        fill: "#BB7341",
+      },
+      { name: "Carbs taken", value: +sumCarbs.toFixed(2), fill: "#82ca9d" },
     ];
     setChartCarbsData(chartCarbsData);
   }, [differenceCarbs, sumCarbs]);
@@ -197,67 +234,105 @@ const ExeprmientFoodApi = () => {
   return (
     <>
       <Container>
-        <h1
+        <h2
           style={{
             display: "flex",
             alignitems: "center",
             justifyContent: "center",
-            marginTop: "20px",
+            margin: "2rem",
           }}
         >
           Track Your Daily Calories
-        </h1>
+        </h2>
         <div
           style={{
             display: "flex",
             justifyContent: "center",
-            margin: "100px",
+            margin: "2rem",
           }}
         >
-          <Input
-            placeholder="Search"
+          <TextField
+            placeholder="Search for the food items"
             onChange={(e) => {
               setSearch(e.target.value);
             }}
-            style={{ margin: "0 10px", width: "40%", height: "60px" }}
+            style={{ margin: "0 10px", width: "40%", height: "1rem" }}
           />
-          <Button
-            onClick={clickHandler}
-            style={{ backgroundColor: "red", color: "white", width: "17%" }}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: "0.2rem",
+            }}
           >
-            Search
-          </Button>
+            <Button
+              onClick={clickHandler}
+              style={{
+                backgroundColor: "red",
+                color: "white",
+                width: "6rem",
+                height: "3rem",
+              }}
+            >
+              Search
+            </Button>
+          </Box>
         </div>
-        {result.length > 0 && (
-          <Box sx={{ display: "flex", justifyContent: "center" }}>
-            <TableBody>
-              {result.map((row, index) => (
-                <StyledTableRow key={row.name}>
-                  <StyledTableCell component="th" scope="row">
-                    {row.name}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    <b>Calories : </b>
-                    {row.calories}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    <b>Fat : </b>
-                    {row.fat_total_g}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    <b>Carbs : </b>
-                    {row.carbohydrates_total_g}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    <b>Protein : </b>
-                    {row.protein_g}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    <Button onClick={() => AddToTable(index)}>Add</Button>
-                  </StyledTableCell>
-                </StyledTableRow>
-              ))}
-            </TableBody>
+        {!isLoading ? (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+              marginBottom: "0.5rem",
+            }}
+          >
+            {result.length > 0 && (
+              <>
+                <h4>{`Nutritional value in 100g of ${search}`}</h4>
+                <TableBody>
+                  {result.map((row, index) => (
+                    <StyledTableRow key={row.name}>
+                      <StyledTableCell component="th" scope="row">
+                        {row.name}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        <b>Calories : </b>
+                        {row.calories}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        <b>Fat : </b>
+                        {row.fat_total_g}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        <b>Carbs : </b>
+                        {row.carbohydrates_total_g}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        <b>Protein : </b>
+                        {row.protein_g}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        <Button onClick={() => AddToTable(index)}>Add</Button>
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))}
+                </TableBody>
+              </>
+            )}
+          </Box>
+        ) : (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              marginBottom: "0.5rem",
+            }}
+          >
+            <CircularProgress sx={{ color: "black" }} />
           </Box>
         )}
         <div>

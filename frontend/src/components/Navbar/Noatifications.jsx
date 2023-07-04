@@ -204,13 +204,13 @@ function NotificationItem({ notification, userRole }) {
 function RenderContent(notification, userRole) {
   let title;
   const dispatch = useDispatch();
-  const token = useSelector((state)=>state?.user?.token)
+  const token = useSelector((state) => state?.user?.token);
   const acceptRequestHandler = (id) => {
     console.log(id);
-    dispatch(acceptRequest({id,token}));
+    dispatch(acceptRequest({ id, token }));
   };
-  const rejectRequestHandler = ({id}) => {
-    dispatch(rejectRequest(id,token));
+  const rejectRequestHandler = ({ id }) => {
+    dispatch(rejectRequest(id, token));
   };
 
   if (userRole === 0) {
@@ -246,20 +246,6 @@ function RenderContent(notification, userRole) {
           sx={{ color: "text.secondary" }}
         >
           &nbsp; has requested training from you
-          <Box>
-            <Button
-              onClick={acceptRequestHandler(notification?._id)}
-              sx={{ background: "green", color: "white", margin: "5px" }}
-            >
-              Accept
-            </Button>
-            <Button
-              onClick={rejectRequestHandler(notification?._id)}
-              sx={{ background: "red", color: "white" }}
-            >
-              Reject
-            </Button>
-          </Box>
         </Typography>
       </Typography>
     );

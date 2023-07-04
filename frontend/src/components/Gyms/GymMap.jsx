@@ -12,7 +12,6 @@ import {
 const GymMap = withScriptjs(
   withGoogleMap(({ gyms, center }) => {
     const [selectedGym, setSelectedGym] = React.useState(null);
-    const [searchPlace, setSearchPlace] = useState("");
     const handleMarkerClick = (gym) => {
       console.log(gym);
       setSelectedGym(gym);

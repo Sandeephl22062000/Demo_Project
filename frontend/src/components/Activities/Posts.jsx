@@ -162,7 +162,7 @@ const Post = (props) => {
           </Box>
         </CardContent>
         <CardContent>
-          <Typography fontSize="sm">
+          <Typography sx={{ height: "1.5rem" }}>
             <Link
               component="button"
               color="neutral"
@@ -170,7 +170,7 @@ const Post = (props) => {
               textColor="text.primary"
             >
               {props.post?.postedBy?.name}
-            </Link>{" "}
+            </Link>
             {props.post?.caption}
           </Typography>
           {console.log(showComment)}
@@ -178,8 +178,9 @@ const Post = (props) => {
             ?.slice()
             .reverse()
             .map((comment) => (
-              <Typography>
-                {comment?.user?.name} {comment?.comment}
+              <Typography sx={{ height: "1.2rem" }}>
+                <b>{comment?.user?.name} </b>
+                {comment?.comment}
               </Typography>
             ))}
 

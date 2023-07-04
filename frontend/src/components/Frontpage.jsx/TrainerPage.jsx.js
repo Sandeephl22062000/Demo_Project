@@ -23,9 +23,9 @@ const BackgroundImageContainer = ({ text }) => {
           variant="h2"
           color="red"
           textAlign="right"
-          sx={{ padding: "20px", fontWeight: 600, height: "140px" }}
+          sx={{ padding: "20px", fontWeight: 600, height: "30%" }}
         >
-          Train with our experts
+          TRAIN WITH THE EXPERTS
         </Typography>
         <Box
           sx={{
@@ -51,12 +51,13 @@ const BackgroundImageContainer = ({ text }) => {
               padding: "20px",
               color: "white",
               bgcolor: "red",
-              width: "150px",
+              width: "13%",
               alignSelf: "flex-end",
               marginTop: "20px",
+              "&:hover": { backgroundColor: "red" },
             }}
           >
-            FEEDS
+            TRAINER
           </Button>
         </Box>
       </Container>

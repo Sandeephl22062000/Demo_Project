@@ -3,7 +3,7 @@ import { css, jsx } from "@emotion/core";
 import Container from "../Global/Container";
 import HeroImage from "../../images/heroImages.jpg";
 import { Navigate, useNavigate } from "react-router-dom";
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 
 const Hero = () => {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ const Hero = () => {
         sx={{
           display: "flex",
           flexDirection: "column",
-          alignItems:"center",
+          alignItems: "center",
           justifyContent: "center",
         }}
       >
@@ -27,19 +27,27 @@ const Hero = () => {
           <h1>BODY SHAPE</h1>
           <span>Build Your Body and Fitness with Professional Touch</span>
         </div>
-        <Button
+        <Box
           sx={{
-            padding: "20px",
-            color: "white",
-            bgcolor: "red",
-            width: "150px",
-            alignSelf: "flex-start",
-            marginTop: "20px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
-          onClick={handleregisterPage}
         >
-          JOIN US
-        </Button>
+          <Button
+            sx={{
+              padding: "20px",
+              color: "white",
+              bgcolor: "red",
+              width: "150px",
+              marginTop: "20px",
+              "&:hover": { backgroundColor: "red" },
+            }}
+            onClick={handleregisterPage}
+          >
+            JOIN US
+          </Button>
+        </Box>
       </Container>
     </section>
   );

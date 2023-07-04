@@ -38,9 +38,7 @@ const ProfilePage = () => {
       const { data } = await axios.get(
         `http://localhost:8000/api/trainer/trainerDetail/${id}`
       );
-      console.log(data.data);
       setTrainer(data.data);
-      console.log(data.data.posts);
       showPost(data.data.posts);
     };
     trainerDetail();

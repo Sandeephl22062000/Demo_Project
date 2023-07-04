@@ -49,6 +49,7 @@ const BackgroundImageContainer = ({ text }) => {
               bgcolor: "red",
               width: "150px",
               alignSelf: "flex-start",
+              "&:hover": { backgroundColor: "red" },
               marginTop: "20px",
             }}
           >

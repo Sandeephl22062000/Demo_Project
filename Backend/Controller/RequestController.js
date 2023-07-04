@@ -210,13 +210,13 @@ const unReadMessages = async (req, res, next) => {
   if (req.user.role === 0) {
     getRequests = await Request.find({
       user: req?.user?._id,
-      isPending: true,
+      isPending: false,
     }).sort({ createdAt: -1 });
     console.log("dfvdfvdf", getRequests);
   } else {
     getRequests = await Request.find({
       trainer: req?.user?._id,
-      isPending: true,
+      isPending: false,
     }).sort({ createdAt: -1 });
     console.log("dfvdfvdf", getRequests);
   }

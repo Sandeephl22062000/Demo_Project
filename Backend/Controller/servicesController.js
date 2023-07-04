@@ -2,22 +2,19 @@ const Services = require("../Model/ServicesModel");
 
 const createServices = async (req, res) => {
   try {
-    const { services } = req.body;
-
-    if (services.length !== 4) {
-      return res.status(400).json({ message: "Please provide 4 services" });
-    }
-
-    const newServices = await Services.create({
-      servicesOffered: services,
-      trainer: req?.user?._id,
+    const { service } = req.body;
+    console.log(service);
+    const newservice = await Services.create({
+      trainer: req.user._id,
+      duration: service.duration,
+      description: service.description,
+      charges: service.charges,
     });
-    console.log(newServices);
-
-    res.status(201).json({ message: "Services created successfully" });
+    console.log(newservice);
+    res.status(201).json({ service: newservice, message: "success" });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal server error" });
+    console.log(error);
+    res.status(500).json({ error: error.message });
   }
 };
 
