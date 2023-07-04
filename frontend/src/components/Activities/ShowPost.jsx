@@ -25,9 +25,9 @@ const ShowPost = () => {
       );
       console.log(response.data.posts);
       setPosts(response.data.posts);
+      setIsLoading(false);
     };
     data();
-    setIsLoading(false);
   };
   useEffect(() => {
     if (search.length > 0) {
@@ -83,7 +83,7 @@ const ShowPost = () => {
           />
         </Box>
       </Container>
-      <Container sx={{ minHeight: "80vh" }}>
+      <Container sx={{ minHeight: "100vh"}}>
         <AddPost />
         {!isLoading ? (
           posts.map((post) => <Posts post={post} />)

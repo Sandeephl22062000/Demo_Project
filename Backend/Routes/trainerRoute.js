@@ -17,8 +17,12 @@ router
   .get(protectingRoutes, serviceController.getServicesOfTrainer);
 
 router
-  .route("/editserices/:serviceID")
-  .get(protectingRoutes, serviceController.editServices);
+  .route("/editServices/:serviceID")
+  .put(protectingRoutes, serviceController.editServices);
+
+  router
+  .route("/deleteServices/:serviceID")
+  .delete(protectingRoutes, serviceController.deleteServices);
 
 router.route("/trainerDetail/:id").get(TrainerController.getTrainerById);
 router.route("/:trainer/:page").get(TrainerController.getAlltrainer);

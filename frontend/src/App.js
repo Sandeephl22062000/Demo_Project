@@ -23,7 +23,6 @@ import ProfileToShow from "./components/ProfileToShow";
 import ViewAllRecords from "./components/Food/ViewAllRecords";
 import Gym from "./components/Gyms/nearByGym";
 import { useState } from "react";
-import Challenges from "./components/Challenges/challengesTOShow";
 import Createservices from "./components/createservices";
 import IntelligentDiet from "./components/Food/IntelligentDiet";
 import { useSelector } from "react-redux";
@@ -144,14 +143,6 @@ const App = () => {
                 element={
                   <Protected isLoggedIn={isLoggedIn}>
                     <ShowPost />
-                  </Protected>
-                }
-              />
-              <Route
-                path="/challenges"
-                element={
-                  <Protected isLoggedIn={isLoggedIn}>
-                    <Challenges />
                   </Protected>
                 }
               />

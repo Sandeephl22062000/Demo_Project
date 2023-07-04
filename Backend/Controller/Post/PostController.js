@@ -11,6 +11,7 @@ exports.newPost = catchAsync(async (req, res, next) => {
     const postData = {
       caption: req.body.caption,
       image: req.body.image,
+      video: req.body.video, // Add video field to postData
       postedBy: req.user._id,
     };
 

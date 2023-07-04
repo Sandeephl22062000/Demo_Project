@@ -18,18 +18,19 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import ChallengesModel from "../Challenges/AddChallenges";
 
 const AddPost = () => {
   const [images, setImages] = useState("");
   const [status, setStatus] = useState("");
   const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const [selectedVideo, setSelectedVideo] = useState(null);
   const [caption, setCaption] = useState("");
   const [variant, setVariant] = useState(undefined);
   const [variant2, setVariant2] = useState(undefined);
 
   const token = useSelector((state) => state.user.token);
   console.log(token);
+
   const photoupload = (event) => {
     let file = event.target.files[0];
     if (!file) {
@@ -49,13 +50,37 @@ const AddPost = () => {
     );
   };
 
+  const videoupload = (event) => {
+    let file = event.target.files[0];
+    if (!file) {
+      alert("Please upload a video first!");
+    }
+    const storageRef = addRef(storage, `/videos/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {},
+      (err) => console.log(err),
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+          setSelectedVideo(url);
+        });
+      }
+    );
+  };
+
   const handlePhotoUpload = (event) => {
     photoupload(event);
+  };
+
+  const handleVideoUpload = (event) => {
+    videoupload(event);
   };
 
   const handleCaptionChange = (event) => {
     setCaption(event.target.value);
   };
+
   const handleCloseModal = () => {
     setVariant2(undefined);
   };
@@ -65,12 +90,14 @@ const AddPost = () => {
     const createPost = async () => {
       console.log("asdfghjklsdfghjk");
       console.log("Selected Photo:", selectedPhoto);
+      console.log("Selected Video:", selectedVideo);
       console.log("Caption:", caption);
       const data = await axios.post(
         "api/post/new",
         {
           caption: caption,
           image: selectedPhoto,
+          video: selectedVideo,
         },
         {
           headers: {
@@ -147,7 +174,7 @@ const AddPost = () => {
                   },
                 }}
               >
-                Upload Photo
+                Upload Photo/Video
               </Button>
             </Box>
           </Grid>
@@ -193,15 +220,26 @@ const AddPost = () => {
                     }}
                   />
                 ) : (
-                  <Button variant="outlined" component="label">
-                    Add Photo
-                    <input
-                      type="file"
-                      onChange={handlePhotoUpload}
-                      style={{ display: "none" }}
-                      accept="image/*"
-                    />
-                  </Button>
+                  <div>
+                    <Button variant="outlined" component="label">
+                      Add Photo
+                      <input
+                        type="file"
+                        onChange={handlePhotoUpload}
+                        style={{ display: "none" }}
+                        accept="image/*"
+                      />
+                    </Button>
+                    <Button variant="outlined" component="label">
+                      Add Video
+                      <input
+                        type="file"
+                        onChange={handleVideoUpload}
+                        style={{ display: "none" }}
+                        accept="video/*"
+                      />
+                    </Button>
+                  </div>
                 )}
                 {console.log(selectedPhoto)}
               </Box>
@@ -229,9 +267,6 @@ const AddPost = () => {
             </Box>
           </form>
         </ModalDialog>
-      </Modal>
-      <Modal open={variant2 === "soft"} onClose={handleCloseModal}>
-        <ChallengesModel variant={variant2} />
       </Modal>
     </Container>
   );

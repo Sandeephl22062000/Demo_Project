@@ -56,7 +56,11 @@ const ProfilePage = () => {
     >
       <Grid container spacing={4}>
         <Grid item xs={4}>
-          <AspectRatio ratio="1" maxHeight={250}>
+          <AspectRatio
+            ratio="1"
+            maxHeight={200}
+            sx={{ margin: "0.5rem 0.6rem" }}
+          >
             <img
               src={trainer?.photo}
               loading="lazy"
@@ -84,6 +88,9 @@ const ProfilePage = () => {
             <Typography level="body2" fontWeight="lg" textColor="text.tertiary">
               Specialization: {trainer.specialization}
             </Typography>
+            <Typography level="body2" fontWeight="lg" textColor="text.tertiary">
+              Posts: {trainer?.posts?.length}
+            </Typography>
           </Box>
         </Grid>
       </Grid>
@@ -97,37 +104,6 @@ const ProfilePage = () => {
         }}
       >
         <CardContent sx={{ width: "100%" }}>
-          <Sheet
-            sx={{
-              bgcolor: "background.level1",
-              borderRadius: "sm",
-              width: "100%",
-              p: 1.5,
-              my: 1.5,
-              display: "flex",
-              gap: 2,
-              "& > div": { flex: 1 },
-            }}
-          >
-            <div>
-              <Typography level="body3" fontWeight="lg">
-                Posts
-              </Typography>
-              <Typography fontWeight="lg">{trainer?.posts?.length}</Typography>
-            </div>
-            <div>
-              <Typography level="body3" fontWeight="lg">
-                Clients
-              </Typography>
-              <Typography fontWeight="lg">980</Typography>
-            </div>
-            <div>
-              <Typography level="body3" fontWeight="lg">
-                Rating
-              </Typography>
-              <Typography fontWeight="lg">8.9</Typography>
-            </div>
-          </Sheet>
           <Box
             sx={{
               display: "flex",

@@ -15,7 +15,6 @@ const Createservices = () => {
 
   const handleAddService = (e) => {
     e.preventDefault();
-
     console.log(duration, charges, description);
     dispatch(
       createServices({

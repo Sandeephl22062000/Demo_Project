@@ -48,4 +48,37 @@ const getServicesOfTrainer = async (req, res, next) => {
   });
 };
 
-module.exports = { createServices, getServicesOfTrainer, updateServices };
+const editServices = async (req, res, next) => {
+  console.log(req.params);
+  const { duration, charges, description } = req.body;
+  const updateService = await Services.findByIdAndUpdate(
+    req.params.serviceID,
+    {
+      duration,
+      charges,
+      description,
+    },
+    { new: true }
+  );
+  console.log(updateService);
+  res.status(200).json({
+    message: "success",
+    updateService,
+  });
+};
+
+const deleteServices = async (req, res, next) => {
+  console.log(req.params.serviceID);
+  const services = await Services.findByIdAndDelete(req.params.serviceID);
+  res.status(200).json({
+    message: "success",
+  });
+};
+
+module.exports = {
+  createServices,
+  getServicesOfTrainer,
+  editServices,
+  updateServices,
+  deleteServices,
+};

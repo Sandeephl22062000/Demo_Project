@@ -9,7 +9,6 @@ import CardContent from "@mui/joy/CardContent";
 import Typography from "@mui/joy/Typography";
 import Sheet from "@mui/joy/Sheet";
 import Posts from "./Trainer-Info/PRofilePostCard";
-import Challenges from "./Challenges/ChallengesOnProfile";
 import UpdateProfileModal from "./TrainerMyProfile/UpdateProfileModal";
 import { Modal, ModalClose, ModalDialog } from "@mui/joy";
 import { useDispatch, useSelector } from "react-redux";
@@ -259,8 +258,6 @@ const ProfilePage = () => {
       </Card>
       {showRequests ? (
         <RequestTable trainer={user?._id} />
-      ) : showChallenges ? (
-        <Challenges trainer={user?._id} />
       ) : showServices ? (
         <TrainerServices trainer={user?._id} />
       ) : (

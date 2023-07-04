@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import * as React from "react";
 import axios from "axios";
 import AspectRatio from "@mui/joy/AspectRatio";
@@ -23,8 +22,9 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 const Post = (props) => {
   const token = useSelector((state) => state.user.token);
   const [likeCount, setLikeCount] = React.useState(props?.post?.likes?.length);
+  const id = localStorage.getItem("id");
   const [isLiked, setIsLiked] = React.useState(
-    props?.post?.likes?.includes(token)
+    props.post?.likes?.includes(id) || false
   );
   const [comment, setComment] = useState("");
   const [showComment, setShowComment] = useState([]);
@@ -124,23 +124,41 @@ const Post = (props) => {
           >
             <Avatar size="sm" src={props.post?.postedBy?.photo}></Avatar>
           </Box>
-          <Typography fontWeight="lg">{props.post?.postedBy?.name}</Typography>
+          <Typography fontWeight="lg">
+            {props.post?.postedBy?.name || props?.name}
+          </Typography>
         </CardContent>
         <CardOverflow>
           <AspectRatio>
-            <img
-              src={props.post?.image}
-              alt=""
-              loading="lazy"
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-              }}
-            />
+            {props.post?.video && (
+              <video
+                src={props.post?.video}
+                controls
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                }}
+              />
+            )}
+            {!props.post?.video && (
+              <img
+                src={props.post?.image}
+                alt=""
+                loading="lazy"
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                }}
+              />
+            )}
           </AspectRatio>
         </CardOverflow>
         <CardContent

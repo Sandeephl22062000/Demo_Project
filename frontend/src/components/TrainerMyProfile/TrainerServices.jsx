@@ -1,24 +1,46 @@
-import { Box, Button, Card, Container, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  Container,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import Modal from "@mui/joy/Modal";
 import ModalClose from "@mui/joy/ModalClose";
 import ModalDialog from "@mui/joy/ModalDialog";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getservices } from "../../store/trainer";
+import { editServices, getservices, deleteServices } from "../../store/trainer";
 import { useEffect } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
+import UpdateServicesDialog from "./updateServiceModal";
+import UpdateServiceModal from "./updateServiceModal";
+import DeleteServiceModal from "./DeleteServiceModal";
 const TrainerServices = () => {
   const [variant, setVariant] = React.useState(undefined);
+  const [variant1, setVariant1] = React.useState(undefined);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const token = useSelector((state) => state?.user?.token);
   console.log(token);
   const services = useSelector((state) => state?.trainer?.trainerServicesList);
-
-  const setEditHandle = (id) => {
-    dispatch(editServices(id));
+  const handleDelete = () => {
+    setVariant1("solid");
   };
+  const handleClose1 = () => {
+    setVariant1(undefined);
+  };
+  const handleClose = () => {
+    setVariant(undefined);
+  };
+  const setEditHandle = (id) => {
+    console.log(id);
+    setVariant("solid");
+  };
+
   useEffect(() => {
     const trainerID = localStorage.getItem("id");
     dispatch(getservices({ trainerID, token }));
@@ -59,10 +81,19 @@ const TrainerServices = () => {
                   {service?.duration} Month
                 </Typography>
                 <Box sx={{ marginLeft: "auto" }}>
-                  <DeleteIcon />
+                  <IconButton
+                    onClick={() => {
+                      handleDelete(service?._id);
+                    }}
+                    sx={{ color: "black", cursor: "pointer" }}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
                   <Button
                     sx={{ color: "black" }}
-                    onClick={setEditHandle(service._id)}
+                    onClick={() => {
+                      setEditHandle(service._id);
+                    }}
                   >
                     {" "}
                     <svg
@@ -100,6 +131,31 @@ const TrainerServices = () => {
                 <Typography>Charges: {service?.charges}</Typography>
               </Box>
             </Card>
+            <Modal
+              open={variant === "solid"}
+              onClose={() => setVariant(undefined)}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <ModalDialog>
+                <ModalClose onClick={() => setVariant(undefined)} />
+                <UpdateServiceModal id={service._id} onClose={handleClose} />
+              </ModalDialog>
+            </Modal>
+            <Modal
+              open={variant1 === "solid"}
+              onClose={() => setVariant1(undefined)}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <ModalDialog>
+                <Box>
+                  <b>Delete Confirmation</b>
+                </Box>
+                <ModalClose onClick={() => setVariant1(undefined)} />
+                <DeleteServiceModal id={service._id} onClose={handleClose1} />
+              </ModalDialog>
+            </Modal>
           </Box>
         ))}
         <Box
@@ -124,21 +180,6 @@ const TrainerServices = () => {
           </Button>
         </Box>
       </Box>
-      <Modal open={!!variant} onClose={() => setVariant(undefined)}>
-        <ModalDialog
-          aria-labelledby="variant-modal-title"
-          aria-describedby="variant-modal-description"
-          variant={variant}
-        >
-          <ModalClose />
-          <Typography id="variant-modal-title" component="h2" level="inherit">
-            Modal Dialog
-          </Typography>
-          <Typography id="variant-modal-description" textColor="inherit">
-            This is a `{variant}` modal dialog.
-          </Typography>
-        </ModalDialog>
-      </Modal>
     </Container>
   );
 };

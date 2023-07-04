@@ -68,11 +68,7 @@ export default function RecipeReviewCard(props) {
               {console.log(props.post)}
               <CardHeader
                 avatar={
-                  <Avatar
-                    src={user?.photo}
-                    sx={{ bgcolor: red[500] }}
-                    aria-label="recipe"
-                  >
+                  <Avatar src={user?.photo} aria-label="recipe">
                     {user?.name[0].toUpperCase()}
                   </Avatar>
                 }

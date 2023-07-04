@@ -18,14 +18,7 @@ import { logout } from "../../store/user";
 import Noatification from "./Noatifications";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 
-const pages = [
-  "Food",
-  "Exercise",
-  "Trainer",
-  "Activities",
-  "Challenges",
-  "Gyms",
-];
+const pages = ["Food", "Exercise", "Trainer", "Activities", "Gyms"];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);

@@ -54,7 +54,7 @@ const CalorieDetail = () => {
   const showData = (data) => (
     <>
       {" "}
-      <h3>{`How much Weight do you want to ${data}?`}</h3>
+      <h5>{`How much Weight do you want to ${data}?`}</h5>
       <Box
         sx={{
           display: "flex",
@@ -163,10 +163,10 @@ const CalorieDetail = () => {
                 According to the Details provided your Maintaince Calory is{" "}
                 {maintainceCalory}
               </h3>
-              <h6>
+              <h5>
                 Please select your fitness goal,and according know your body
                 nutrition requirements
-              </h6>
+              </h5>
             </>
           )}
           <FormControl sx={{ m: 1, width: "40%" }}>
@@ -231,48 +231,50 @@ const CalorieDetail = () => {
               </Table>
             </TableContainer>
           )}
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              flexDirection: "center",
-            }}
-          >
-            <Button
-              onClick={clickHandler}
+          {Target && (
+            <Box
               sx={{
-                background: "black",
-                color: "white",
-                marginTop: "10px",
-                height: "60px",
-                width: "200px",
-                margin: "0.5rem",
-                "&:hover": {
-                  background: "black",
-                },
+                display: "flex",
+                justifyContent: "center",
+                flexDirection: "center",
               }}
             >
-              Track Calories
-            </Button>
-            <Button
-              onClick={() => {
-                navigate("/dietprovider");
-              }}
-              sx={{
-                background: "black",
-                color: "white",
-                marginTop: "10px",
-                height: "60px",
-                width: "200px",
-                margin: "0.5rem",
-                "&:hover": {
+              <Button
+                onClick={clickHandler}
+                sx={{
                   background: "black",
-                },
-              }}
-            >
-              Personalized Diet
-            </Button>
-          </Box>
+                  color: "white",
+                  marginTop: "10px",
+                  height: "60px",
+                  width: "200px",
+                  margin: "0.5rem",
+                  "&:hover": {
+                    background: "black",
+                  },
+                }}
+              >
+                Track Calories
+              </Button>
+              <Button
+                onClick={() => {
+                  navigate("/dietprovider");
+                }}
+                sx={{
+                  background: "black",
+                  color: "white",
+                  marginTop: "10px",
+                  height: "60px",
+                  width: "200px",
+                  margin: "0.5rem",
+                  "&:hover": {
+                    background: "black",
+                  },
+                }}
+              >
+                Personalized Diet
+              </Button>
+            </Box>
+          )}
         </Container>
       </>
       )

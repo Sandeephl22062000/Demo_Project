@@ -189,9 +189,14 @@ export const getservices = createAsyncThunk(
 
 export const editServices = createAsyncThunk(
   "/trainer/editServices",
-  async ({ serviceID, token }) => {
-    const postData = await axios.get(
-      `http://localhost:8000/api/trainer/editServices/${serviceID}`,
+  async ({ id, token, charges, duration, description }) => {
+    const postData = await axios.put(
+      `http://localhost:8000/api/trainer/editServices/${id}`,
+      {
+        charges,
+        duration,
+        description,
+      },
       {
         headers: {
           "Content-Type": "application/json",
@@ -199,8 +204,23 @@ export const editServices = createAsyncThunk(
         },
       }
     );
+  }
+);
 
-    console.log(postData.data.services);
+export const deleteServices = createAsyncThunk(
+  "/trainer/deleteServices",
+  async ({ id, token }) => {
+    console.log(id);
+    const postData = await axios.delete(
+      `http://localhost:8000/api/trainer/deleteServices/${id}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log(postData.data);
     return postData?.data?.services;
   }
 );
