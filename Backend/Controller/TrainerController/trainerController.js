@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 
 const getTrainerById = async (req, res) => {
   console.log(req.params.id);
-  const trainer = await User.findById({ _id: req.params.id });
+  const trainer = await User.findById({ _id: req.params.id }).populate("posts");
   console.log(trainer);
   if (trainer) {
     res.json({
@@ -53,9 +53,9 @@ const getAlltrainer = async (req, res, next) => {
 
 const getTrainers = async (req, res, next) => {
   console.log("pagees", req.params);
-  const page = parseInt(req.params.page) || 1; 
-  const limit = parseInt(req.query.limit) || 9; 
-  const count = await User.countDocuments({ role: 1 }); 
+  const page = parseInt(req.params.page) || 1;
+  const limit = parseInt(req.query.limit) || 9;
+  const count = await User.countDocuments({ role: 1 });
   const trainers = await User.find({ role: 1 })
     .skip((page - 1) * limit)
     .limit(limit);

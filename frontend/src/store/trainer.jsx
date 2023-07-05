@@ -253,7 +253,7 @@ const trainerSlice = createSlice({
       })
       .addCase(TrainerById.fulfilled, (state, action) => {
         state.loading = false;
-        state.trainer = action.payload;
+        state.trainerInfoById = action.payload;
       })
       .addCase(TrainerById.rejected, (state, action) => {
         state.loading = false;

@@ -16,36 +16,37 @@ const GymMap = withScriptjs(
       console.log(gym);
       setSelectedGym(gym);
     };
+
     return (
       <Container>
-       
-        <Box>
-          <GoogleMap defaultZoom={12} defaultCenter={center}>
-            {console.log(gyms)}
-            {gyms.map((gym) => (
-              <Marker
-                key={gym.id}
-                position={{
-                  lat: gym?.geocodes?.main?.latitude,
-                  lng: gym?.geocodes?.main?.longitude,
-                }}
-                onClick={() => handleMarkerClick(gym)}
-              />
-            ))}
-            {selectedGym && (
-              <InfoWindow
-                position={{
-                  lat: selectedGym?.geocodes?.main?.latitude,
-                  lng: selectedGym?.geocodes?.main?.longitude,
-                }}
-                onCloseClick={() => setSelectedGym(null)}
-              >
-                <div>
-                  <h5>{selectedGym?.name}</h5>
-                </div>
-              </InfoWindow>
-            )}
-          </GoogleMap>
+        <Box sx={{ height: "500px" }}>
+          {gyms.length > 0 && (
+            <GoogleMap defaultZoom={12} defaultCenter={center}>
+              {gyms.map((gym) => (
+                <Marker
+                  key={gym.id}
+                  position={{
+                    lat: gym?.geocodes?.main?.latitude,
+                    lng: gym?.geocodes?.main?.longitude,
+                  }}
+                  onClick={() => handleMarkerClick(gym)}
+                />
+              ))}
+              {selectedGym && (
+                <InfoWindow
+                  position={{
+                    lat: selectedGym?.geocodes?.main?.latitude,
+                    lng: selectedGym?.geocodes?.main?.longitude,
+                  }}
+                  onCloseClick={() => setSelectedGym(null)}
+                >
+                  <div>
+                    <h5>{selectedGym?.name}</h5>
+                  </div>
+                </InfoWindow>
+              )}
+            </GoogleMap>
+          )}
         </Box>
       </Container>
     );

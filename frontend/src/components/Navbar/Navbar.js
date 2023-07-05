@@ -14,9 +14,10 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../store/user";
+import { UserByID, logout } from "../../store/user";
 import Noatification from "./Noatifications";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
+import { useEffect } from "react";
 
 const pages = ["Food", "Exercise", "Trainer", "Activities", "Gyms"];
 
@@ -24,6 +25,7 @@ function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [anchorElRegister, setAnchorElRegister] = React.useState(null);
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -45,9 +47,10 @@ function ResponsiveAppBar() {
   };
 
   const token = useSelector((state) => state?.user?.token);
-  console.log(token);
 
-  React.useEffect(() => {}, [token]);
+  useEffect(() => {
+    console.log("i reloaded");
+  }, [token, dispatch]);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -78,9 +81,12 @@ function ResponsiveAppBar() {
             variant="h6"
             noWrap
             component="a"
-            href="/"
+            onClick={() => {
+              navigate("/");
+            }}
             sx={{
               mr: 2,
+              cursor: "pointer",
               display: { xs: "none", md: "flex" },
               fontFamily: "monospace",
               fontWeight: 700,

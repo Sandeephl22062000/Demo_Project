@@ -13,7 +13,6 @@ import LinearProgress from "@mui/joy/LinearProgress";
 import axios from "axios";
 import React from "react";
 import { useState } from "react";
-import MealCard from "./MealCard";
 import parse from "react-html-parser";
 import { useSelector } from "react-redux";
 import CircularProgress from "@mui/joy/CircularProgress";

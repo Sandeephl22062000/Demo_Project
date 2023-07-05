@@ -30,6 +30,7 @@ const ShowPost = () => {
     data();
   };
   useEffect(() => {
+    window.scrollTo(0, 0);
     if (search.length > 0) {
       console.log("SDVsdf");
       dispatch(searchUserKeyword(search));
@@ -83,7 +84,7 @@ const ShowPost = () => {
           />
         </Box>
       </Container>
-      <Container sx={{ minHeight: "100vh"}}>
+      <Container sx={{ minHeight: "100vh" }}>
         <AddPost />
         {!isLoading ? (
           posts.map((post) => <Posts post={post} />)

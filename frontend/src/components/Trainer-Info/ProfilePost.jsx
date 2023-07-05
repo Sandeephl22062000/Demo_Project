@@ -14,7 +14,7 @@ import { postByID } from "../../store/post";
 import { useEffect } from "react";
 
 import ZoomPost from "../Activities/Posts";
-import { Box } from "@mui/material";
+import { Box, Container } from "@mui/material";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -46,8 +46,8 @@ export default function RecipeReviewCard(props) {
   }, [selectedPost]);
 
   return (
-    <>
-      {!showPost ? (
+    <Container>
+      {!showPost &&
         posts?.map((post) => (
           <Box
             key={post.id}
@@ -68,7 +68,11 @@ export default function RecipeReviewCard(props) {
               {console.log(props.post)}
               <CardHeader
                 avatar={
-                  <Avatar src={user?.photo} aria-label="recipe">
+                  <Avatar
+                    src={user?.photo}
+                    sx={{ bgcolor: red[500] }}
+                    aria-label="recipe"
+                  >
                     {user?.name[0].toUpperCase()}
                   </Avatar>
                 }
@@ -88,10 +92,7 @@ export default function RecipeReviewCard(props) {
               </CardContent>
             </Card>
           </Box>
-        ))
-      ) : (
-        <ZoomPost post={post} />
-      )}
-    </>
+        ))}
+    </Container>
   );
 }

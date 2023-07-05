@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import client from "../features/client";
 import axios from "axios";
+
 const initialUser = {
-  FindUserByID: null,
   token: "",
   userInfo: null,
   userInfoById: null,
@@ -11,7 +11,6 @@ const initialUser = {
   SearchUserResult: [],
   getAcceptedNoatifcation: [],
   getRejectedNoatifcation: [],
-
   MessageReaded: [],
 };
 
@@ -46,10 +45,31 @@ export const loginUser = createAsyncThunk(
     }
   }
 );
+// export const googleLoginUser = createAsyncThunk(
+//   "user/googlelogin",
+//   async (tokenResponse) => {
+//     try {
+
+//       console.log("tokenResponse", tokenResponse);
+//       const { data } = await axios.post(
+//         "http://localhost:8000/api/users/register",
+//         {
+//           googleAccessToken: tokenResponse.access_token,
+//         }
+//       );
+//       const { token, id } = data;
+//       localStorage.setItem("id", id);
+//       localStorage.setItem("token", token);
+//       return data;
+//     } catch (error) {
+//       console.error(error);
+//       throw error;
+//     }
+//   }
+// );
+
 export const UserByID = createAsyncThunk("/user/userDetail", async () => {
   const Userid = localStorage.getItem("id");
-  console.log("Avdfvdfv");
-  console.log("sdfsdfs", Userid);
   const postData = await axios.get(`http://localhost:8000/api/users/${Userid}`);
   console.log(postData.data);
   return postData.data.data;
@@ -208,10 +228,15 @@ const userSlice = createSlice({
   name: "user",
   initialState: {
     token: localStorage.getItem("token") || null,
+    FindUserByID: null,
+
     loading: false,
     error: null,
   },
   reducers: {
+    setToken: (state, action) => {
+      state.token = action.payload;
+    },
     logout: (state) => {
       state.token = null;
       localStorage.removeItem("token");
@@ -344,3 +369,5 @@ const userSlice = createSlice({
 });
 export const { logout } = userSlice.actions;
 export default userSlice.reducer;
+
+export const { setToken } = userSlice.actions;

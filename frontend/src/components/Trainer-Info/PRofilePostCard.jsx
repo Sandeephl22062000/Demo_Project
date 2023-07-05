@@ -1,176 +1,153 @@
 import {
   Avatar,
   Box,
+  Button,
   Card,
   CardContent,
   CardHeader,
   CardMedia,
-  Typography,
-  Modal,
-  Button,
+  Container,
   Pagination,
+  Typography,
 } from "@mui/material";
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserByID } from "../../store/user";
-import Post from "../Activities/Posts";
 
-const ProfilePostCard = () => {
+const PRofilePostCard = () => {
   const user = useSelector((state) => state?.user?.FindUserByID);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const params = useParams();
-  const id = params.id;
-  const [selectedMediaType, setSelectedMediaType] = useState("image");
-  const [selectedPost, setSelectedPost] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [page, setPage] = useState(1);
-  const postsPerPage = 9;
+  const navigate = useNavigate();
+  const [showImagesOnly, setShowImagesOnly] = useState(false);
+  const [showVideosOnly, setShowVideosOnly] = useState(false);
 
   useEffect(() => {
-    dispatch(UserByID(id));
+    dispatch(UserByID());
   }, []);
 
-  const handleMediaButtonClick = (mediaType) => {
-    setSelectedMediaType(mediaType);
-    setPage(1); // Reset page when media type changes
+  const handleImageButtonClick = () => {
+    setShowImagesOnly(true);
+    setShowVideosOnly(false);
   };
 
-  const handlePostClick = (post) => {
-    setSelectedPost(post);
-    if (selectedPost) navigate(`/post/${selectedPost}`);
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setSelectedPost(null);
-    setIsModalOpen(false);
+  const handleVideoButtonClick = () => {
+    setShowImagesOnly(false);
+    setShowVideosOnly(true);
   };
 
   const filterPostsByMediaType = (post) => {
-    if (selectedMediaType === "image") {
-      return post?.image && post?.image !== "";
-    } else if (selectedMediaType === "video") {
-      return post?.video && post?.video !== "";
+    if (showVideosOnly) {
+      return post?.video;
+    } else {
+      return post?.image;
     }
   };
 
-  const handlePageChange = (event, value) => {
-    setPage(value);
-  };
-  const indexOfLastPost = page * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const paginatedPosts = user?.posts
-    ?.slice()
-    .reverse()
-    .filter(filterPostsByMediaType)
-    .slice(indexOfFirstPost, indexOfLastPost);
-
   return (
-    <>
+    <Container sx={{ minHeight: "100vh" }}>
       <Box
         sx={{
           display: "flex",
           justifyContent: "center",
+          alignItems: "center",
+          margin: "1rem",
         }}
       >
         <Button
-          onClick={() => handleMediaButtonClick("image")}
+          onClick={handleImageButtonClick}
           sx={{
             background: "black",
             color: "white",
+            margin: "1rem",
+            width: "9rem",
             height: "3rem",
-            width: "7rem",
-            margin: "0.5rem",
-            "&:hover": { backgroundColor: "black" },
+            "&:hover": {
+              background: "black",
+            },
           }}
         >
-          Images
+          Image
         </Button>
         <Button
-          onClick={() => handleMediaButtonClick("video")}
+          onClick={handleVideoButtonClick}
           sx={{
-            border: "2px solid black",
+            background: "white",
             color: "black",
+            border: "2px solid black",
+            width: "9rem",
             height: "3rem",
-            width: "7rem",
-            margin: "0.5rem",
           }}
         >
-          Videos
+          Video
         </Button>
       </Box>
-      <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-        {paginatedPosts?.map((post) => {
-          const firstCharacter = user?.name[0].toUpperCase();
-          const isVideo = post?.video && post?.video !== "";
-          console.log("post", post);
-          console.log("selectedPost", selectedPost);
-          return (
-            <Card
-              sx={{ width: "19.6rem", margin: "0.5rem", boxShadow: "0px 8px 12px rgba(0, 0, 0, 0.2)" }}
-              key={post._id}
-              onClick={() => navigate(`/post/${post._id}`)}
-              style={{ cursor: "pointer" }}
-            >
-              <CardHeader
-                avatar={
-                  <Avatar
-                    src={user?.photo}
-                    sx={{ bgcolor: "red" }}
-                    aria-label="recipe"
-                  >
-                    {firstCharacter}
-                  </Avatar>
-                }
-                title={user?.name}
-                subheader={new Date(post?.createdAt).toLocaleString()}
-              />
-              {isVideo ? (
-                <CardMedia component="video" controls>
-                  <source src={post?.video} type="video/mp4" />
-                </CardMedia>
-              ) : (
-                <CardMedia
-                  component="img"
-                  image={post?.image}
-                  alt="Post image"
+      <Box sx={{ display: "flex", flexWrap: "wrap", marginBottom: "2rem" }}>
+        {user?.posts
+          ?.filter(filterPostsByMediaType)
+          .slice()
+          .reverse()
+          .map((post) => (
+            <>
+              <Card
+                sx={{ width: "18.6rem", margin: "0.5rem", cursor: "pointer" }}
+                onClick={() => {
+                  navigate(`/post/${post._id}`);
+                }}
+              >
+                <CardHeader
+                  avatar={
+                    <Avatar
+                      src={user?.photo}
+                      sx={{ bgcolor: "red" }}
+                      aria-label="recipe"
+                    >
+                      R
+                    </Avatar>
+                  }
+                  title={user?.name}
+                  subheader={new Date(post?.createdAt).toLocaleString()}
                 />
-              )}
-              <CardContent>
-                <Typography variant="body2" color="text.secondary">
-                  {post?.caption}
-                </Typography>
-              </CardContent>
-            </Card>
-          );
-        })}
+                {post?.image && (
+                  <CardMedia
+                    component="img"
+                    height="250"
+                    image={post?.image}
+                    alt="Image"
+                  />
+                )}
+                {post?.video && (
+                  <CardMedia
+                    component="video"
+                    height="250"
+                    src={post?.video}
+                    alt="Video"
+                    controls
+                  />
+                )}
+                <CardContent>
+                  <Typography variant="body2" color="text.secondary">
+                    {post?.caption}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </>
+          ))}
       </Box>
-      {user?.posts?.length > postsPerPage && (
-        <Box sx={{ display: "flex", justifyContent: "center", my: 3 }}>
-          <Pagination
-            count={Math.ceil(user?.posts?.length / postsPerPage)}
-            page={page}
-            onChange={handlePageChange}
-          />
-        </Box>
-      )}
-
-      {/* <Box
+      <Box
         sx={{
-          p: 4,
-          backgroundColor: "white",
-          borderRadius: "4px",
-          width: "80%",
-          maxWidth: "600px",
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: "center",
+          marginBottom: "1rem",
         }}
       >
-        {selectedPost && <Post post={selectedPost} name={user?.name} />}
-      </Box> */}
-    </>
+        <Pagination count={10} />
+      </Box>
+    </Container>
   );
 };
 
-export default ProfilePostCard;
+export default PRofilePostCard;

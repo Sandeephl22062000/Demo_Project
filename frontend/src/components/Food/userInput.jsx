@@ -69,6 +69,7 @@ const UserInput = () => {
   });
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     dispatch(priorFoodDetails(token)).then((result) => {
       setDataAvailable(result.payload);
     });

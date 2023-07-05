@@ -39,6 +39,7 @@ export default function BasicSelect() {
     setIsLoading(false);
   };
   useEffect(() => {
+    window.scrollTo(0, 0);
     fetchData();
   }, []);
   return (

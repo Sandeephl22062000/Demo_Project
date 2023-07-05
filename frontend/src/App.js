@@ -6,7 +6,7 @@ import Footer from "./components/Footer/Footer";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Food } from "./components/Food/Food";
 import TrainerCards from "./components/Trainer-Info/TrainerCards";
-import TrainerProfile from "./components/Trainer-Info/TrainerProfile";
+import TrainerProfile from "./components/TrainerMyProfile/TrainerProfile";
 import Exercises from "./components/Exercises/Exercises";
 import ExerciseVideos from "./components/Exercises/ExerciseVideo";
 import Signup from "./components/Auth/signup";
@@ -28,6 +28,7 @@ import Createservices from "./components/createservices";
 import IntelligentDiet from "./components/Food/IntelligentDiet";
 import { useSelector } from "react-redux";
 import Protected from "./ProtectingRoutes";
+import VirtaulTrainer from "./components/virutalTrainer";
 
 const App = () => {
   const [isAdmin, setIsAdmin] = useState(true);
@@ -44,6 +45,8 @@ const App = () => {
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/trainersignup" element={<TrainerSigup />} />
+
+              <Route path="/VirtaulTrainer" element={<VirtaulTrainer />} />
 
               <Route
                 path="/food"

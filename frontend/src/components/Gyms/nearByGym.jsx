@@ -65,28 +65,12 @@ const NearByGym = () => {
         justifyContent: "center",
         flexDirection: "column",
         alignItems: "center",
+        minHeight: "100vh",
       }}
     >
       <Typography variant="h5" align="center" sx={{ m: 2 }}>
         Gyms near your location
       </Typography>
-      {/* 
-      <TextField
-        required
-        id="outlined-required"
-        name="place"
-        value={searchPlace}
-        label="Enter location"
-        onChange={(e) => {
-          setSearchPlace(e.target.value);
-        }}
-        type="string"
-        sx={{ width: "60%", margin: "10px" }}
-      /> */}
-      {/* 
-      <Button onClick={searchHandler} variant="contained" color="primary">
-        Search
-      </Button> */}
 
       <GymMap
         gyms={gyms}

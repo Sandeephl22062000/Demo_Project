@@ -7,6 +7,7 @@ const initialFood = {
   loading: false,
   priorFoodCaloryvalue: 0,
   foodNutritions: null,
+  deletedRecord: "",
 };
 
 export const calculateCalories = createAsyncThunk(
@@ -115,6 +116,29 @@ export const updateNutritionValue = createAsyncThunk(
   }
 );
 
+export const deleteCaloryTracked = createAsyncThunk(
+  "/food/deleteCaloryTracked",
+  async ({ token, recordID }) => {
+    try {
+      console.log("Vzdfvdrvzdfvfz");
+      const response = await axios.delete(
+        `http://localhost:8000/api/users/deletetrackedmeal/${recordID}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const { data } = response;
+      console.log(data);
+      return recordID;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
 const foodSlice = createSlice({
   name: "food",
   initialState: initialFood,
@@ -172,10 +196,22 @@ const foodSlice = createSlice({
       })
       .addCase(updateNutritionValue.fulfilled, (state, action) => {
         state.loading = false;
-
         state.foodNutritions = action.payload;
       })
       .addCase(updateNutritionValue.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+
+      .addCase(deleteCaloryTracked.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteCaloryTracked.fulfilled, (state, action) => {
+        state.loading = false;
+        state.deletedRecord = action.payload;
+      })
+      .addCase(deleteCaloryTracked.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });

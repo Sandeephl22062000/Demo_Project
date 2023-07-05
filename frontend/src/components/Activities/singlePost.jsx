@@ -94,14 +94,13 @@ const Post = (props) => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-
-        margin: "1rem 0 0 4rem",
+        height: "90vh",
       }}
     >
       <Card
         variant="outlined"
         sx={{
-          width: "80%",
+          width: "50%",
           "--Card-radius": (theme) => theme.vars.radius.xs,
           display: "flex",
           justifyContent: "center",
@@ -197,7 +196,7 @@ const Post = (props) => {
             </Link>
             {propsPostID?.caption}
           </Typography>
-         
+
           {showComment
             ?.slice()
             .reverse()
@@ -215,7 +214,6 @@ const Post = (props) => {
             sx={{ color: "text.tertiary", my: 0.5 }}
           >
             <Typography fontSize="sm">
-              
               {calculateTime === 0 ? (
                 <Typography
                   color="neutral"

@@ -23,14 +23,16 @@ import profileImage from "../../images/Profile.png";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import GoogleIcon from "../../images/Google__G__Logo.svg.webp";
+import { setToken } from "../../store/user";
+import { useDispatch } from "react-redux";
 const Signup = () => {
   const [images, setImages] = useState("");
   const [role, setRole] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { addToast } = useToasts();
   const photoupload = (event) => {
     let file = event.target.files[0];
-
     if (!file) {
       alert("Please upload an image first!");
     }
@@ -48,7 +50,9 @@ const Signup = () => {
       }
     );
   };
+
   const handleGoogleLoginSuccess = async (tokenResponse) => {
+    console.log("tokenResponse", tokenResponse);
     const { data } = await axios.post(
       "http://localhost:8000/api/users/register",
       {
@@ -58,8 +62,9 @@ const Signup = () => {
     console.log(data);
     const { token, id } = data;
     console.log(token, id);
-    localStorage.setItem("id", id); 
+    localStorage.setItem("id", id);
     localStorage.setItem("token", token);
+    dispatch(setToken(token));
     navigate("/");
 
     addToast(data?.message, {

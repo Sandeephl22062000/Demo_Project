@@ -414,15 +414,24 @@ const ExeprmientFoodApi = () => {
                   variant="h6"
                   sx={{ display: "flex", justifyContent: "center" }}
                 >
-                  Difference in Protein <b>{differenceProtein.toFixed(2)}g</b>
+                  Targeted Protein
+                  <b style={{ marginLeft: "8px" }}>{TargetProtein}g</b>
                 </Typography>
-                <Typography></Typography>
-                <PieChart width={400} height={300}>
+                <Typography
+                  variant="h6"
+                  sx={{ display: "flex", justifyContent: "center" }}
+                >
+                  Difference in Protein{" "}
+                  <b style={{ marginLeft: "8px" }}>
+                    {differenceProtein.toFixed(2)}g
+                  </b>
+                </Typography>
+                <PieChart width={400} height={350}>
                   <Pie
                     dataKey="value"
                     data={chartProteinData}
                     cx={200}
-                    cy={100}
+                    cy={150}
                     outerRadius={80}
                     fill="#8884d8"
                     label
@@ -439,14 +448,24 @@ const ExeprmientFoodApi = () => {
                 variant="h6"
                 sx={{ display: "flex", justifyContent: "center" }}
               >
-                Difference in Calories <b>{differenceCalories.toFixed(2)}</b>
+                Targeted Calories
+                <b style={{ marginLeft: "8px" }}>{TargetCalories}g</b>
               </Typography>
-              <PieChart width={400} height={300}>
+              <Typography
+                variant="h6"
+                sx={{ display: "flex", justifyContent: "center" }}
+              >
+                Difference in Calories{" "}
+                <b style={{ marginLeft: "8px" }}>
+                  {differenceCalories.toFixed(2)}
+                </b>
+              </Typography>
+              <PieChart width={400} height={350}>
                 <Pie
                   dataKey="value"
                   data={chartCaloriesData}
                   cx={200}
-                  cy={100}
+                  cy={150}
                   outerRadius={80}
                   fill="#8884d8"
                   label
@@ -462,14 +481,24 @@ const ExeprmientFoodApi = () => {
                 variant="h6"
                 sx={{ display: "flex", justifyContent: "center" }}
               >
-                Difference in Carbs <b>{differenceCarbs.toFixed(2)}g</b>
+                Targeted Carbohydrated
+                <b style={{ marginLeft: "8px" }}>{TargetCarbs}g</b>
               </Typography>
-              <PieChart width={400} height={300}>
+              <Typography
+                variant="h6"
+                sx={{ display: "flex", justifyContent: "center" }}
+              >
+                Difference in Carbs{" "}
+                <b style={{ marginLeft: "8px" }}>
+                  {differenceCarbs.toFixed(2)}g
+                </b>
+              </Typography>
+              <PieChart width={400} height={350}>
                 <Pie
                   dataKey="value"
                   data={chartCarbsData}
                   cx={200}
-                  cy={100}
+                  cy={150}
                   outerRadius={80}
                   fill="#8884d8"
                   label
@@ -491,6 +520,7 @@ const ExeprmientFoodApi = () => {
               height: "50px",
               width: "200px",
               margin: "20px",
+              "&:hover": { background: "black" },
             }}
             onClick={() => navigate(`/viewallrecords`)}
           >
@@ -510,6 +540,7 @@ const ExeprmientFoodApi = () => {
                 height: "50px",
                 width: "150px",
                 margin: "20px 5px",
+                "&:hover": { background: "black" },
               }}
             >
               Save
