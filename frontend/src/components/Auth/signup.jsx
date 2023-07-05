@@ -9,7 +9,14 @@ import {
 import storage from "../../utils/firebase";
 import React, { useState } from "react";
 import validationSchema from "../schema/schema";
-import { Avatar, Box, Button, Container, TextField, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Container,
+  TextField,
+  Typography,
+} from "@mui/material";
 import client from "../../features/client";
 import { useToasts } from "react-toast-notifications";
 import profileImage from "../../images/Profile.png";
@@ -42,16 +49,20 @@ const Signup = () => {
     );
   };
   const handleGoogleLoginSuccess = async (tokenResponse) => {
-    const accessToken = tokenResponse.access_token;
-
     const { data } = await axios.post(
       "http://localhost:8000/api/users/register",
       {
         googleAccessToken: tokenResponse.access_token,
       }
     );
-    console.log(data.data.message);
-    addToast(data.data.message, {
+    console.log(data);
+    const { token, id } = data;
+    console.log(token, id);
+    localStorage.setItem("id", id); 
+    localStorage.setItem("token", token);
+    navigate("/");
+
+    addToast(data?.message, {
       appearance: "success",
       autoDismiss: true,
       autoDismissTimeout: 3000,
@@ -59,9 +70,6 @@ const Signup = () => {
   };
   const login = useGoogleLogin({ onSuccess: handleGoogleLoginSuccess });
 
-  const TrainerHandler = () => {
-    navigate("/trainersignup");
-  };
   const formik = useFormik({
     initialValues: {
       fullName: "",
@@ -93,14 +101,13 @@ const Signup = () => {
               role: 0,
             }
           );
-          console.log(response.data);
+          console.log(response);
           addToast(response.data.message, {
             appearance: "success",
             autoDismiss: true,
             autoDismissTimeout: 3000,
           });
           navigate("/login");
-          // resetForm();
         } catch (error) {
           console.log(error);
           addToast(error.message, {

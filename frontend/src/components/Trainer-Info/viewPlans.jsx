@@ -22,10 +22,9 @@ export default function OverlayRadio(props) {
 
   const handleSubmit = (selectedOption) => {
     console.log("Selected option:", selectedOption);
-    // Add your logic here to handle the selected option
   };
 
-  const [selectedOption, setSelectedOption] = React.useState("Website");
+  const [selectedOption, setSelectedOption] = React.useState("");
 
   console.log(trainerID);
   const initPayment = (data) => {
@@ -92,24 +91,26 @@ export default function OverlayRadio(props) {
     };
     trainerDetail();
   }, []);
+  console.log(services);
   return (
-    <Container sx={{ minHeight: "100vh" }}>
-      <Box
-        sx={{ display: "flex", justifyContent: "center", marginTop: "2rem" }}
-      >
-        <Typography variant="h6">Select the Plan</Typography>
-      </Box>
+    <Container sx={{ minHeight: "50vh" }}>
       <>
-        {services?.map((service) => (
-          <Box
-            key={service._id}
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              flexDirection: "column",
-            }}
-          >
-            {service?.servicesOffered?.map((serviceOffered) => (
+        {console.log(services?.length)}
+        <Box
+          sx={{ display: "flex", justifyContent: "center", marginTop: "2rem" }}
+        >
+          <Typography variant="h6">Select the Plan</Typography>
+        </Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "column",
+          }}
+        >
+          {services?.map((serviceOffered) => (
+            <>
               <Card
                 key={serviceOffered._id}
                 sx={{
@@ -160,30 +161,32 @@ export default function OverlayRadio(props) {
                   <Typography>Charges: {serviceOffered?.charges}</Typography>
                 </Box>
               </Card>
-            ))}
-          </Box>
-        ))}
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  margin: "0.5rem 0 1rem 1rem",
+                }}
+              >
+                <Button
+                  onClick={handlePayment}
+                  sx={{
+                    background: "black",
+                    color: "white",
+                    height: "50px",
+                    width: "100px",
+                    "&:hover": {
+                      background: "black",
+                    },
+                  }}
+                >
+                  Proceed
+                </Button>
+              </Box>
+            </>
+          ))}
+        </Box>
       </>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          margin: "0.5rem 0 1rem 1rem",
-        }}
-      >
-        <Button
-          onClick={handlePayment}
-          disabled={!selectedOption}
-          sx={{
-            background: "black",
-            color: "white",
-            height: "50px",
-            width: "100px",
-          }}
-        >
-          Proceed
-        </Button>
-      </Box>
     </Container>
   );
 }

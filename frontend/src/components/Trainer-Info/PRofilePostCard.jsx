@@ -13,13 +13,14 @@ import {
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { UserByID } from "../../store/user";
 import Post from "../Activities/Posts";
 
 const ProfilePostCard = () => {
   const user = useSelector((state) => state?.user?.FindUserByID);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const params = useParams();
   const id = params.id;
   const [selectedMediaType, setSelectedMediaType] = useState("image");
@@ -39,6 +40,7 @@ const ProfilePostCard = () => {
 
   const handlePostClick = (post) => {
     setSelectedPost(post);
+    if (selectedPost) navigate(`/post/${selectedPost}`);
     setIsModalOpen(true);
   };
 
@@ -58,7 +60,6 @@ const ProfilePostCard = () => {
   const handlePageChange = (event, value) => {
     setPage(value);
   };
-
   const indexOfLastPost = page * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const paginatedPosts = user?.posts
@@ -105,12 +106,13 @@ const ProfilePostCard = () => {
         {paginatedPosts?.map((post) => {
           const firstCharacter = user?.name[0].toUpperCase();
           const isVideo = post?.video && post?.video !== "";
-
+          console.log("post", post);
+          console.log("selectedPost", selectedPost);
           return (
             <Card
-              sx={{ width: "19.6rem", margin: "0.5rem" }}
+              sx={{ width: "19.6rem", margin: "0.5rem", boxShadow: "0px 8px 12px rgba(0, 0, 0, 0.2)" }}
               key={post._id}
-              onClick={() => handlePostClick(post)}
+              onClick={() => navigate(`/post/${post._id}`)}
               style={{ cursor: "pointer" }}
             >
               <CardHeader
@@ -133,7 +135,6 @@ const ProfilePostCard = () => {
               ) : (
                 <CardMedia
                   component="img"
-                  height="250"
                   image={post?.image}
                   alt="Post image"
                 />
@@ -156,28 +157,18 @@ const ProfilePostCard = () => {
           />
         </Box>
       )}
-      <Modal
-        open={isModalOpen}
-        onClose={handleCloseModal}
+
+      {/* <Box
         sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          backdropFilter: "blur(4px)",
+          p: 4,
+          backgroundColor: "white",
+          borderRadius: "4px",
+          width: "80%",
+          maxWidth: "600px",
         }}
       >
-        <Box
-          sx={{
-            p: 4,
-            backgroundColor: "white",
-            borderRadius: "4px",
-            width: "80%",
-            maxWidth: "600px",
-          }}
-        >
-          {selectedPost && <Post post={selectedPost} name={user?.name} />}
-        </Box>
-      </Modal>
+        {selectedPost && <Post post={selectedPost} name={user?.name} />}
+      </Box> */}
     </>
   );
 };

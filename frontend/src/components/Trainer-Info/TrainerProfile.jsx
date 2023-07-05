@@ -52,83 +52,129 @@ const ProfilePage = () => {
         minHeight: "80vh",
         marginTop: "2rem",
         width: "65rem",
+        background: "#DFE1E1",
+        borderRadius: "2rem",
       }}
     >
-      <Grid container spacing={4}>
-        <Grid item xs={4}>
-          <AspectRatio
-            ratio="1"
-            maxHeight={200}
-            sx={{ margin: "0.5rem 0.6rem" }}
-          >
-            <img
-              src={trainer?.photo}
-              loading="lazy"
-              alt=""
-              style={{
-                objectFit: "cover",
-                display: "block",
-                marginLeft: "auto",
-                marginRight: "auto",
-              }}
-            />
-          </AspectRatio>
-        </Grid>
-        <Grid item xs={8}>
-          <Box>
-            <Typography fontSize="xl" fontWeight="lg">
-              {trainer.name}
-            </Typography>
-            <Typography level="body2" fontWeight="lg" textColor="text.tertiary">
-              {trainer.email}
-            </Typography>
-            <Typography level="body2" fontWeight="lg" textColor="text.tertiary">
-              Experience: {trainer.experience}
-            </Typography>
-            <Typography level="body2" fontWeight="lg" textColor="text.tertiary">
-              Specialization: {trainer.specialization}
-            </Typography>
-            <Typography level="body2" fontWeight="lg" textColor="text.tertiary">
-              Posts: {trainer?.posts?.length}
-            </Typography>
-          </Box>
-        </Grid>
-      </Grid>
-      <Card
-        sx={{
-          width: "100%",
-          flexWrap: "wrap",
-          overflow: "auto",
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
-        <CardContent sx={{ width: "100%" }}>
-          <Box
+      <Box>
+        <Grid container spacing={4}>
+          <Grid
+            item
+            xs={4}
             sx={{
               display: "flex",
-              gap: 1.5,
-              width: "100%",
-              "& > button": { flex: 1 },
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
-            <Button
-              variant="outlined"
-              color="neutral"
-              onClick={handleShowServices}
+            <AspectRatio
+              ratio="1"
+              sx={{
+                margin: "0.5rem  0.5rem 1.5rem 3.6rem",
+                height: "12rem",
+                width: "12rem",
+              }}
             >
-              Services
-            </Button>
-            <Button
-              variant="solid"
-              sx={{ background: "black", color: "white" }}
-              onClick={handleShowPost}
-            >
-              Post
-            </Button>
-          </Box>
-        </CardContent>
-      </Card>
+              <img
+                src={trainer?.photo}
+                loading="lazy"
+                alt=""
+                style={{
+                  objectFit: "cover",
+                  display: "block",
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                }}
+              />
+            </AspectRatio>
+          </Grid>
+          <Grid item xs={8}>
+            <Box>
+              <Typography fontSize="xl" fontWeight="lg">
+                {trainer?.name}
+              </Typography>
+              <Typography
+                level="body2"
+                fontWeight="lg"
+                textColor="text.tertiary"
+              >
+                {trainer?.email}
+              </Typography>
+              <Typography
+                level="body2"
+                fontWeight="lg"
+                textColor="text.tertiary"
+              >
+                Experience: {trainer?.experience}
+              </Typography>
+              <Typography
+                level="body2"
+                fontWeight="lg"
+                textColor="text.tertiary"
+              >
+                Specialization: {trainer?.specialization}
+              </Typography>
+              <Typography
+                level="body2"
+                fontWeight="lg"
+                textColor="text.tertiary"
+              >
+                Posts: {trainer?.posts?.length}
+              </Typography>
+            </Box>
+          </Grid>
+        </Grid>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Card
+            sx={{
+              width: "80%",
+              flexWrap: "wrap",
+              overflow: "auto",
+              display: "flex",
+              alignItems: "center",
+              background: "#DFE1E1",
+            }}
+          >
+            <CardContent sx={{ width: "100%" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: 1.5,
+                  width: "100%",
+                  "& > button": { flex: 1 },
+                }}
+              >
+                <Button
+                  variant="outlined"
+                  color="neutral"
+                  onClick={handleShowServices}
+                >
+                  Services
+                </Button>
+                <Button
+                  variant="solid"
+                  sx={{
+                    background: "black",
+                    color: "white",
+                    "&:hover": {
+                      background: "black",
+                    },
+                  }}
+                  onClick={handleShowPost}
+                >
+                  Post
+                </Button>
+              </Box>
+            </CardContent>
+          </Card>
+        </Box>
+      </Box>
       {post &&
         (trainer?.posts?.length > 0 ? (
           <Posts />

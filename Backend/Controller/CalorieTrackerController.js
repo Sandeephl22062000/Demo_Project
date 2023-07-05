@@ -29,4 +29,13 @@ const getCaloriesRecordByID = asyncHandler(async (req, res, next) => {
   res.status(200).json({ message: "success", data });
 });
 
-module.exports = { saveTrackedCalories, getCaloriesRecordByID };
+const deleteTracekedMeal = async (req, res, next) => {
+  const data = await CalorieTracker.findByIdAndDelete(req.params.mealID);
+  res.status(200).json({ message: "success" });
+};
+
+module.exports = {
+  saveTrackedCalories,
+  getCaloriesRecordByID,
+  deleteTracekedMeal,
+};

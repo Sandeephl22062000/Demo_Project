@@ -33,6 +33,7 @@ const SearchInput = () => {
   const navigate = useNavigate();
 
   const submithandler = async (e) => {
+    e.preventDefault();
     try {
       setLoading(true);
       if (!search) {
@@ -77,13 +78,18 @@ const SearchInput = () => {
     if (search) {
       submithandler();
     } else {
-      setSearchResult(trainer); // Display the data from getTrainerDetail() when search is empty
+      setSearchResult(trainer);
     }
   }, [search, trainer]);
 
   return (
     <Container sx={{ minHeight: "80vh" }}>
-      <form style={{ width: "100%" }} onSubmit={submithandler}>
+      <form
+        style={{ width: "100%" }}
+        onSubmit={(e) => {
+          submithandler(e);
+        }}
+      >
         <Box
           sx={{
             display: "flex",
@@ -136,7 +142,12 @@ const SearchInput = () => {
                 }}
               >
                 {searchResult.map((trainer) => (
-                  <Card sx={{ width: 350 }}>
+                  <Card
+                    sx={{
+                      width: 350,
+                      boxShadow: "0px 8px 12px rgba(0, 0, 0, 0.2)",
+                    }}
+                  >
                     <CardHeader
                       avatar={
                         <Avatar
@@ -173,9 +184,9 @@ const SearchInput = () => {
                             backgroundColor: "black",
                             color: "white",
                             "&:hover": {
-                              backgroundColor: "black",
+                              background: "black",
                             },
-                            textDecoration: "none !important",
+                            textDecoration: "none",
                           }}
                         >
                           View Profile

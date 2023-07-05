@@ -12,7 +12,6 @@ import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import ModeCommentOutlined from "@mui/icons-material/ModeCommentOutlined";
-import Face from "@mui/icons-material/Face";
 import { Container, Button } from "@mui/material";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -23,22 +22,23 @@ import { postByID } from "../../store/post";
 
 const Post = (props) => {
   const token = useSelector((state) => state.user.token);
-  const dispatch = useDispatch();
-  const { postID } = useParams();
   const propsPostID = useSelector((state) => state?.post?.postInfoById);
-
-  const [likeCount, setLikeCount] = React.useState(props?.post?.likes?.length);
+  console.log(propsPostID?.likes?.length);
+  const [likeCount, setLikeCount] = React.useState(propsPostID?.likes?.length);
   const id = localStorage.getItem("id");
   const [isLiked, setIsLiked] = React.useState(
-    props.post?.likes?.includes(id) || false
+    propsPostID?.likes?.includes(id) || false
   );
   const [comment, setComment] = useState("");
   const [showComment, setShowComment] = useState([]);
+  const dispatch = useDispatch();
+  const { postID } = useParams();
+  console.log(propsPostID);
 
   const handleLike = () => {
     const addLike = async () => {
       const data = await axios.post(
-        `/api/post/likepost/${props.post._id}`,
+        `/api/post/likepost/${propsPostID?._id}`,
         {},
         {
           headers: {
@@ -63,7 +63,7 @@ const Post = (props) => {
   const addCommentHandler = async (e) => {
     e.preventDefault();
     const { data } = await axios.post(
-      `/api/post/commentpost/${props.post._id}`,
+      `/api/post/commentpost/${propsPostID?._id}`,
       {
         comment,
       },
@@ -80,21 +80,22 @@ const Post = (props) => {
   };
 
   const calculateTime = Math.floor(
-    (new Date() - new Date(props?.post?.createdAt)) / (1000 * 60 * 60 * 24)
+    (new Date() - new Date(propsPostID?.createdAt)) / (1000 * 60 * 60 * 24)
   );
 
   useEffect(() => {
-    setShowComment(props.post?.comments);
+    dispatch(postByID({ id: postID, token }));
+    setShowComment(propsPostID?.comments);
   }, []);
-
-  console.log("nsjfdnbotn", props?.post);
 
   return (
     <Container
       sx={{
         display: "flex",
         justifyContent: "center",
-        margin: "20px 0 30px 0",
+        alignItems: "center",
+
+        margin: "1rem 0 0 4rem",
       }}
     >
       <Card
@@ -127,17 +128,17 @@ const Post = (props) => {
               },
             }}
           >
-            <Avatar size="sm" src={props.post?.postedBy?.photo}></Avatar>
+            <Avatar size="sm" src={propsPostID?.postedBy?.photo}></Avatar>
           </Box>
           <Typography fontWeight="lg">
-            {props.post?.postedBy?.name || props?.name}
+            {propsPostID?.postedBy?.name || props?.name}
           </Typography>
         </CardContent>
         <CardOverflow>
           <AspectRatio>
-            {props.post?.video && (
+            {propsPostID?.video && (
               <video
-                src={props.post?.video}
+                src={propsPostID?.video}
                 controls
                 style={{
                   position: "absolute",
@@ -149,9 +150,9 @@ const Post = (props) => {
                 }}
               />
             )}
-            {!props.post?.video && (
+            {!propsPostID?.video && (
               <img
-                src={props.post?.image}
+                src={propsPostID?.image}
                 alt=""
                 loading="lazy"
                 style={{
@@ -180,7 +181,7 @@ const Post = (props) => {
               {isLiked ? <FavoriteIcon /> : <FavoriteBorder />} {likeCount}
             </IconButton>
             <IconButton variant="plain" color="neutral" size="sm">
-              <ModeCommentOutlined /> {props.post?.comments?.length}
+              <ModeCommentOutlined /> {propsPostID?.comments?.length}
             </IconButton>
           </Box>
         </CardContent>
@@ -192,11 +193,11 @@ const Post = (props) => {
               fontWeight="lg"
               textColor="text.primary"
             >
-              {props.post?.postedBy?.name}
+              {propsPostID?.postedBy?.name}
             </Link>
-            {props.post?.caption}
+            {propsPostID?.caption}
           </Typography>
-          {console.log(showComment)}
+         
           {showComment
             ?.slice()
             .reverse()
@@ -214,7 +215,7 @@ const Post = (props) => {
             sx={{ color: "text.tertiary", my: 0.5 }}
           >
             <Typography fontSize="sm">
-              {console.log(calculateTime)}
+              
               {calculateTime === 0 ? (
                 <Typography
                   color="neutral"
@@ -240,7 +241,7 @@ const Post = (props) => {
             pb: "var(--Card-padding)",
             display: "flex",
             alignItems: "center",
-            justifyContent: "flex-start", // Align items to the left
+            justifyContent: "flex-start",
           }}
         >
           <form onSubmit={addCommentHandler} style={{ display: "flex" }}>

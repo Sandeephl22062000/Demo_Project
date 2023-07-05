@@ -16,6 +16,7 @@ import CalorieDetail from "./components/Food/calorieCalculation";
 
 import TrainerSigup from "./components/Auth/trainerSignup";
 import ShowPost from "./components/Activities/ShowPost";
+import SinglePost from "./components/Activities/singlePost";
 import ExeprmientFoodApi from "./components/Food/FoodTracking";
 import Profile from "./components/MyProfile";
 import AdminDashboard from "./components/Admin/AdminDashboard";
@@ -27,6 +28,7 @@ import Createservices from "./components/createservices";
 import IntelligentDiet from "./components/Food/IntelligentDiet";
 import { useSelector } from "react-redux";
 import Protected from "./ProtectingRoutes";
+
 const App = () => {
   const [isAdmin, setIsAdmin] = useState(true);
   const isLoggedIn = useSelector((state) => state?.user?.token);
@@ -143,6 +145,14 @@ const App = () => {
                 element={
                   <Protected isLoggedIn={isLoggedIn}>
                     <ShowPost />
+                  </Protected>
+                }
+              />
+              <Route
+                path="/post/:postID"
+                element={
+                  <Protected isLoggedIn={isLoggedIn}>
+                    <SinglePost />
                   </Protected>
                 }
               />

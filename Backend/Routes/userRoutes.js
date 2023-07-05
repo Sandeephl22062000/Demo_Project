@@ -33,6 +33,12 @@ router.post(
   CalorieTrackerController.saveTrackedCalories
 );
 
+router.delete(
+  "/deletetrackedmeal/:mealID",
+  protectingRoutes,
+  CalorieTrackerController.deleteTracekedMeal
+);
+
 router
   .route("/updatenutritionvalue")
   .put(protectingRoutes, DietController.updateNutrients);

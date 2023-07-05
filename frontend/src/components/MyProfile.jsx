@@ -16,7 +16,6 @@ import { UserByID } from "../store/user";
 import RequestTable from "./TrainerMyProfile/trainingRequestTable";
 import TrainerServices from "./TrainerMyProfile/TrainerServices";
 
-
 const style = {
   width: "100%",
   maxWidth: 360,
@@ -83,7 +82,14 @@ const ProfilePage = () => {
     >
       <Grid container spacing={4}>
         <Grid item xs={4}>
-          <AspectRatio ratio="1" maxHeight={250}>
+          <AspectRatio
+            ratio="1"
+            sx={{
+              margin: "0.5rem  0.5rem 1.5rem 3.6rem",
+              height: "12rem",
+              width: "12rem",
+            }}
+          >
             <img
               src={user?.photo}
               loading="lazy"
@@ -121,6 +127,13 @@ const ProfilePage = () => {
                 >
                   Specialization: {user?.specialization}
                 </Typography>
+                <Typography
+                  level="body2"
+                  fontWeight="lg"
+                  textColor="text.tertiary"
+                >
+                  Posts: {user?.posts?.length}
+                </Typography>
               </>
             )}
           </Box>
@@ -136,57 +149,6 @@ const ProfilePage = () => {
         }}
       >
         <CardContent sx={{ width: "100%" }}>
-          <Sheet
-            sx={{
-              bgcolor: "background.level1",
-              borderRadius: "sm",
-              width: "100%",
-              p: 1.5,
-              my: 1.5,
-              display: "flex",
-              gap: 2,
-              "& > div": { flex: 1 },
-            }}
-          >
-            <div>
-              <Typography level="body3" fontWeight="lg">
-                Posts
-              </Typography>
-              <Typography fontWeight="lg">{user?.posts?.length}</Typography>
-            </div>
-            {user?.role === 1 ? (
-              <>
-                <div>
-                  <Typography level="body3" fontWeight="lg">
-                    Clients
-                  </Typography>
-                  <Typography fontWeight="lg">980</Typography>
-                </div>
-                <div>
-                  <Typography level="body3" fontWeight="lg">
-                    Rating
-                  </Typography>
-                  <Typography fontWeight="lg">8.9</Typography>
-                </div>
-              </>
-            ) : (
-              <>
-                <div>
-                  <Typography level="body3" fontWeight="lg">
-                    Challenges
-                  </Typography>
-                  <Typography fontWeight="lg">980</Typography>
-                </div>
-
-                <div>
-                  <Typography level="body3" fontWeight="lg">
-                    Rating
-                  </Typography>
-                  <Typography fontWeight="lg">8.9</Typography>
-                </div>
-              </>
-            )}
-          </Sheet>
           <Box
             sx={{
               display: "flex",
@@ -216,21 +178,39 @@ const ProfilePage = () => {
               <>
                 <Button
                   onClick={handleViewServices}
-                  sx={{ color: "white", background: "black" }}
+                  sx={{
+                    color: "white",
+                    background: "black",
+                    "&:hover": {
+                      background: "black",
+                    },
+                  }}
                 >
                   View Services
                 </Button>
                 {showRequests ? (
                   <Button
                     onClick={handleViewPost}
-                    sx={{ color: "white", background: "black" }}
+                    sx={{
+                      color: "white",
+                      background: "black",
+                      "&:hover": {
+                        background: "black",
+                      },
+                    }}
                   >
                     View Post
                   </Button>
                 ) : (
                   <Button
                     onClick={handleViewRequest}
-                    sx={{ color: "white", background: "black" }}
+                    sx={{
+                      color: "white",
+                      background: "black",
+                      "&:hover": {
+                        background: "black",
+                      },
+                    }}
                   >
                     View Requests
                   </Button>
@@ -250,7 +230,7 @@ const ProfilePage = () => {
                   },
                 }}
               >
-                {showChallenges ? "View Posts" : "Challenges"}
+                View Posts
               </Button>
             )}
           </Box>

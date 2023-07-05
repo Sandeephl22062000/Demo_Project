@@ -119,66 +119,33 @@ const AddPost = () => {
     <Container
       sx={{ borderColor: "black", backGround: "grey", margin: "20px 0 20px 0" }}
     >
-      <Box sx={{ border: "1px solid black", borderRadius: "20px" }}>
-        <Grid container spacing={0} alignItems="center">
-          <Grid item xs={10}>
-            <TextField
-              id="outlined-required"
-              name="fullName"
-              value={status}
-              placeholder="Share your progress with your friends"
-              type="string"
-              onChange={(e) => {
-                setStatus(e.target.value);
-              }}
-              sx={{ width: "100%", margin: "8px" }}
-            />
-          </Grid>
-          <Grid item xs={2} display="flex" justifyContent="center">
-            <Button
-              sx={{
-                background: "black",
-                color: "white",
-                height: "50px",
-                "&:hover": {
-                  background: "black", // Set the same background color on hover
-                },
-              }}
-            >
-              Upload Status
-            </Button>
-          </Grid>
-        </Grid>
-
-        <Grid container spacing={0}>
-          <Grid
-            item
-            xs={12}
-            style={{ display: "flex", justifyContent: "center" }}
-          >
-            {/* Content for the second container */}
-            <Box style={{ height: "60px" }}>
-              <Button
-                variant="soft"
-                color="neutral"
-                onClick={() => {
-                  setVariant("soft");
-                }}
-                sx={{
-                  background: "black",
-                  color: "white",
-                  height: "50px",
-                  margin: "0 30px",
-                  "&:hover": {
-                    background: "black",
-                  },
-                }}
-              >
-                Upload Photo/Video
-              </Button>
-            </Box>
-          </Grid>
-        </Grid>
+      {/* Content for the second container */}
+      <Box
+        style={{
+          height: "5rem",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Button
+          variant="soft"
+          color="neutral"
+          onClick={() => {
+            setVariant("soft");
+          }}
+          sx={{
+            background: "black",
+            color: "white",
+            height: "50px",
+            margin: "0 30px",
+            "&:hover": {
+              background: "black",
+            },
+          }}
+        >
+          Upload Photo / Video
+        </Button>
       </Box>
       <Modal open={!!variant} onClose={() => setVariant(undefined)}>
         <ModalDialog

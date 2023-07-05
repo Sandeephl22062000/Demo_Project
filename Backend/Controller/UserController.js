@@ -9,6 +9,7 @@ require("dotenv").config();
 
 const registerUser = catchAync(async (req, res, next) => {
   if (req.body.googleAccessToken) {
+    console.log(req.body.googleAccessToken);
     accessToken = req.body.googleAccessToken;
     const response = await axios.get(
       "https://www.googleapis.com/oauth2/v3/userinfo",
@@ -18,26 +19,37 @@ const registerUser = catchAync(async (req, res, next) => {
         },
       }
     );
-    console.log("response", response);
     const name = response.data.name;
     const email = response.data.email;
     const photo = response.data.picture;
     console.log("name", name, photo, email);
 
-    const userFind = await User.findOne({ email });
-
-    if (userFind) return next(new AppError("This Email is Already registered"));
-
-    const user = await User.create({
-      name,
-      email,
-      photo,
-    });
-    console.log("users", user);
-    if (user) {
+    const userFind = await User.find({ email });
+    console.log(userFind);
+    if (userFind.length === 0) {
+      const user = await User.create({
+        name,
+        email,
+        photo,
+      });
+      console.log("users", user);
+      const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY);
+      if (user) {
+        res.json({
+          message: "Successfully register",
+          data: user,
+          token,
+        });
+      } else {
+        return next(new AppError("Something went wrong", 500));
+      }
+    }
+    const token = jwt.sign({ id: userFind[0]._id }, process.env.SECRET_KEY);
+    if (userFind) {
       res.json({
-        message: "Successfully register",
-        data: user,
+        message: "Successfully logged In",
+        id: userFind[0]._id,
+        token,
       });
     } else {
       return next(new AppError("Something went wrong", 500));
@@ -45,7 +57,6 @@ const registerUser = catchAync(async (req, res, next) => {
   } else {
     const { email, password, name, specialization, experiences, role } =
       req.body;
-    console.log(req.body);
     if (!email || !password || !name) {
       return next(new AppError("Provide All the Requied Details", 401));
     }

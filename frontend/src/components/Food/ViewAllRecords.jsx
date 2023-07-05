@@ -7,18 +7,28 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useEffect } from "react";
-import { Box, Container } from "@mui/material";
+import { Box, Button, Container, Modal } from "@mui/material";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { useState } from "react";
-
+import { ModalClose, ModalDialog } from "@mui/joy";
+import DeleteRecordsModal from "./DeleteRecordsModal";
 export default function BasicTable() {
   const [data, setData] = useState([]);
+  const [variant, setVariant] = React.useState(undefined);
   const token = useSelector((state) => state.user.token);
   const chartData = [
     { name: "Category A", value: 400, fill: "#8884d8" },
     { name: "Category B", value: 300, fill: "#82ca9d" },
   ];
+
+  const handleClose1 = () => {
+    setVariant(undefined);
+  };
+
+  const handleDelete = () => {
+    setVariant("solid");
+  };
 
   const getuserTrackedDetails = async () => {
     try {
@@ -58,12 +68,49 @@ export default function BasicTable() {
             sx={{
               display: "flex",
               justifyContent: "space-between",
-              marginTop: "30px",
+              margin: "15px",
             }}
           >
             <h4>{meals.name}</h4>
-            <h6>{new Date(meals?.createdAt).toLocaleString()}</h6>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <h6>{new Date(meals?.createdAt).toLocaleString()}</h6>
+              <Button
+                onClick={() => {
+                  handleDelete(meals._id);
+                }}
+                sx={{
+                  background: "red",
+                  color: "white",
+                  "&:hover": {
+                    background: "red",
+                  },
+                  margin: "0 1rem",
+                }}
+              >
+                Delete
+              </Button>
+            </Box>
           </Box>
+          <Modal
+            open={variant === "solid"}
+            onClose={() => setVariant(undefined)}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <ModalDialog>
+              <Box>
+                <b>Delete Confirmation</b>
+              </Box>
+              <ModalClose onClick={() => setVariant(undefined)} />
+              <DeleteRecordsModal id={meals._id} onClose={handleClose1} />
+            </ModalDialog>
+          </Modal>
 
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
