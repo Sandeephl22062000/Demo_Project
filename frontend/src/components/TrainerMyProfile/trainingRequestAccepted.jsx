@@ -56,7 +56,6 @@ const TrainingRequestAccepted = () => {
                   <Box
                     sx={{
                       display: "flex",
-
                       flexDirection: "row",
                     }}
                   >
@@ -69,7 +68,6 @@ const TrainingRequestAccepted = () => {
                   <Box
                     sx={{
                       display: "flex",
-
                       flexDirection: "row",
                     }}
                   >

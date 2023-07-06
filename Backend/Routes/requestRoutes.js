@@ -45,7 +45,7 @@ router.get(
   RequestController.isPendingRequest
 );
 
-router.get(
+router.post(
   "/acceptRequest/:requestID",
   protectingRoutes,
   RequestController.acceptRequest

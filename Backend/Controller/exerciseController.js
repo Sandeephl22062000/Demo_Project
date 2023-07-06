@@ -1,8 +1,13 @@
 const axios = require("axios");
 const fetchExercises = async (req, res, next) => {
-  var muscle = req.query.muscle;
-  var difficulty = req.query.difficulty;
-  console.log(req.query);
+  const muscle = req.query.muscle;
+  const difficulty = req.query.difficulty;
+  const page = req.query.page || 1;
+  const limit = req.query.limit || 4;
+
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+
   const exercises = await axios.get(
     `https://api.api-ninjas.com/v1/exercises?muscle=${muscle}&difficulty=${difficulty}`,
     {
@@ -11,11 +16,15 @@ const fetchExercises = async (req, res, next) => {
       },
     }
   );
-  console.log(exercises);
+
   const fetchData = exercises.data;
+  const paginatedData = fetchData.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(fetchData.length / limit);
+
   if (exercises) {
     res.status(200).json({
-      exercises: fetchData,
+      exercises: paginatedData,
+      totalPages,
       status: "Success",
     });
   } else {

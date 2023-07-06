@@ -2,13 +2,14 @@
 import { css, jsx } from "@emotion/core";
 import Container from "../Global/Container";
 import FooterCard from "./FooterCard";
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 const Footer = () => {
   const [reviews, setReviews] = useState("");
   const [email, setEmail] = useState("");
-
+  const navigate = useNavigate();
   const addReview = async (email, reviews) => {
     try {
       const review = await axios.post(
@@ -36,7 +37,6 @@ const Footer = () => {
       <Container>
         <FooterCard cardHeading="Contact Us">
           <div className="firstCard">
-            {/* <p>5th flora, 700/D kings road, green lane New York-1782</p> */}
             <a href="">+91 367 826 2567</a>
             <a href="">sandeep.h.lohar@gmail.com</a>
             <div className="social">
@@ -50,10 +50,38 @@ const Footer = () => {
         </FooterCard>
         <FooterCard cardHeading="Useful Links">
           <div className="usefulLinks">
-            <a href="/food">Food</a>
-            <a href="/exercise">Exercise</a>
-            <a href="/trainer">Trainer</a>
-            <a href="activities">Activities</a>
+            <Typography
+              onClick={() => {
+                navigate("/food");
+              }}
+              sx={{ color: "white", margin: "0.3rem", cursor: "pointer" }}
+            >
+              Food
+            </Typography>
+            <Typography
+              onClick={() => {
+                navigate("/exercise");
+              }}
+              sx={{ color: "white", margin: "0.3rem", cursor: "pointer" }}
+            >
+              Exercise
+            </Typography>
+            <Typography
+              onClick={() => {
+                navigate("/trainer");
+              }}
+              sx={{ color: "white", margin: "0.3rem", cursor: "pointer" }}
+            >
+              Trainer
+            </Typography>
+            <Typography
+              onClick={() => {
+                navigate("/activities");
+              }}
+              sx={{ color: "white", margin: "0.3rem", cursor: "pointer" }}
+            >
+              Activities
+            </Typography>
           </div>
         </FooterCard>
         <FooterCard cardHeading="Reviews">

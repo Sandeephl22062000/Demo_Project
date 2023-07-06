@@ -11,14 +11,14 @@ exports.newPost = catchAsync(async (req, res, next) => {
     const postData = {
       caption: req.body.caption,
       image: req.body.image,
-      video: req.body.video, 
+      video: req.body.video,
       postedBy: req.user._id,
     };
 
     const post = await Post.create(postData);
     const user = await User.findById(req.user._id);
     console.log(post, user, "vadfdv", postData, "tbhrtgsrtd");
-    user.posts.push(post._id);
+    user?.posts?.push(post._id);
     console.log("post created");
     await user.save();
 

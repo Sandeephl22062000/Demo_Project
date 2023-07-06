@@ -7,7 +7,6 @@ const AppError = require("./Error-Handling/error");
 const trainerRoutes = require("./Routes/trainerRoute");
 const exerciseRoutes = require("./Routes/exercisesRoutes");
 const postRoutes = require("./Routes/postRoutes");
-const challengeRoutes = require("./Routes/challangesRoutes");
 const gymRoutes = require("./Routes/gymRoutes");
 const requestRoutes = require("./Routes/requestRoutes");
 const paymentRoutes = require("./Routes/paymentRoutes");
@@ -34,22 +33,20 @@ app.use("/api/users", userRoutes);
 app.use("/api/trainer", trainerRoutes);
 app.use("/api/exercise", exerciseRoutes);
 app.use("/api/post", postRoutes);
-app.use("/api/challenges", challengeRoutes);
 app.use("/api/request", requestRoutes);
 app.use("/api/gyms", gymRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/targetnutrients", targetNutrientsRoutes);
 app.use("/api/reviews", ExtraReviewRoutes);
 
-
-// app.use("/api/trainerPortal", trainerRoutes);
-
 app.all("*", (req, res, next) => {
   return next(
     new AppError(`${req.originalUrl} This URL is not running on this server`)
   );
 });
+
 app.use(globalerrorHandler);
+
 app.listen(process.env.PORT, () => {
   console.log(`Server Connected on port: ${process.env.PORT}`);
 });

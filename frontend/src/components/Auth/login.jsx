@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { UserByID, loginUser } from "../../store/user";
 import { useToasts } from "react-toast-notifications";
 import { useGoogleLogin } from "@react-oauth/google";
+import loginValidationSchema from "../schema/loginValidationSchema";
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -21,12 +22,7 @@ const Login = () => {
       email: "",
       password: "",
     },
-    validationSchema: Yup.object({
-      email: Yup.string()
-        .email("Invalid email address")
-        .required("Email is required"),
-      password: Yup.string().min(6).required("Password is required"),
-    }),
+    validationSchema: loginValidationSchema,
     onSubmit: (values, { resetForm }) => {
       try {
         dispatch(

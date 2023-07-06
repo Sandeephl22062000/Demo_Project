@@ -1,5 +1,6 @@
 const Request = require("../Model/RequestModel");
 const User = require("../Model/UserModel");
+const sendEmail = require("../utils/email");
 const createRequest = async (req, res, next) => {
   const trainerID = req.params.trainerID;
   const { message } = req.body;
@@ -49,7 +50,12 @@ const getAllRequestOFUser = async (req, res, next) => {
 
 const acceptRequest = async (req, res, next) => {
   const requestID = req.params.requestID;
-
+  const trainerEmail = req?.user?.email;
+  const userName = req.body.userName;
+  const userEmail = req.body.userEmail;
+  const trainerName = req.user.name;
+  console.log(userEmail);
+  console.log(req.user.email, req.user.name);
   const getRequest = await Request.findByIdAndUpdate(
     requestID,
     {
@@ -61,6 +67,13 @@ const acceptRequest = async (req, res, next) => {
       new: true,
     }
   );
+  await sendEmail({
+    from:"sandeepnode001@gmail.com",
+    to: "sudhanshusingh0401@gmail.com",
+    subject: "Welcome Email",
+    text: `Your request has been accepted by ${trainerName}, you can contact them further on this email ${trainerEmail}`,
+  });
+
   if (getRequest) {
     res.status(201).json({
       message: "Success",
@@ -179,7 +192,7 @@ const isPendingRequest = async (req, res, next) => {
       isPending: true,
     })
       .sort({ createdAt: -1 })
-      .populate("trainer", "name photo");
+      .populate("trainer", "name photo email");
     console.log("dfvdfvdfpeenidng ", getRequests);
     if (getRequests) {
       res.status(201).json({
@@ -193,7 +206,7 @@ const isPendingRequest = async (req, res, next) => {
       isPending: true,
     })
       .sort({ createdAt: -1 })
-      .populate("user", "name photo");
+      .populate("user", "name email photo");
 
     console.log("dfvdfvdfhjmhjm", getRequest);
 

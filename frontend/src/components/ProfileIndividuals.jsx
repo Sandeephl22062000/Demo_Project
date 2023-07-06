@@ -230,6 +230,15 @@ const ProfilePage = () => {
           variant={variant}
         >
           <ModalClose />
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            Edit Your profile
+          </Box>
           <Table aria-label="basic table" sx={{ marginTop: "30px" }}>
             <tbody>
               <tr>

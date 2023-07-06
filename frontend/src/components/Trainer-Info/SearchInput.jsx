@@ -33,7 +33,6 @@ const SearchInput = () => {
   const navigate = useNavigate();
 
   const submithandler = async (e) => {
-    e.preventDefault();
     try {
       setLoading(true);
       if (!search) {

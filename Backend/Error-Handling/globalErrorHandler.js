@@ -1,4 +1,4 @@
-const gloablErrorHandler = (err, req, res, next) => {
+const globalErrorHandler = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || "error";
 
@@ -8,12 +8,7 @@ const gloablErrorHandler = (err, req, res, next) => {
       message: "Duplicate Key Error",
     });
   }
-  // if (err.name === "CastError") {
-  //   return res.status(404).json({
-  //     status: "failed",
-  //     message: "Please enter valid Product ID",
-  //   });
-  // }
+
   if (err.name === "ValidationError") {
     return res.status(404).json({
       status: "failed",
@@ -30,4 +25,4 @@ const gloablErrorHandler = (err, req, res, next) => {
   });
 };
 
-module.exports = gloablErrorHandler;
+module.exports = globalErrorHandler;

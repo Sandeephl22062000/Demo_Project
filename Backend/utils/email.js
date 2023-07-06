@@ -8,15 +8,14 @@ const sendEmail = async (options) => {
     secure: false,
     requireTLS: true,
     auth: {
-      user: "sandyhl2206@gmail.com",
-      pass: "fgzpeypmjedmefkn",
+      user: "sandeepnode001@gmail.com",
+      pass: "ysbxtfhrmwsvcxbu",
     },
   });
 
-  //2. define the email options
   const mailoptions = {
-    from: "sandyhl2206@gmail.com",
-    to: options.email,
+    from: options.sender,
+    to: options.receiver,
     subject: options.subject,
     text: options.message,
   };

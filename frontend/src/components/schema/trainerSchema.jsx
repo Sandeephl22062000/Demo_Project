@@ -13,7 +13,6 @@ const validationSchema = Yup.object({
     .max(30)
     .required("Provide specialization"),
 experience: Yup.string().required("Provide your experience")
-
 });
 
 export default validationSchema;

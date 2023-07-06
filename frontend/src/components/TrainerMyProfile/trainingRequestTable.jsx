@@ -12,7 +12,7 @@ export default function BasicTable() {
   };
 
   return (
-    <Container>
+    <Container sx={{ minHeight: "70vh" }}>
       <Box
         sx={{
           display: "flex",
@@ -26,6 +26,10 @@ export default function BasicTable() {
           sx={{
             background: activeTab === "pending" ? "black" : "white",
             color: activeTab === "pending" ? "white" : "black",
+            "&:hover": {
+              background: "black",
+              color: "white",
+            },
           }}
           onClick={() => handleTabChange("pending")}
         >
@@ -34,6 +38,10 @@ export default function BasicTable() {
         <Button
           sx={{
             background: activeTab === "accepted" ? "black" : "white",
+            "&:hover": {
+              background: "black",
+              color: "white",
+            },
             color: activeTab === "accepted" ? "white" : "black",
           }}
           onClick={() => handleTabChange("accepted")}
@@ -44,6 +52,10 @@ export default function BasicTable() {
           sx={{
             background: activeTab === "rejected" ? "black" : "white",
             color: activeTab === "rejected" ? "white" : "black",
+            "&:hover": {
+              background: "black",
+              color: "white",
+            },
           }}
           onClick={() => handleTabChange("rejected")}
         >

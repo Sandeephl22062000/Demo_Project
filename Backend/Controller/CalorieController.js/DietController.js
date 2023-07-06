@@ -3,6 +3,8 @@ const catchAsync = require("../../utils/catchAync");
 const Food = require("../../Model/CalorieCountingModel");
 const AppError = "../../Error-Handling";
 const TargetNutrients = require("../../Model/TargetCalories");
+const catchAync = require("../../utils/catchAync");
+
 const saveUserDetails = async (req, res, next) => {
   const { weight, height, gender, age, activity } = req.body;
   console.log("req.user._id", req.user?._id);
@@ -156,23 +158,19 @@ const getTargetNutrients = async (req, res, next) => {
     return next(new AppError("Something went wrong", 404));
   }
 };
-const getMaintainceCalory = async (req, res, next) => {
+const getMaintainceCalory = catchAync(async (req, res, next) => {
   const UserID = req?.user?._id;
   const Data = await Food.find({ user: UserID }).sort({ createdAt: -1 });
   res.json({
     maintainceCalory: Data[0]?.requireCalories,
   });
-};
-// Call the function and pass the food name as an argument
+});
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 const makeChatCompletionsRequest = async (req, res) => {
   console.log(OPENAI_API_KEY);
   try {
-    const calories = req.body.calories;
-    const protein = req.body.protein;
-    const carbs = req.body.carbs;
     const foodtype = req.body.foodType;
     const response = await axios.post(
       "https://api.openai.com/v1/chat/completions",
@@ -182,7 +180,7 @@ const makeChatCompletionsRequest = async (req, res) => {
           { role: "system", content: "You are a helpful assistant." },
           {
             role: "user",
-            content: `Make me ${foodtype} diet with required calories:${calories}, required protein:${protein} and required carbohydrates: ${carbs}, but i want it in meals separated as Breakfast,Morning Snack,Lunch,Evening Snacks and dinner and each one has atleast 3 different types of dishes , provide me the data in html table for each meal times an each meals has the total value for the column, with proper styling`,
+            content: `${foodtype} for this content give me the shortest reply`,
           },
         ],
       },

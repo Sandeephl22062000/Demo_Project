@@ -1,11 +1,6 @@
 import * as React from "react";
-import FormControl from "@mui/joy/FormControl";
-import FormLabel from "@mui/joy/FormLabel";
-
 import { Box, Button, Card, Typography, Container } from "@mui/material";
-import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import { useToasts } from "react-toast-notifications";
-
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { getservices, requestTrainer } from "../../store/trainer";
@@ -26,7 +21,6 @@ export default function OverlayRadio(props) {
 
   const [selectedOption, setSelectedOption] = React.useState("");
 
-  console.log(trainerID);
   const initPayment = (data) => {
     const options = {
       key: "rzp_test_8ryBijpHhTbHDx",
@@ -34,7 +28,7 @@ export default function OverlayRadio(props) {
       currency: data.currency,
       name: trainer?.name,
       description: "Test Transaction",
-      image: trainer?.phot,
+      image: trainer?.photo,
       order_id: data.id,
       handler: async (response) => {
         try {

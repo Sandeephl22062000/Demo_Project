@@ -1,12 +1,8 @@
 import React from "react";
-import Modal from "@mui/joy/Modal";
-import ModalClose from "@mui/joy/ModalClose";
-import ModalDialog from "@mui/joy/ModalDialog";
-import Typography from "@mui/joy/Typography";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useToasts } from "react-toast-notifications";
-import { Button, Table } from "@mui/material";
+import { Box, Button, Table } from "@mui/material";
 import { updateUser } from "../../store/user";
 
 const UpdateProfileModal = (props) => {
@@ -42,6 +38,18 @@ const UpdateProfileModal = (props) => {
 
   return (
     <>
+      <Box
+        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      >
+        Update Your Profile
+      </Box>
+      <label htmlFor="profile-picture-upload">
+        <img
+          src={user?.data?.photo}
+          alt="Profile Picture"
+          style={{ cursor: "pointer" }}
+        />
+      </label>
       <Table aria-label="basic table" sx={{ marginTop: "30px" }}>
         <tbody>
           <tr>

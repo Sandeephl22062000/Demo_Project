@@ -5,6 +5,7 @@ import ModalClose from "@mui/joy/ModalClose";
 import ModalDialog from "@mui/joy/ModalDialog";
 import Typography from "@mui/joy/Typography";
 import { Box } from "@mui/system";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import {
   ref as addRef,
@@ -12,14 +13,14 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import storage from "../../utils/firebase";
-import "./AddPost.css"; // Import the CSS file
+import "./AddPost.css";
 import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
-const AddPost = () => {
+const AddPost = ({ setNewPost }) => {
   const [images, setImages] = useState("");
   const [status, setStatus] = useState("");
   const [selectedPhoto, setSelectedPhoto] = useState(null);
@@ -27,11 +28,13 @@ const AddPost = () => {
   const [caption, setCaption] = useState("");
   const [variant, setVariant] = useState(undefined);
   const [variant2, setVariant2] = useState(undefined);
-
+  const [isLoading, setIsLoading] = useState(false);
+  const [post, newPost] = useState({});
   const token = useSelector((state) => state.user.token);
   console.log(token);
 
   const photoupload = (event) => {
+    setIsLoading(true);
     let file = event.target.files[0];
     if (!file) {
       alert("Please upload an image first!");
@@ -41,16 +44,21 @@ const AddPost = () => {
     uploadTask.on(
       "state_changed",
       (snapshot) => {},
-      (err) => console.log(err),
+      (err) => {
+        console.log(err);
+        setIsLoading(false);
+      },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((url) => {
           setSelectedPhoto(url);
+          setIsLoading(false);
         });
       }
     );
   };
 
   const videoupload = (event) => {
+    isLoading(true);
     let file = event.target.files[0];
     if (!file) {
       alert("Please upload a video first!");
@@ -60,13 +68,18 @@ const AddPost = () => {
     uploadTask.on(
       "state_changed",
       (snapshot) => {},
-      (err) => console.log(err),
+      (err) => {
+        console.log(err);
+        setIsLoading(false);
+      },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((url) => {
           setSelectedVideo(url);
+          setIsLoading(false);
         });
       }
     );
+    setIsLoading(false);
   };
 
   const handlePhotoUpload = (event) => {
@@ -88,10 +101,6 @@ const AddPost = () => {
   const handleFormSubmit = (event) => {
     event.preventDefault();
     const createPost = async () => {
-      console.log("asdfghjklsdfghjk");
-      console.log("Selected Photo:", selectedPhoto);
-      console.log("Selected Video:", selectedVideo);
-      console.log("Caption:", caption);
       const data = await axios.post(
         "api/post/new",
         {
@@ -106,7 +115,12 @@ const AddPost = () => {
           },
         }
       );
-      console.log(data);
+      console.log(data?.data?.post);
+      setNewPost(data?.data?.post);
+      setVariant(undefined);
+      setCaption("");
+      setSelectedPhoto("");
+      setSelectedVideo("");
     };
     try {
       createPost();
@@ -119,7 +133,6 @@ const AddPost = () => {
     <Container
       sx={{ borderColor: "black", backGround: "grey", margin: "20px 0 20px 0" }}
     >
-      {/* Content for the second container */}
       <Box
         style={{
           height: "5rem",
@@ -168,7 +181,7 @@ const AddPost = () => {
               <Box
                 sx={{
                   width: "300px",
-                  height: "300px",
+                  height: "200px",
                   border: "1px dashed #ddd",
                   display: "flex",
                   alignItems: "center",
@@ -176,19 +189,43 @@ const AddPost = () => {
                   marginBottom: "20px",
                 }}
               >
-                {selectedPhoto ? (
-                  <img
-                    src={selectedPhoto}
-                    alt="Preview"
-                    style={{
-                      width: "200px",
-                      height: "250px",
-                      objectFit: "cover",
-                    }}
-                  />
+                {isLoading ? (
+                  <CircularProgress sx={{ color: "black" }} />
+                ) : selectedPhoto || selectedVideo ? (
+                  selectedPhoto ? (
+                    <img
+                      src={selectedPhoto}
+                      alt="Preview"
+                      style={{
+                        width: "200px",
+                        height: "100px",
+                        objectFit: "cover",
+                      }}
+                    />
+                  ) : (
+                    <video
+                      src={selectedVideo}
+                      controls
+                      style={{
+                        width: "200px",
+                        height: "250px",
+                        objectFit: "cover",
+                      }}
+                    />
+                  )
                 ) : (
                   <div>
-                    <Button variant="outlined" component="label">
+                    <Button
+                      variant="outlined"
+                      component="label"
+                      sx={{
+                        background: "black",
+                        color: "white",
+                        "&:hover": {
+                          background: "black",
+                        },
+                      }}
+                    >
                       Add Photo
                       <input
                         type="file"
@@ -197,7 +234,18 @@ const AddPost = () => {
                         accept="image/*"
                       />
                     </Button>
-                    <Button variant="outlined" component="label">
+                    <Button
+                      variant="outlined"
+                      component="label"
+                      sx={{
+                        background: "black",
+                        color: "white",
+                        margin: "0.5rem",
+                        "&:hover": {
+                          background: "black",
+                        },
+                      }}
+                    >
                       Add Video
                       <input
                         type="file"
@@ -208,6 +256,7 @@ const AddPost = () => {
                     </Button>
                   </div>
                 )}
+
                 {console.log(selectedPhoto)}
               </Box>
               <TextField
@@ -216,7 +265,8 @@ const AddPost = () => {
                 value={caption}
                 onChange={handleCaptionChange}
                 multiline
-                rows={4}
+                rows={3}
+                sx={{ margin: "0.5rem" }}
               />
               <Button
                 type="submit"

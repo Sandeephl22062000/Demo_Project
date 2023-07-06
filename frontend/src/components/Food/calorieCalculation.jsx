@@ -48,6 +48,7 @@ const CalorieDetail = () => {
 
   const navigate = useNavigate();
   useEffect(() => {
+    window.scrollTo(0, 0);
     dispatch(priorFoodCalory(token));
   }, []);
   console.log(maintainceCalory);

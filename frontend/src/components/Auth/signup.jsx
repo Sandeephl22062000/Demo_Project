@@ -25,6 +25,7 @@ import axios from "axios";
 import GoogleIcon from "../../images/Google__G__Logo.svg.webp";
 import { setToken } from "../../store/user";
 import { useDispatch } from "react-redux";
+import signupValidationSchema from "../schema/schema";
 const Signup = () => {
   const [images, setImages] = useState("");
   const [role, setRole] = useState("");
@@ -82,16 +83,7 @@ const Signup = () => {
       password: "",
       confirmPassword: "",
     },
-    validationSchema: Yup.object({
-      fullName: Yup.string().min(2).max(25).required("Full Name is required"),
-      email: Yup.string()
-        .email("Invalid email address")
-        .required("Email is required"),
-      password: Yup.string().min(6).required("Password is required"),
-      confirmPassword: Yup.string()
-        .required("Confirm Password is required")
-        .oneOf([Yup.ref("password"), null], "Password does not match"),
-    }),
+    validationSchema: signupValidationSchema,
     onSubmit: (values, { resetForm }) => {
       console.log("users");
       const sendData = async () => {

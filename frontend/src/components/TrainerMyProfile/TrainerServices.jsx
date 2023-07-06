@@ -25,7 +25,6 @@ const TrainerServices = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const token = useSelector((state) => state?.user?.token);
-  console.log(token);
   const services = useSelector((state) => state?.trainer?.trainerServicesList);
   const handleDelete = () => {
     setVariant1("solid");

@@ -1,6 +1,8 @@
 const AppError = require("../Error-Handling/error");
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
+const razor_pay_id = process.env.RAZOR_PAY_KEY_ID;
+const razor_secret_key = process.env.RAZOR_PAY_SECRET_KEY;
 const createPayment = async (req, res, next) => {
   try {
     const instance = new Razorpay({

@@ -23,14 +23,12 @@ const TrainingRequestRejected = () => {
   const [pendingRequest, setPendingReqeust] = useState([]);
   const dispatch = useDispatch();
   const token = useSelector((state) => state?.user?.token);
-  //   const pendingRequest = useSelector(
-  //     (state) => state?.user?.getAllPendingRequest
-  //   );
-  //   console.log(pendingRequest);
-  const acceptRequestHandler = (id) => {
+
+  const acceptRequestHandler = (id, userName, userEmail) => {
     console.log(id);
-    console.log(token);
-    dispatch(acceptRequest({ id, token }));
+    console.log(userName);
+    console.log(userEmail);
+    dispatch(acceptRequest({ id, token, userName, userEmail }));
   };
   const rejectRequestHandler = (id) => {
     console.log(id);
@@ -53,7 +51,7 @@ const TrainingRequestRejected = () => {
     data();
   }, []);
   return (
-    <Container>
+    <Container sx={{ minhHeight: "60vh" }}>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
@@ -81,6 +79,7 @@ const TrainingRequestRejected = () => {
                 key={request._id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
+                {console.log(request)}
                 <TableCell component="th" scope="row">
                   <Box
                     sx={{
@@ -123,7 +122,11 @@ const TrainingRequestRejected = () => {
                 <TableCell align="right">
                   <Button
                     sx={{ background: "green", color: "white" }}
-                    onClick={acceptRequestHandler(request?._id)}
+                    onClick={acceptRequestHandler(
+                      request?._id,
+                      request?.user?.name,
+                      request?.user?.email
+                    )}
                   >
                     Accept
                   </Button>

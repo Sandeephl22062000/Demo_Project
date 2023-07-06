@@ -111,6 +111,7 @@ export default function BasicTable() {
               onClose={() => setVariant(undefined)}
               aria-labelledby="modal-modal-title"
               aria-describedby="modal-modal-description"
+              sx={{ background: "white" }}
             >
               <ModalDialog>
                 <Box>

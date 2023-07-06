@@ -16,16 +16,21 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { UserByID, logout } from "../../store/user";
 import Noatification from "./Noatifications";
-import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import { useEffect } from "react";
-
-const pages = ["Food", "Exercise", "Trainer", "Activities", "Gyms"];
+import FitnessLogo from "./../../images/Fitness.jpg";
+const pages = [
+  "Food",
+  "Exercise",
+  "Trainer",
+  "Activities",
+  "Gyms",
+  "E-Trainer",
+];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [anchorElRegister, setAnchorElRegister] = React.useState(null);
-
   const [anchorEl, setAnchorEl] = React.useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -77,28 +82,27 @@ function ResponsiveAppBar() {
     <AppBar position="static" sx={{ background: "black" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
+          <Box
             onClick={() => {
               navigate("/");
             }}
             sx={{
-              mr: 2,
+              display: "flex",
               cursor: "pointer",
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              color: "inherit",
-              textDecoration: "none",
+              justifyContent: "center",
+              flexDirection: "row",
             }}
           >
-            <FitnessCenterIcon
-              sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+            <img
+              src={FitnessLogo}
+              alt=""
+              style={{
+                height: "3rem",
+                width: "8rem",
+                margin: "0 1rem 0.5rem 0",
+              }}
             />
-            Fitness
-          </Typography>
+          </Box>
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"

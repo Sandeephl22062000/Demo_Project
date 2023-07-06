@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import client from "../features/client";
 import axios from "axios";
 const initialFood = {
   calculateFoodCalories: 0,
@@ -202,7 +201,6 @@ const foodSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
-
       .addCase(deleteCaloryTracked.pending, (state) => {
         state.loading = true;
         state.error = null;

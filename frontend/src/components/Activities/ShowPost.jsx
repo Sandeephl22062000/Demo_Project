@@ -1,54 +1,61 @@
-import { Box, Container, Grid, TextField, Avatar } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { Box, Container, TextField, Avatar } from "@mui/material";
+import Autocomplete from "@mui/material/Autocomplete";
+import CircularProgress from "@mui/material/CircularProgress";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { UserByID, searchUserKeyword } from "../../store/user";
+import { useNavigate } from "react-router-dom";
 import AddPost from "./AddPost";
 import Posts from "./Posts";
-import axios from "axios";
-import { UserByID, searchUserKeyword } from "../../store/user";
-import { useDispatch, useSelector } from "react-redux";
-import Autocomplete from "@mui/material/Autocomplete";
-import { useNavigate } from "react-router-dom";
-import CircularProgress from "@mui/material/CircularProgress";
 
 const ShowPost = () => {
   const [posts, setPosts] = useState([]);
   const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [newPost, setNewPost] = useState(null);
+
   const users = useSelector((state) => state?.user?.SearchUserResult);
-  console.log("users", users);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const getPost = () => {
-    const data = async () => {
-      setIsLoading(true);
-      const response = await axios.get(
-        "http://localhost:8000/api/post/posts/all"
-      );
-      console.log(response.data.posts);
-      setPosts(response.data.posts);
-      setIsLoading(false);
-    };
-    data();
+
+  const getPost = async () => {
+    setIsLoading(true);
+    const response = await axios.get(
+      "http://localhost:8000/api/post/posts/all"
+    );
+    setPosts(response.data.posts);
+    setIsLoading(false);
   };
+
   useEffect(() => {
     window.scrollTo(0, 0);
     if (search.length > 0) {
-      console.log("SDVsdf");
       dispatch(searchUserKeyword(search));
     }
   }, [search]);
+
   useEffect(() => {
     getPost();
   }, []);
+
+  useEffect(() => {
+    if (newPost) {
+      setPosts((prevPosts) => [newPost, ...prevPosts]);
+    }
+  }, [newPost]);
 
   const handleOptionClick = (id) => {
     dispatch(UserByID(id));
     navigate(`/user/${id}`);
   };
+
   const renderOption = (option) =>
     users?.map((user) => (
       <Box
         sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}
         onClick={() => handleOptionClick(user._id)}
+        key={user._id}
       >
         <Avatar src={user.photo} alt={user.name} />
         <span>{user.name}</span>
@@ -85,9 +92,9 @@ const ShowPost = () => {
         </Box>
       </Container>
       <Container sx={{ minHeight: "100vh" }}>
-        <AddPost />
+        <AddPost setNewPost={setNewPost} />
         {!isLoading ? (
-          posts.map((post) => <Posts post={post} />)
+          posts.map((post) => <Posts key={post.id} post={post} />)
         ) : (
           <Box
             sx={{

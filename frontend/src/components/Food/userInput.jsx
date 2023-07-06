@@ -21,6 +21,7 @@ import { useToasts } from "react-toast-notifications";
 import { useEffect } from "react";
 // import Modal from "@mui/material/Modal";
 import PriorInfoModal from "./priorData";
+import userInputValidation from "../schema/userInputFood";
 // import ResultPage from "./ResultPage";
 
 const UserInput = () => {
@@ -34,13 +35,6 @@ const UserInput = () => {
   const prorData = useSelector((state) => state?.food?.priorUserDetails);
   console.log("prorData", prorData?.data);
   const isLoading = useSelector((state) => state.food.loading);
-  const validationSchema = yup.object().shape({
-    height: yup.number().required("Height is required"),
-    weight: yup.number().required("Weight is required"),
-    age: yup.number().required("Age is required"),
-    gender: yup.string().required("Gender is required"),
-    activity: yup.string().required("Activity is required"),
-  });
 
   const formik = useFormik({
     initialValues: {
@@ -50,7 +44,7 @@ const UserInput = () => {
       gender: "",
       activity: "",
     },
-    validationSchema,
+    validationSchema: userInputValidation,
     onSubmit: (values, { resetForm }) => {
       dispatch(
         calculateCalories({

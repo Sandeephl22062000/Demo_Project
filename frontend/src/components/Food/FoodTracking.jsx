@@ -63,6 +63,7 @@ const ExeprmientFoodApi = () => {
     setTargetProtein(data?.data?.requireProtein);
   };
   useEffect(() => {
+    window.scrollTo(0, 0);
     getTargetData();
   }, []);
 
@@ -77,7 +78,7 @@ const ExeprmientFoodApi = () => {
         },
       }
     );
-    console.log(data);
+    console.log("data", data);
     if (data?.data.length === 0) setNotFound(true);
     setResult(data.data);
     setIsLoading(false);
@@ -88,7 +89,6 @@ const ExeprmientFoodApi = () => {
 
     setRows(updatedRows);
 
-    // Update the sums by subtracting the removed item's values
     setSumCalorie(sumCalorie - removedItem.calories * removedItem.quantity);
     setSumFat(sumFat - removedItem.fat * removedItem.quantity);
     setSumCarbs(sumCarbs - removedItem.carbs * removedItem.quantity);
@@ -159,7 +159,8 @@ const ExeprmientFoodApi = () => {
     calculateTotals([...rows, newRow]);
   };
   const token = useSelector((state) => state.user.token);
-  const saveTrackedTable = async () => {
+  const saveTrackedTable = async (e) => {
+    e.preventDefault();
     try {
       console.log(name);
       const response = await axios.post(
@@ -183,6 +184,7 @@ const ExeprmientFoodApi = () => {
     } catch (error) {
       console.log(error);
     }
+    setVariant(undefined);
   };
 
   const differenceCalories = TargetCalories - sumCalorie;
@@ -291,7 +293,7 @@ const ExeprmientFoodApi = () => {
           >
             {result.length > 0 && (
               <>
-                <h4>{`Nutritional value in 100g of ${search}`}</h4>
+                <h4>Nutritional value in 100g is:-</h4>
                 <TableBody>
                   {result.map((row, index) => (
                     <StyledTableRow key={row.name}>
@@ -322,6 +324,7 @@ const ExeprmientFoodApi = () => {
                 </TableBody>
               </>
             )}
+            {result.length === 0 && search && <div>No data found.</div>}
           </Box>
         ) : (
           <Box
@@ -368,12 +371,12 @@ const ExeprmientFoodApi = () => {
                       {row.protein}
                     </StyledTableCell>
                     <StyledTableCell align="right">
-                      <Input
+                      <TextField
                         type="number"
                         value={row.quantity}
                         onChange={(e) => adjustQuantity(index, e.target.value)}
                         endAdornment={
-                          <InputAdornment position="end">g</InputAdornment>
+                          <InputAdornment position="end">100g</InputAdornment>
                         }
                       />
                     </StyledTableCell>
@@ -566,6 +569,7 @@ const ExeprmientFoodApi = () => {
               Give your meal a name
               <TextField
                 required
+                autoComplete="off"
                 id="outlined-required"
                 name="name"
                 value={name}
@@ -574,7 +578,12 @@ const ExeprmientFoodApi = () => {
                 }}
                 label="Meal name"
                 type="String"
-                sx={{ width: "100%", margin: "8px", color: "white" }}
+                sx={{
+                  width: "100%",
+                  margin: "8px",
+                  color: "white",
+                  label: { color: "white" },
+                }}
               />
               <Box
                 sx={{

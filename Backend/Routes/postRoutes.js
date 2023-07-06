@@ -12,8 +12,6 @@ const {
   newLike,
   getPostPerById,
 } = require("../Controller/Post/PostController");
-const CommentController = require("../Controller/Post/CommentPost");
-// const PostController = require("../Controller/Post/PostController.js");
 const { protectingRoutes } = require("../Controller/AuthController");
 
 const router = express();
@@ -31,19 +29,6 @@ router.route("/posts").get(protectingRoutes, getPostsOfFollowing);
 router.route("/post/detail/:id").get(protectingRoutes, getPostDetails);
 
 router.route("/postperuser").get(protectingRoutes, getPostPerById);
-// router
-//   .route("/likepost/:postID")
-//   .post(AuthController.protectingRoutes, LikePostController.likePost);
-
-// router.route("/getUsersLike/:userID").get(LikePostController.getUsersLike);
-
-// router
-//   .route("/dislikeTrainer/:userID")
-//   .post(AuthController.protectingRoutes, LikePostController.disLikedTrainer);
-
-router
-  .route("/commentTrainer/:userID")
-  .post(protectingRoutes, CommentController.comment);
 
 router
   .route("/post/:id")

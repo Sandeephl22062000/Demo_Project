@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import {
   Container,
   Grid,
@@ -10,9 +8,7 @@ import {
   Button,
   Box,
 } from "@mui/material";
-
 import Post from "./Trainer-Info/ProfilePost";
-import { useDispatch } from "react-redux";
 const style = {
   width: "100%",
   maxWidth: 360,

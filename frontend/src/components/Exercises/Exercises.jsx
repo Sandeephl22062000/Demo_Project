@@ -4,26 +4,30 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { Button, Container } from "@mui/material";
+import { Button, Container, Pagination, Stack } from "@mui/material";
 import axios from "axios";
 import Card from "react-bootstrap/Card";
 import { useNavigate } from "react-router-dom";
 
 import CircularProgress from "@mui/material/CircularProgress";
+import { current } from "@reduxjs/toolkit";
 export default function BasicSelect() {
   const [muscle, setMuscle] = useState("");
   const [data, setData] = useState([]);
   const [difficulty, setDifficulty] = useState("");
   const [exercise, setExercise] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [TotalPage, setTotalPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
-  const clickHandler = async () => {
-    setIsLoading(true);
-    const { data } = await axios.get(
-      `http://localhost:8000/api/exercise/sortedExercises?muscle=${muscle}&difficulty=${difficulty}`
-    );
 
-    // console.log(`https://www.youtube.com/watch?v=${videoId}`)
+  const clickHandler = async (currentPage) => {
+    setIsLoading(true);
+    console.log("currentpage", currentPage);
+    const { data } = await axios.get(
+      `http://localhost:8000/api/exercise/sortedExercises?muscle=${muscle}&difficulty=${difficulty}&page=${currentPage}`
+    );
+    setTotalPage(data.totalPages);
     setExercise(data.exercises);
     setIsLoading(false);
   };
@@ -31,6 +35,12 @@ export default function BasicSelect() {
   const VideoHandler = (muscleName, exerciseName) => {
     navigate(`/execiseVideos/${exerciseName}/${muscleName}`);
   };
+
+  const handlePageChange = (event, page) => {
+    setCurrentPage(page);
+    clickHandler(page);
+  };
+
   const fetchData = async () => {
     setIsLoading(true);
     const { data } = await axios.get("http://localhost:8000/api/exercise");
@@ -38,6 +48,7 @@ export default function BasicSelect() {
     setData(dataToShow.slice(0, 4));
     setIsLoading(false);
   };
+
   useEffect(() => {
     window.scrollTo(0, 0);
     fetchData();
@@ -62,21 +73,21 @@ export default function BasicSelect() {
               label="muscle"
               onChange={(e) => setMuscle(e.target.value)}
             >
-              <MenuItem value="abductors">abductors</MenuItem>
-              <MenuItem value="adductors">adductors</MenuItem>
-              <MenuItem value="biceps">biceps</MenuItem>
-              <MenuItem value="calves">calves</MenuItem>
-              <MenuItem value="chest">chest</MenuItem>
-              <MenuItem value="forearms">forearms</MenuItem>
-              <MenuItem value="glutes">glutes</MenuItem>
-              <MenuItem value="hamstrings">hamstrings</MenuItem>
-              <MenuItem value="lats">lats</MenuItem>
-              <MenuItem value="lower_back">lower_back</MenuItem>
-              <MenuItem value="middle_back">middle_back</MenuItem>
-              <MenuItem value="neck">neck</MenuItem>
-              <MenuItem value="quadriceps">quadriceps</MenuItem>
-              <MenuItem value="traps">traps</MenuItem>
-              <MenuItem value="triceps">triceps</MenuItem>
+              <MenuItem value="abductors">Abductors</MenuItem>
+              <MenuItem value="adductors">Adductors</MenuItem>
+              <MenuItem value="biceps">Biceps</MenuItem>
+              <MenuItem value="calves">Calves</MenuItem>
+              <MenuItem value="chest">Chest</MenuItem>
+              <MenuItem value="forearms">Forearms</MenuItem>
+              <MenuItem value="glutes">Glutes</MenuItem>
+              <MenuItem value="hamstrings">Hamstrings</MenuItem>
+              <MenuItem value="lats">Lats</MenuItem>
+              <MenuItem value="lower_back">Lower back</MenuItem>
+              <MenuItem value="middle_back">Middle back</MenuItem>
+              <MenuItem value="neck">Neck</MenuItem>
+              <MenuItem value="quadriceps">Quads</MenuItem>
+              <MenuItem value="traps">Traps</MenuItem>
+              <MenuItem value="triceps">Triceps</MenuItem>
             </Select>
           </FormControl>
 
@@ -103,15 +114,17 @@ export default function BasicSelect() {
               width: "155px",
               height: "63px",
               fontSize: "19px",
+              "&:hover": {
+                background: "red",
+              },
             }}
             onClick={clickHandler}
           >
             Search
           </Button>
         </Box>
-        {/* <Button onClick={VideoHandler}>Video Tutorials</Button> */}
         {!isLoading ? (
-          <>
+          <Container sx={{ margin: "4rem 0" }}>
             {exercise.length > 0
               ? exercise.map((e) => (
                   <Box style={{ margin: "10px" }}>
@@ -161,7 +174,7 @@ export default function BasicSelect() {
                     </Card>
                   </Box>
                 ))}
-          </>
+          </Container>
         ) : (
           <Box
             sx={{
@@ -173,37 +186,23 @@ export default function BasicSelect() {
             <CircularProgress sx={{ color: "black" }} />
           </Box>
         )}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            margin: "20px 0 20px 0",
+          }}
+        >
+          <Stack spacing={2}>
+            <Pagination
+              count={TotalPage}
+              color="primary"
+              onChange={handlePageChange}
+            />
+          </Stack>
+        </Box>
       </Container>
     </>
   );
 }
-
-// const card = (
-//   <React.Fragment>
-//     <CardContent>
-//       <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-//         Word of the Day
-//       </Typography>
-//       <Typography sx={{ mb: 1.5 }} color="text.secondary">
-//         adjective
-//       </Typography>
-//       <Typography variant="body2">
-//         well meaning and kindly.
-//         <br />
-//         {'"a benevolent smile"'}
-//       </Typography>
-//     </CardContent>
-//     <CardActions>
-//       <Button size="small">Learn More</Button>
-//     </CardActions>
-//   </React.Fragment>
-// );
-
-// export default function OutlinedCard() {
-//   return (
-//     <Box sx={{ minWidth: 275 }}>
-//       <Card variant="outlined">{card}</Card>
-//     </Box>
-//   );
-// }
-// const apiKey = "AIzaSyD53f8EOZksI3yzYqusT85aaAFX5Gleec0";
