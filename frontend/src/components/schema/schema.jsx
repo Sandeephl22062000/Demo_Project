@@ -8,7 +8,6 @@ const validationSchema = Yup.object({
   confirmPassword: Yup.string()
     .required("Confirm Password is required")
     .oneOf([Yup.ref("password"), null], "Password does not match"),
-    experience: Yup.number().required("Please Provide Your experience years here")
 });
 
 export default validationSchema;

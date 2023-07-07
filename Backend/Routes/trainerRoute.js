@@ -3,10 +3,11 @@ const router = express.Router();
 const TrainerController = require("../Controller/TrainerController/trainerController");
 const serviceController = require("../Controller/servicesController");
 const { protectingRoutes } = require("../Controller/AuthController");
-// router.route("/").post(TrainerController.RegisterTrainer);
-// router.route("/login").post(TrainerController.loginTrainer);
+
 router.route("/approverequest").post(TrainerController.approveRequest);
 router.route("/trainertoapprove").get(TrainerController.TrainerToApprove);
+
+router.route("/virtualtrainer").post(TrainerController.virtualTrainer);
 
 router
   .route("/services")
@@ -20,13 +21,15 @@ router
   .route("/editServices/:serviceID")
   .put(protectingRoutes, serviceController.editServices);
 
-  router
+router
   .route("/deleteServices/:serviceID")
   .delete(protectingRoutes, serviceController.deleteServices);
 
+router
+  .route("/search/:specialization/:experienceLevel")
+  .get(TrainerController.getTrainerByfilter);
 router.route("/trainerDetail/:id").get(TrainerController.getTrainerById);
 router.route("/:trainer/:page").get(TrainerController.getAlltrainer);
 router.route("/:page").get(TrainerController.getTrainers);
-// router.route("/updatePassword").post(UserController.updatePassword);
 
 module.exports = router;

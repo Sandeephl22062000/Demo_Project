@@ -25,58 +25,13 @@ const TrainingRequestAccepted = () => {
   }, []);
   return (
     <Container>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Requests Date</TableCell>
-              <TableCell>Users Name</TableCell>
-              <TableCell align="right">
-                {" "}
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    flexDirection: "row",
-                  }}
-                >
-                  Message
-                </Box>
-              </TableCell>
-              <TableCell align="right">Accetped at</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {acceptedRequests?.map((request) => (
-              <TableRow
-                key={request._id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "row",
-                    }}
-                  >
-                    <Typography sx={{ margin: "10px" }}>
-                      {new Date(request?.createdAt).toLocaleString()}
-                    </Typography>
-                  </Box>
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "row",
-                    }}
-                  >
-                    <Avatar src={request?.user?.photo}></Avatar>
-                    <Typography sx={{ margin: "10px" }}>
-                      {request?.user?.name}
-                    </Typography>
-                  </Box>
-                </TableCell>
+      {acceptedRequests.length > 0 ? (
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Requests Date</TableCell>
+                <TableCell>Users Name</TableCell>
                 <TableCell align="right">
                   {" "}
                   <Box
@@ -86,19 +41,77 @@ const TrainingRequestAccepted = () => {
                       flexDirection: "row",
                     }}
                   >
-                    {request?.message}
+                    Message
                   </Box>
                 </TableCell>
-                <TableCell align="right">
-                  <Typography sx={{ margin: "10px" }}>
-                    {new Date(request?.updatedAt).toLocaleString()}
-                  </Typography>
-                </TableCell>
+                <TableCell align="right">Accetped at</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {acceptedRequests?.map((request) => (
+                <TableRow
+                  key={request._id}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                      }}
+                    >
+                      <Typography sx={{ margin: "10px" }}>
+                        {new Date(request?.createdAt).toLocaleString()}
+                      </Typography>
+                    </Box>
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                      }}
+                    >
+                      <Avatar src={request?.user?.photo}></Avatar>
+                      <Typography sx={{ margin: "10px" }}>
+                        {request?.user?.name}
+                      </Typography>
+                    </Box>
+                  </TableCell>
+                  <TableCell align="right">
+                    {" "}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        flexDirection: "row",
+                      }}
+                    >
+                      {request?.message}
+                    </Box>
+                  </TableCell>
+                  <TableCell align="right">
+                    <Typography sx={{ margin: "10px" }}>
+                      {new Date(request?.updatedAt).toLocaleString()}
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      ) : (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: "8rem",
+          }}
+        >
+          No Accepted Requests
+        </Box>
+      )}
     </Container>
   );
 };

@@ -1,13 +1,11 @@
-import { useFormik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
+import { useFormik } from "formik";
 import React from "react";
-import validationSchema from "../schema/schema";
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import GoogleIcon from "../../images/Google__G__Logo.svg.webp";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { UserByID, loginUser } from "../../store/user";
+import { loginUser } from "../../store/user";
 import { useToasts } from "react-toast-notifications";
 import { useGoogleLogin } from "@react-oauth/google";
 import loginValidationSchema from "../schema/loginValidationSchema";
@@ -16,7 +14,9 @@ const Login = () => {
   const dispatch = useDispatch();
   const { addToast } = useToasts();
 
-  const handleForgotPassword = () => {};
+  const DontHaveAccountHandler = () => {
+    navigate("/signup");
+  };
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -33,6 +33,7 @@ const Login = () => {
             navigate,
           })
         );
+        resetForm();
       } catch (error) {
         console.log(error);
       }
@@ -47,7 +48,6 @@ const Login = () => {
           googleAccessToken: tokenResponse.access_token,
         }
       );
-      console.log(data);
       localStorage.setItem("id", data?.data);
       localStorage.setItem("token", data?.token);
       addToast(data?.message, {
@@ -66,9 +66,7 @@ const Login = () => {
     }
   };
   const login = useGoogleLogin({ onSuccess: handleGoogleLoginSuccess });
-  const trainerLogin = () => {
-    navigate("/trainerlogin");
-  };
+
   return (
     <>
       <Container
@@ -127,21 +125,24 @@ const Login = () => {
                 fontSize: "19px",
                 margin: "10px",
                 justifyContent: "center",
+                "&:hover": {
+                  background: "red",
+                },
               }}
             >
               Submit
             </Button>
             <Box
-              onClick={handleForgotPassword}
+              onClick={DontHaveAccountHandler}
               sx={{
                 display: { xs: "none", md: "flex" },
                 cursor: "pointer",
-                marginLeft: "auto", // Adjust the margin as needed
+                marginLeft: "auto",
               }}
             >
-              <Typography>Forgot Password?</Typography>
+              <Typography>Don't have an account?</Typography>
             </Box>
-          </Box>{" "}
+          </Box>
         </form>
         <Box
           sx={{

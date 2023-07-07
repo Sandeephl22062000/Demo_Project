@@ -8,8 +8,8 @@ import {
   Box,
   CircularProgress,
 } from "@mui/material";
-import "./VirtualTrainerChat.css";
 import axios from "axios";
+import "./VirtualTrainerChat.css";
 
 const VirtualTrainerChat = () => {
   const [chatMessages, setChatMessages] = useState([]);
@@ -20,9 +20,9 @@ const VirtualTrainerChat = () => {
   const sendMessage = async (message) => {
     setLoading(true);
     const resp = await axios.post(
-      "http://localhost:8000/api/users/intelligentdiet",
+      "http://localhost:8000/api/trainer/virtualtrainer",
       {
-        foodType: message,
+        content: message,
       }
     );
     setResponse(resp?.data?.choices[0].message?.content);
@@ -46,13 +46,10 @@ const VirtualTrainerChat = () => {
   };
 
   useEffect(() => {
-    setChatMessages([
-      {
-        message: "Welcome! Feel free to ask me anything related to fitness.",
-        isUser: false,
-      },
-    ]);
-  }, []);
+    if (chatMessages.length % 2 === 1) {
+      sendMessage(chatMessages[chatMessages.length - 1].message);
+    }
+  }, [chatMessages]);
 
   return (
     <Container

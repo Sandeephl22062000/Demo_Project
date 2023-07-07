@@ -5,8 +5,12 @@ import {
   Box,
   Button,
   Container,
+  FormControl,
   InputBase,
+  InputLabel,
+  MenuItem,
   Pagination,
+  Select,
   Stack,
   TextField,
   Typography,
@@ -26,23 +30,21 @@ const SearchInput = () => {
   const [searchResult, setSearchResult] = useState([]);
   const [page, setPage] = useState(1);
   const [TotalPage, setTotalPage] = useState(1);
-
   const [trainer, setTrainer] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const [open, setOpen] = React.useState(false);
+  const [specialization, setSpecialization] = useState("");
+  const [experienceLevel, setExperienceLevel] = useState("");
+  const [filteredSearch, setFilteredSearch] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
-
   const submithandler = async (e) => {
     try {
       setLoading(true);
       if (!search) {
         return;
       }
-      const { data } = await axios.get(
-        `http://localhost:8000/api/trainer/${search}/${page}`
-      );
-      console.log(data);
-      console.log(data.totalPages);
+      const { data } = await axios.get(`/api/trainer/${search}/${page}`);
       setTotalPage(data.totalPages);
       setSearchResult(data.data);
       setLoading(false);
@@ -52,27 +54,51 @@ const SearchInput = () => {
   };
 
   const getTrainerDetail = async () => {
-    const { data } = await axios.get(
-      `http://localhost:8000/api/trainer/${page}`
-    );
-    setTrainer(data.data);
-    setTotalPage(data.totalPages);
+    try {
+      const { data } = await axios.get(`/api/trainer/${page}`);
+      setTrainer(data.data);
+      setTotalPage(data.totalPages);
+    } catch (error) {
+      throw error;
+    }
   };
 
   useEffect(() => {
     getTrainerDetail();
   }, [page]);
 
+  const handleSpecializationChange = (event) => {
+    setSpecialization(event.target.value);
+  };
+
+  const handleExperienceLevelChange = (event) => {
+    setExperienceLevel(event.target.value);
+  };
+
+  const searchFilter = async () => {
+    try {
+      console.log("searchStarted");
+      const response = await axios.get(
+        `/api/trainer/search/${specialization}/${experienceLevel}`
+      );
+      setFilteredSearch(response.data.data);
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    searchFilter(specialization, experienceLevel);
+  };
   const handlePageChange = (event, page) => {
     setPage(page);
   };
 
-  console.log(page);
-
   const handleInputChange = (e) => {
     setSearch(e.target.value);
   };
-
+ 
   useEffect(() => {
     if (search) {
       submithandler();
@@ -82,27 +108,26 @@ const SearchInput = () => {
   }, [search, trainer]);
 
   return (
-    <Container sx={{ minHeight: "80vh" }}>
-      <form
-        style={{ width: "100%" }}
-        onSubmit={(e) => {
-          submithandler(e);
+    <Container>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          padding: "10px",
+          minHeight: "80vh",
         }}
       >
         <Box
           sx={{
             display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            padding: "10px",
-            minHeight: "80vh",
+            justifyContent: "center",
+            padding: "20px",
           }}
         >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              padding: "20px",
+          <form
+            onSubmit={(e) => {
+              submithandler(e);
             }}
           >
             <TextField
@@ -115,94 +140,171 @@ const SearchInput = () => {
               placeholder="Name or Email"
               onChange={handleInputChange}
             />
+
             <Button
-              sx={{ background: "black", color: "white" }}
+              sx={{
+                background: "black",
+                color: "white",
+                width: "7rem",
+                height: "3rem",
+                margin: "0.3rem 0 0 0.5rem",
+              }}
               onClick={submithandler}
               variant="contained"
               type="submit"
             >
               Search
             </Button>
-          </Box>
-          <Box
-            sx={{
+          </form>
+        </Box>
+
+        <Typography>OR</Typography>
+        <Typography>Filter your search</Typography>
+
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "row",
+          }}
+        >
+          {" "}
+          <form
+            onSubmit={handleSubmit}
+            style={{
               display: "flex",
-              justifyContent: "center",
-              padding: "10px",
+              justifyContentL: "center",
+              alignItems: "center",
+              margin: "0.3rem",
             }}
           >
-            {!isLoading ? (
-              <Box
-                sx={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(3, 1fr)",
-                  justifyContent: "flex-end",
-                  gap: "20px",
-                }}
+            <FormControl sx={{ margin: "1rem" }}>
+              <InputLabel id="specialization-label">Specialization</InputLabel>
+              <Select
+                labelId="specialization-label"
+                id="specialization"
+                value={specialization}
+                onChange={handleSpecializationChange}
+                label="Specialization"
+                sx={{ bgcolor: "white", width: "10rem" }}
               >
-                {searchResult.map((trainer) => (
-                  <Card
-                    sx={{
-                      width: 350,
-                      boxShadow: "0px 8px 12px rgba(0, 0, 0, 0.2)",
-                    }}
-                  >
-                    <CardHeader
-                      avatar={
-                        <Avatar
-                          sx={{ bgcolor: red[500] }}
-                          src={trainer?.photo}
-                          aria-label="recipe"
-                        >
-                          {trainer?.name[0].toUpperCase()}
-                        </Avatar>
-                      }
-                      title={trainer.name}
-                      // subheader="September 14, 2016"
-                    />
-                    <CardMedia
-                      component="img"
-                      height="194"
-                      image={trainer.photo}
-                      alt="Paella dish"
-                    />
-                    <CardContent>
-                      <Typography variant="body2" color="text.secondary">
-                        Email:{trainer.email}
-                        <br />
-                        specification:not created model yet
-                      </Typography>
-                    </CardContent>
-                    <CardActions
-                      disableSpacing
-                      sx={{ display: "flex", justifyContent: "center" }}
-                    >
-                      <a href={`/trainer/${trainer._id}`}>
-                        <Button
-                          sx={{
-                            backgroundColor: "black",
-                            color: "white",
-                            "&:hover": {
-                              background: "black",
-                            },
-                            textDecoration: "none",
-                          }}
-                        >
-                          View Profile
-                        </Button>
-                      </a>
-                    </CardActions>
-                  </Card>
-                ))}
-              </Box>
-            ) : (
-              <Box sx={{ display: "flex" }}>
-                <CircularProgress />
-              </Box>
-            )}
-          </Box>
+                <MenuItem value="cardio">Cardio </MenuItem>
+                <MenuItem value="weightGaining">Weight gaining</MenuItem>
+                <MenuItem value="weightLoss">Weight loss</MenuItem>
+              </Select>
+            </FormControl>
+
+            <FormControl sx={{ margin: "1rem" }}>
+              <InputLabel id="experience-level-label">Experience</InputLabel>
+              <Select
+                labelId="experience-level-label"
+                id="experience-level"
+                value={experienceLevel}
+                onChange={handleExperienceLevelChange}
+                label="Experience"
+                sx={{ bgcolor: "white", width: "10rem" }}
+              >
+                <MenuItem value="beginner">Beginner Level</MenuItem>
+                <MenuItem value="intermediate">Intermediate level</MenuItem>
+                <MenuItem value="advance">Advance level</MenuItem>
+                <MenuItem value="expert">Expert level</MenuItem>
+              </Select>
+            </FormControl>
+
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{
+                background: "black",
+                color: "white",
+                "&:hover": {
+                  background: "black",
+                  color: "white",
+                },
+              }}
+            >
+              Submit
+            </Button>
+          </form>
         </Box>
-      </form>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            padding: "10px",
+          }}
+        >
+          {!isLoading ? (
+            <Box
+              sx={{
+                display: "grid",
+                gridTemplateColumns: "repeat(3, 1fr)",
+                justifyContent: "flex-end",
+                gap: "20px",
+              }}
+            >
+              {searchResult.map((trainer) => (
+                <Card
+                  sx={{
+                    width: 350,
+                    boxShadow: "0px 8px 12px rgba(0, 0, 0, 0.2)",
+                  }}
+                >
+                  <CardHeader
+                    avatar={
+                      <Avatar
+                        sx={{ bgcolor: red[500] }}
+                        src={trainer?.photo}
+                        aria-label="recipe"
+                      >
+                        {trainer?.name[0].toUpperCase()}
+                      </Avatar>
+                    }
+                    title={trainer.name}
+                  />
+                  <CardMedia
+                    component="img"
+                    height="194"
+                    image={trainer.photo}
+                    alt="Paella dish"
+                  />
+                  <CardContent>
+                    <Typography variant="body2" color="text.secondary">
+                      Email:{trainer.email}
+                      <br />
+                      specification:{trainer?.specialization}
+                    </Typography>
+                  </CardContent>
+                  <CardActions
+                    disableSpacing
+                    sx={{ display: "flex", justifyContent: "center" }}
+                  >
+                    <Button
+                      sx={{
+                        backgroundColor: "black",
+                        color: "white",
+                        "&:hover": {
+                          background: "black",
+                        },
+                        textDecoration: "none",
+                      }}
+                      onClick={() => {
+                        navigate(`/trainer/${trainer._id}`);
+                      }}
+                    >
+                      View Profile
+                    </Button>
+                  </CardActions>
+                </Card>
+              ))}
+            </Box>
+          ) : (
+            <Box sx={{ display: "flex" }}>
+              <CircularProgress />
+            </Box>
+          )}
+        </Box>
+      </Box>
       <Box
         sx={{
           display: "flex",

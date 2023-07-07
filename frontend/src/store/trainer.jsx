@@ -49,12 +49,12 @@ export const RegisterTrainer = createAsyncThunk(
       }
     );
     console.log(data.data);
-    addToast(data.message, {
+    addToast(data?.message, {
       appearance: "success",
       autoDismiss: true,
       autoDismissTimeout: 3000,
     });
-    // navigate("/login");
+    navigate("/login");
     return data.data;
   }
 );

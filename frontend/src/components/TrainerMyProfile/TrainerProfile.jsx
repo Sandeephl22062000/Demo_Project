@@ -33,14 +33,16 @@ const ProfilePage = () => {
     setShowServices(false);
     showPost(true);
   };
+  const trainerDetail = async () => {
+    const { data } = await axios.get(
+      `http://localhost:8000/api/trainer/trainerDetail/${id}`
+    );
+    setTrainer(data.data);
+    showPost(data.data.posts);
+  };
+
   useEffect(() => {
-    const trainerDetail = async () => {
-      const { data } = await axios.get(
-        `http://localhost:8000/api/trainer/trainerDetail/${id}`
-      );
-      setTrainer(data.data);
-      showPost(data.data.posts);
-    };
+    window.scrollTo(0, 0);
     trainerDetail();
   }, []);
 
@@ -49,7 +51,7 @@ const ProfilePage = () => {
   return (
     <Container
       sx={{
-        minHeight: "243vh",
+        // minHeight: "243vh",
         marginTop: "5rem",
         marginBottom: "5rem",
         width: "66rem",

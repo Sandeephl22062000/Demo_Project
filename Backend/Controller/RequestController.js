@@ -51,7 +51,6 @@ const getAllRequestOFUser = async (req, res, next) => {
 const acceptRequest = async (req, res, next) => {
   const requestID = req.params.requestID;
   const trainerEmail = req?.user?.email;
-  const userName = req.body.userName;
   const userEmail = req.body.userEmail;
   const trainerName = req.user.name;
   console.log(userEmail);
@@ -97,8 +96,7 @@ const rejectRequest = async (req, res, next) => {
     }
   );
 
-  console.log(getRequests);
-  if (getRequests) {
+    if (getRequests) {
     res.status(201).json({
       message: "Success",
       request: getRequests,

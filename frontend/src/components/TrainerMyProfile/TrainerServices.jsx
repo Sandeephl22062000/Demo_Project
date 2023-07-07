@@ -162,6 +162,7 @@ const TrainerServices = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            margin: "1rem",
           }}
         >
           <Button
@@ -173,6 +174,9 @@ const TrainerServices = () => {
               color: "white",
               width: "10rem",
               height: "2rem",
+              "&:hover": {
+                background: "black",
+              },
             }}
           >
             Create Services

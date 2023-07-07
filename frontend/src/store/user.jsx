@@ -2,18 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import client from "../features/client";
 import axios from "axios";
 
-const initialUser = {
-  token: "",
-  userInfo: null,
-  userInfoById: null,
-  ApprovedTrainer: null,
-  TrainersYetToApproved: [],
-  SearchUserResult: [],
-  getAcceptedNoatifcation: [],
-  getRejectedNoatifcation: [],
-  MessageReaded: [],
-};
-
 export const loginUser = createAsyncThunk(
   "/user/loginUser",
   async ({ email, password, addToast, navigate }) => {
@@ -45,28 +33,39 @@ export const loginUser = createAsyncThunk(
     }
   }
 );
-// export const googleLoginUser = createAsyncThunk(
-//   "user/googlelogin",
-//   async (tokenResponse) => {
-//     try {
 
-//       console.log("tokenResponse", tokenResponse);
-//       const { data } = await axios.post(
-//         "http://localhost:8000/api/users/register",
-//         {
-//           googleAccessToken: tokenResponse.access_token,
-//         }
-//       );
-//       const { token, id } = data;
-//       localStorage.setItem("id", id);
-//       localStorage.setItem("token", token);
-//       return data;
-//     } catch (error) {
-//       console.error(error);
-//       throw error;
-//     }
-//   }
-// );
+export const registerUser = createAsyncThunk(
+  "/user/registerUser",
+  async ({ name, photo, email, password, addToast, navigate, role }) => {
+    try {
+      console.log(" i am here");
+      const response = await axios.post(
+        "http://localhost:8000/api/users/register",
+        {
+          name,
+          email,
+          password,
+          photo,
+          role,
+        }
+      );
+      console.log(response);
+      addToast(response.data.message, {
+        appearance: "success",
+        autoDismiss: true,
+        autoDismissTimeout: 3000,
+      });
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+      addToast(error.message, {
+        appearance: "error",
+        autoDismiss: true,
+        autoDismissTimeout: 3000,
+      });
+    }
+  }
+);
 
 export const UserByID = createAsyncThunk("/user/userDetail", async () => {
   const Userid = localStorage.getItem("id");
@@ -229,7 +228,6 @@ const userSlice = createSlice({
   initialState: {
     token: localStorage.getItem("token") || null,
     FindUserByID: null,
-
     loading: false,
     error: null,
   },

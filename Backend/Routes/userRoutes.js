@@ -52,9 +52,6 @@ router
   .post(protectingRoutes, DietController.getMaintainceCalory);
 router.route("/caloriecalculator/:food").get(DietController.CaloriesPerFood);
 
-router
-  .route("/intelligentdiet")
-  .post(DietController.makeChatCompletionsRequest);
 
 router
   .route("/caloriecalculator/savedetail")

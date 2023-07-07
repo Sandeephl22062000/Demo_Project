@@ -14,7 +14,7 @@ import {
   Modal,
   Backdrop,
 } from "@mui/material";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import YouTube from "react-youtube";
 import axios from "axios";
 
@@ -40,25 +40,23 @@ const ExerciseVideo = () => {
     setIsModalOpen(false);
   };
 
-  const muscles = params.muscle;
-  const exerciseName = params.exercise;
+  const muscles = params?.muscle;
+  const exerciseName = params?.exercise;
 
+  const fetchVideos = async () => {
+    setIsLoading(true);
+    console.log(params);
+    const maxResults = 22;
+    const apiKey = process.env.REACT_APP_YOUTUBE_API_KEY;
+
+    const { data } = await axios.get(
+      `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${exerciseName} ${muscles} workout tutorial&type=video&maxResults=${maxResults}&key=${apiKey}`
+    );
+    setVideos(data.items);
+    setIsLoading(false);
+  };
+  
   useEffect(() => {
-    const fetchVideos = async () => {
-      setIsLoading(true);
-      console.log(params);
-      const maxResults = 22;
-      const apiKey = "AIzaSyD53f8EOZksI3yzYqusT85aaAFX5Gleec0";
-
-      const { data } = await axios.get(
-        `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${exerciseName} ${muscles} workout tutorial&type=video&maxResults=${maxResults}&key=${apiKey}`
-      );
-      console.log(data);
-      console.log(data.items);
-      setVideos(data.items);
-      setIsLoading(false);
-    };
-
     fetchVideos();
   }, []);
 
@@ -89,7 +87,6 @@ const ExerciseVideo = () => {
                     <AspectRatio sx={{ minWidth: 200 }}>
                       <img
                         src={video.snippet.thumbnails.high.url}
-                        srcSet="https://images.unsplash.com/photo-1593121925328-369cc8459c08?auto=format&fit=crop&w=286&dpr=2 2x"
                         loading="lazy"
                         alt=""
                       />
@@ -108,6 +105,7 @@ const ExerciseVideo = () => {
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
+                      margin: "0.5rem",
                     }}
                   >
                     <Button
@@ -115,7 +113,7 @@ const ExerciseVideo = () => {
                       sx={{
                         background: "black",
                         color: "white",
-                        marginButtom: "30px",
+                        marginButtom: "1rem",
                         "&:hover": { backgroundColor: "black" },
                       }}
                     >
@@ -190,6 +188,7 @@ const ExerciseVideo = () => {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
+              minHeight: "100vh",
             }}
           >
             <CircularProgress sx={{ color: "black" }} />

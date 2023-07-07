@@ -1,4 +1,5 @@
 /** @jsx jsx */
+import React from "react"
 import { css, jsx } from "@emotion/core";
 import Container from "../Global/Container";
 import FooterCard from "./FooterCard";

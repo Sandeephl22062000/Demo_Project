@@ -10,7 +10,6 @@ import Card from "react-bootstrap/Card";
 import { useNavigate } from "react-router-dom";
 
 import CircularProgress from "@mui/material/CircularProgress";
-import { current } from "@reduxjs/toolkit";
 export default function BasicSelect() {
   const [muscle, setMuscle] = useState("");
   const [data, setData] = useState([]);
@@ -102,9 +101,9 @@ export default function BasicSelect() {
                 setDifficulty(e.target.value);
               }}
             >
-              <MenuItem value="beginner">beginner</MenuItem>
-              <MenuItem value="intermediate">intermediate</MenuItem>
-              <MenuItem value="expert">expert</MenuItem>
+              <MenuItem value="beginner">Beginner</MenuItem>
+              <MenuItem value="intermediate">Intermediate</MenuItem>
+              <MenuItem value="expert">Expert</MenuItem>
             </Select>
           </FormControl>
           <Button

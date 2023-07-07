@@ -5,6 +5,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { getservices, requestTrainer } from "../../store/trainer";
 import { useDispatch, useSelector } from "react-redux";
+import { UserByID } from "../../store/user";
 
 export default function OverlayRadio(props) {
   const { trainerID, setVariant } = props;
@@ -18,7 +19,7 @@ export default function OverlayRadio(props) {
   const handleSubmit = (selectedOption) => {
     console.log("Selected option:", selectedOption);
   };
-
+  const user = useSelector((state) => state?.user?.FindUserByID);
   const [selectedOption, setSelectedOption] = React.useState("");
 
   const initPayment = (data) => {
@@ -26,9 +27,9 @@ export default function OverlayRadio(props) {
       key: "rzp_test_8ryBijpHhTbHDx",
       amount: data.amount,
       currency: data.currency,
-      name: trainer?.name,
+      name: user?.name,
       description: "Test Transaction",
-      image: trainer?.photo,
+      image: user?.photo,
       order_id: data.id,
       handler: async (response) => {
         try {
@@ -73,29 +74,31 @@ export default function OverlayRadio(props) {
   const handleProceedClick = () => {
     handleSubmit(selectedOption);
   };
+
+  const trainerDetail = async () => {
+    const { data } = await axios.get(
+      `http://localhost:8000/api/trainer/trainerDetail/${trainerID}`
+    );
+    console.log(data.data);
+    setTrainer(data.data);
+  };
+
   useEffect(() => {
     dispatch(getservices({ trainerID, token }));
-
-    const trainerDetail = async () => {
-      const { data } = await axios.get(
-        `http://localhost:8000/api/trainer/trainerDetail/${trainerID}`
-      );
-      console.log(data.data);
-      setTrainer(data.data);
-    };
+    dispatch(UserByID());
     trainerDetail();
   }, []);
-  console.log(services);
+
   return (
     <Container sx={{ minHeight: "50vh" }}>
       <>
-        {console.log(services?.length)}
         <Box
           sx={{ display: "flex", justifyContent: "center", marginTop: "2rem" }}
         >
-          <Typography variant="h6">Select the Plan</Typography>
+          <Typography variant="h6">
+            Select the Plan according to your requirements
+          </Typography>
         </Box>
-
         <Box
           sx={{
             display: "flex",
@@ -115,7 +118,6 @@ export default function OverlayRadio(props) {
                     selectedOption === serviceOffered?.charges
                       ? "black 2px solid"
                       : "1px solid rgba(0, 0, 0, 0.23)",
-                  // margin: "1rem",
                   cursor: "pointer",
                 }}
                 onClick={() => handleCardClick(serviceOffered?.charges)}
@@ -139,7 +141,7 @@ export default function OverlayRadio(props) {
                   </Typography>
                 </Box>
                 <Box>
-                  <b style={{ margin: "10px" }}>Includes</b>
+                  <b style={{ margin: "10px" }}>The package includes</b>
                   <p style={{ margin: "10px" }}>
                     {serviceOffered?.description}
                   </p>
@@ -155,30 +157,30 @@ export default function OverlayRadio(props) {
                   <Typography>Charges: {serviceOffered?.charges}</Typography>
                 </Box>
               </Card>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  margin: "0.5rem 0 1rem 1rem",
-                }}
-              >
-                <Button
-                  onClick={handlePayment}
-                  sx={{
-                    background: "black",
-                    color: "white",
-                    height: "50px",
-                    width: "100px",
-                    "&:hover": {
-                      background: "black",
-                    },
-                  }}
-                >
-                  Proceed
-                </Button>
-              </Box>
             </>
           ))}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              margin: "0.5rem 0 1rem 1rem",
+            }}
+          >
+            <Button
+              onClick={handlePayment}
+              sx={{
+                background: "black",
+                color: "white",
+                height: "50px",
+                width: "100px",
+                "&:hover": {
+                  background: "black",
+                },
+              }}
+            >
+              Proceed
+            </Button>
+          </Box>
         </Box>
       </>
     </Container>

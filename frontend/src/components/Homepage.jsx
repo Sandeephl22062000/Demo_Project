@@ -1,23 +1,23 @@
-import React from 'react'
+import React, { useEffect } from "react";
 import Hero from "./Frontpage/Hero";
 import ActivityFeed from "./Frontpage/ActivityFeeds";
 import TrainerPage from "./Frontpage/TrainerPage.jsx.js";
 import FoodPage from "./Frontpage/Foodpage";
-// import Pricing from "./Pricing/Pricing";
-// import Gallery from "./Gallery/Gallery";
-// import Trainers from "./Trainers/Trainers";
-// import Summer from "./Summer/Summer";
-import ExerciseDatabase from "./Frontpage/ExerciseDatabase"
+
+import ExerciseDatabase from "./Frontpage/ExerciseDatabase";
 const Homepage = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div>
       <Hero />
       <ActivityFeed />
       <TrainerPage />
       <FoodPage />
-      <ExerciseDatabase/>
+      <ExerciseDatabase />
     </div>
-  )
-}
+  );
+};
 
-export default Homepage
+export default Homepage;

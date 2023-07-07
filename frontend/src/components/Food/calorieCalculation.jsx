@@ -65,8 +65,11 @@ const CalorieDetail = () => {
         }}
       >
         <Typography>Mention your target in kg/week</Typography>
-        <FormControl sx={{ marginTop: 2, width: "40%", minWidth: "200px" }}>
-          {Goal && (
+        {Goal && (
+          <FormControl sx={{ marginTop: 2, width: "40%", minWidth: "200px" }}>
+            <InputLabel id="demo-simple-select-autowidth-label">
+              Target
+            </InputLabel>
             <Select
               labelId="demo-simple-select-autowidth-label"
               id="demo-simple-select-autowidth"
@@ -83,8 +86,8 @@ const CalorieDetail = () => {
               <MenuItem value="0.75">0.75</MenuItem>
               <MenuItem value="1.0">1.0</MenuItem>
             </Select>
-          )}
-        </FormControl>
+          </FormControl>
+        )}
         {Target && (
           <Typography>{`To effectively ${data} weight, it is recommended for you to consume this much amount of nutritional value every day.`}</Typography>
         )}

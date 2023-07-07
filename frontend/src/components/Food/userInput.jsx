@@ -13,16 +13,14 @@ import {
 
 import { useState } from "react";
 import { useFormik } from "formik";
-import * as yup from "yup";
+
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { calculateCalories, priorFoodDetails } from "../../store/food";
 import { useToasts } from "react-toast-notifications";
 import { useEffect } from "react";
-// import Modal from "@mui/material/Modal";
 import PriorInfoModal from "./priorData";
 import userInputValidation from "../schema/userInputFood";
-// import ResultPage from "./ResultPage";
 
 const UserInput = () => {
   const { addToast } = useToasts();
@@ -32,9 +30,8 @@ const UserInput = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user.token);
-  const prorData = useSelector((state) => state?.food?.priorUserDetails);
-  console.log("prorData", prorData?.data);
-  const isLoading = useSelector((state) => state.food.loading);
+  const priorData = useSelector((state) => state?.food?.priorUserDetails);
+  console.log("priorData", priorData?.data);
 
   const formik = useFormik({
     initialValues: {
@@ -46,6 +43,7 @@ const UserInput = () => {
     },
     validationSchema: userInputValidation,
     onSubmit: (values, { resetForm }) => {
+      console.log(values);
       dispatch(
         calculateCalories({
           weight: values.weight,
@@ -58,7 +56,6 @@ const UserInput = () => {
         })
       );
       navigate(`/food/calculateCalories`);
-      console.log(values);
     },
   });
 
@@ -89,14 +86,12 @@ const UserInput = () => {
   };
   return (
     <>
-      {console.log("dsfvdfgvbrg", dataAvailable?.data?.length > 0)}
-      {console.log("prorData.length > 0 ", prorData.length > 0)}
       {dataAvailable?.data?.length > 0 && (
         <Box sx={{ textAlign: "center", margin: "50px" }}>
           <PriorInfoModal
             open={modalOpen}
             handleClose={closeModal}
-            priorDataArray={prorData?.data}
+            priorDataArray={priorData?.data}
           />
         </Box>
       )}
@@ -230,8 +225,8 @@ const UserInput = () => {
             </Button>
           </Box>
         </form>
-        {console.log(prorData.data !== null)}
-        {prorData.data !== null && (
+        {console.log(priorData?.data !== null)}
+        {!priorData?.data?.length == 0 && (
           <Box
             sx={{
               display: "flex",

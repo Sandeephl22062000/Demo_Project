@@ -1,13 +1,10 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
-const bcrypt = require("bcryptjs");
-// const sendEmail = require("../utils/email");
 const UserSchema = mongoose.Schema(
   {
     name: {
       type: String,
       required: [true, "Please provide the username"],
-      // unique: true,
     },
     email: {
       type: String,
@@ -34,10 +31,6 @@ const UserSchema = mongoose.Schema(
         ref: "Post",
       },
     ],
-    isApproved: {
-      type: Boolean,
-      default: false,
-    },
     specialization: {
       type: String,
     },

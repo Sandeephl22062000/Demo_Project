@@ -47,7 +47,7 @@ const PRofilePostCard = () => {
   };
 
   return (
-    <Container sx={{ minHeight: "100vh" }}>
+    <Container>
       <Box
         sx={{
           display: "flex",
@@ -103,9 +103,7 @@ const PRofilePostCard = () => {
                       src={user?.photo}
                       sx={{ bgcolor: "red" }}
                       aria-label="recipe"
-                    >
-                      R
-                    </Avatar>
+                    />
                   }
                   title={user?.name}
                   subheader={new Date(post?.createdAt).toLocaleString()}

@@ -12,14 +12,12 @@ import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import ModeCommentOutlined from "@mui/icons-material/ModeCommentOutlined";
-import Face from "@mui/icons-material/Face";
 import { Container, Button } from "@mui/material";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useParams } from "react-router-dom";
-import { postByID } from "../../store/post";
 
 const Post = (props) => {
   const token = useSelector((state) => state.user.token);

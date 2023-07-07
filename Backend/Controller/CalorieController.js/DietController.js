@@ -3,18 +3,15 @@ const catchAsync = require("../../utils/catchAync");
 const Food = require("../../Model/CalorieCountingModel");
 const AppError = "../../Error-Handling";
 const TargetNutrients = require("../../Model/TargetCalories");
-const catchAync = require("../../utils/catchAync");
 
-const saveUserDetails = async (req, res, next) => {
+const saveUserDetails = catchAsync(async (req, res, next) => {
   const { weight, height, gender, age, activity } = req.body;
-  console.log("req.user._id", req.user?._id);
 
   if (gender.toLowerCase() === "male") {
     bmr = 88.362 + 13.397 * +weight + 4.799 * +height - 5.677 * +age;
   } else {
     bmr = 447.593 + 9.247 * weight + 3.098 * height - 4.33 * age;
   }
-  console.log("bmr", bmr);
   if (activity.toLowerCase() === "sedentary") {
     activtyFactor = 1.2;
   } else if (activity.toLowerCase() === "light") {
@@ -23,10 +20,9 @@ const saveUserDetails = async (req, res, next) => {
     activtyFactor = 1.55;
   } else if (activity.toLowerCase() === "veryactive") {
     activtyFactor = 1.725;
-  } else if (activity.toLowerCase() === "light") {
+  } else if (activity.toLowerCase() === "extraactive") {
     activtyFactor = 1.9;
   }
-  console.log(activity, typeof activity);
   const maintenanceCalories = bmr * activtyFactor;
   const maintainceCalory = +maintenanceCalories.toFixed(2);
   const userInfo = await Food.create({
@@ -42,11 +38,13 @@ const saveUserDetails = async (req, res, next) => {
   });
   if (maintainceCalory) {
     res.status(201).json({
-      message: "Data Saved",
+      message: "Details Submitted",
       data: maintainceCalory,
     });
+  } else {
+    return next(new AppError("Something went wrong", 500));
   }
-};
+});
 const calorieCounting = (req, res, next) => {
   const { weight, height, age, gender, activityFactors } = req.body;
   console.log(req.body);
@@ -92,6 +90,7 @@ const CaloriesPerFood = catchAsync(async (req, res, next) => {
     return next(new AppError("Something went wrong", 500));
   }
 });
+
 const updatecalories = async (req, res, next) => {
   const userId = req.user.id;
   const food = await Food.find({ user: userId });
@@ -105,7 +104,7 @@ const updatecalories = async (req, res, next) => {
   }
 };
 
-const updateNutrients = async (req, res) => {
+const updateNutrients = catchAsync(async (req, res, next) => {
   const userId = req?.user?._id;
   const { requireProtein, requireCalories, requireCarbs } = req.body;
   const UserData = await Food.find({ user: userId });
@@ -124,12 +123,16 @@ const updateNutrients = async (req, res) => {
     }
   );
 
-  res.status(201).json({
-    updatedvalue,
-  });
-};
+  if (updatedvalue) {
+    res.status(201).json({
+      updatedvalue,
+    });
+  } else {
+    return next(new AppError("Something went wrong", 500));
+  }
+});
 
-const targetCalories = async (req, res, next) => {
+const targetCalories = catchAsync(async (req, res, next) => {
   const { requireCalories, requireProtein, requireCarbs } = req.body;
   const targetCalories = await TargetNutrients.create({
     user: req?.user?._id,
@@ -144,9 +147,9 @@ const targetCalories = async (req, res, next) => {
   } else {
     return next(new AppError("Something went wrong", 404));
   }
-};
+});
 
-const getTargetNutrients = async (req, res, next) => {
+const getTargetNutrients = catchAsync(async (req, res, next) => {
   const targetCalories = await TargetNutrients.find({
     user: req?.user?._id,
   }).sort({ createdAt: -1 });
@@ -157,47 +160,19 @@ const getTargetNutrients = async (req, res, next) => {
   } else {
     return next(new AppError("Something went wrong", 404));
   }
-};
-const getMaintainceCalory = catchAync(async (req, res, next) => {
-  const UserID = req?.user?._id;
-  const Data = await Food.find({ user: UserID }).sort({ createdAt: -1 });
-  res.json({
-    maintainceCalory: Data[0]?.requireCalories,
-  });
 });
 
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-
-const makeChatCompletionsRequest = async (req, res) => {
-  console.log(OPENAI_API_KEY);
-  try {
-    const foodtype = req.body.foodType;
-    const response = await axios.post(
-      "https://api.openai.com/v1/chat/completions",
-      {
-        model: "gpt-3.5-turbo",
-        messages: [
-          { role: "system", content: "You are a helpful assistant." },
-          {
-            role: "user",
-            content: `${foodtype} for this content give me the shortest reply`,
-          },
-        ],
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${OPENAI_API_KEY}`,
-        },
-      }
-    );
-
-    console.log(response.data);
-    res.json(response.data);
-  } catch (error) {
-    console.error("Error making API request:", error);
+const getMaintainceCalory = catchAsync(async (req, res, next) => {
+  const UserID = req?.user?._id;
+  const Data = await Food.find({ user: UserID }).sort({ createdAt: -1 });
+  if (getMaintainceCalory.length > 0) {
+    res.json({
+      maintainceCalory: Data[0]?.requireCalories,
+    });
+  } else {
+    return next(new AppError("Someting Went wrong", 000));
   }
-};
+});
 
 module.exports = {
   calorieCounting,
@@ -206,7 +181,6 @@ module.exports = {
   updatecalories,
   updateNutrients,
   getMaintainceCalory,
-  makeChatCompletionsRequest,
   targetCalories,
   getTargetNutrients,
 };

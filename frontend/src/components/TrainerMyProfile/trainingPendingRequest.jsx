@@ -52,97 +52,113 @@ const TrainingRequestRejected = () => {
   }, []);
   return (
     <Container sx={{ minhHeight: "60vh" }}>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Requests Date</TableCell>
-              <TableCell>Users Name</TableCell>
-              <TableCell align="right">
-                {" "}
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    flexDirection: "row",
-                  }}
-                >
-                  Message
-                </Box>
-              </TableCell>
-              <TableCell align="right">Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {pendingRequest?.map((request) => (
-              <TableRow
-                key={request._id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                {console.log(request)}
-                <TableCell component="th" scope="row">
-                  <Box
-                    sx={{
-                      display: "flex",
+      {pendingRequest.length > 0 ? (
+        <>
+          {pendingRequest?.map((request) => (
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Requests Date</TableCell>
+                    <TableCell>Users Name</TableCell>
+                    <TableCell align="right">
+                      {" "}
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          flexDirection: "row",
+                        }}
+                      >
+                        Message
+                      </Box>
+                    </TableCell>
+                    <TableCell align="right">Actions</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  <TableRow
+                    key={request._id}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    {console.log(request)}
+                    <TableCell component="th" scope="row">
+                      <Box
+                        sx={{
+                          display: "flex",
 
-                      flexDirection: "row",
-                    }}
-                  >
-                    <Typography sx={{ margin: "10px" }}>
-                      {new Date(request?.createdAt).toLocaleString()}
-                    </Typography>
-                  </Box>
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  <Box
-                    sx={{
-                      display: "flex",
+                          flexDirection: "row",
+                        }}
+                      >
+                        <Typography sx={{ margin: "10px" }}>
+                          {new Date(request?.createdAt).toLocaleString()}
+                        </Typography>
+                      </Box>
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      <Box
+                        sx={{
+                          display: "flex",
 
-                      flexDirection: "row",
-                    }}
-                  >
-                    <Avatar src={request?.user?.photo}></Avatar>
-                    <Typography sx={{ margin: "10px" }}>
-                      {request?.user?.name}
-                    </Typography>
-                  </Box>
-                </TableCell>
-                <TableCell align="right">
-                  {" "}
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      flexDirection: "row",
-                    }}
-                  >
-                    {request?.message}
-                  </Box>
-                </TableCell>
-                <TableCell align="right">
-                  <Button
-                    sx={{ background: "green", color: "white" }}
-                    onClick={acceptRequestHandler(
-                      request?._id,
-                      request?.user?.name,
-                      request?.user?.email
-                    )}
-                  >
-                    Accept
-                  </Button>
-                  <Button
-                    sx={{ background: "red", color: "white" }}
-                    onClick={rejectRequestHandler(request?._id)}
-                  >
-                    Reject
-                  </Button>
-                </TableCell>
-                {/* <TableCell align="right">{row.protein}</TableCell> */}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                          flexDirection: "row",
+                        }}
+                      >
+                        <Avatar src={request?.user?.photo}></Avatar>
+                        <Typography sx={{ margin: "10px" }}>
+                          {request?.user?.name}
+                        </Typography>
+                      </Box>
+                    </TableCell>
+                    <TableCell align="right">
+                      {" "}
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          flexDirection: "row",
+                        }}
+                      >
+                        {request?.message}
+                      </Box>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Button
+                        sx={{ background: "green", color: "white" }}
+                        onClick={acceptRequestHandler(
+                          request?._id,
+                          request?.user?.name,
+                          request?.user?.email
+                        )}
+                      >
+                        Accept
+                      </Button>
+                      <Button
+                        sx={{ background: "red", color: "white" }}
+                        onClick={rejectRequestHandler(request?._id)}
+                      >
+                        Reject
+                      </Button>
+                    </TableCell>
+                    {/* <TableCell align="right">{row.protein}</TableCell> */}
+                  </TableRow>
+                  ))
+                </TableBody>
+              </Table>
+            </TableContainer>
+          ))}
+        </>
+      ) : (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: "8rem",
+          }}
+        >
+          No Pending Requests
+        </Box>
+      )}
     </Container>
   );
 };

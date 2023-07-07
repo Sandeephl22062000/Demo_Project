@@ -26,6 +26,7 @@ export default function BasicTable() {
           sx={{
             background: activeTab === "pending" ? "black" : "white",
             color: activeTab === "pending" ? "white" : "black",
+            margin: "0.5rem",
             "&:hover": {
               background: "black",
               color: "white",
@@ -38,6 +39,7 @@ export default function BasicTable() {
         <Button
           sx={{
             background: activeTab === "accepted" ? "black" : "white",
+            margin: "0.5rem",
             "&:hover": {
               background: "black",
               color: "white",
@@ -52,6 +54,7 @@ export default function BasicTable() {
           sx={{
             background: activeTab === "rejected" ? "black" : "white",
             color: activeTab === "rejected" ? "white" : "black",
+            margin: "0.5rem",
             "&:hover": {
               background: "black",
               color: "white",

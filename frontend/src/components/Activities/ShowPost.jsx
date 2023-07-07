@@ -21,25 +21,24 @@ const ShowPost = () => {
 
   const getPost = async () => {
     setIsLoading(true);
-    const response = await axios.get(
-      "http://localhost:8000/api/post/posts/all"
-    );
+    const response = await axios.get("/api/post/posts/all");
     setPosts(response.data.posts);
     setIsLoading(false);
   };
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     if (search.length > 0) {
       dispatch(searchUserKeyword(search));
     }
   }, [search]);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     getPost();
   }, []);
 
   useEffect(() => {
+    console.log("newPost", newPost);
     if (newPost) {
       setPosts((prevPosts) => [newPost, ...prevPosts]);
     }

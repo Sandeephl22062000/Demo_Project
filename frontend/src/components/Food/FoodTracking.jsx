@@ -180,9 +180,8 @@ const ExeprmientFoodApi = () => {
           },
         }
       );
-      console.log(response.data);
     } catch (error) {
-      console.log(error);
+      throw error;
     }
     setVariant(undefined);
   };
@@ -254,6 +253,7 @@ const ExeprmientFoodApi = () => {
           }}
         >
           <TextField
+            autoComplete="off"
             placeholder="Search for the food items"
             onChange={(e) => {
               setSearch(e.target.value);
@@ -532,7 +532,7 @@ const ExeprmientFoodApi = () => {
           <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
             <Button
               onClick={() => {
-                setVariant("solid");
+                setVariant("outlined");
               }}
               sx={{
                 display: "flex",
@@ -594,7 +594,13 @@ const ExeprmientFoodApi = () => {
               >
                 <Button
                   type="submit"
-                  sx={{ background: "black", color: "white" }}
+                  sx={{
+                    background: "black",
+                    color: "white",
+                    "&:hover": {
+                      background: "black",
+                    },
+                  }}
                 >
                   Submit
                 </Button>

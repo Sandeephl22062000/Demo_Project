@@ -1,4 +1,4 @@
-import { useFormik, Form, Field, ErrorMessage } from "formik";
+import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useGoogleLogin } from "@react-oauth/google";
 import {
@@ -8,7 +8,6 @@ import {
 } from "firebase/storage";
 import storage from "../../utils/firebase";
 import React, { useState } from "react";
-import validationSchema from "../schema/schema";
 import {
   Avatar,
   Box,
@@ -17,27 +16,26 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import client from "../../features/client";
 import { useToasts } from "react-toast-notifications";
 import profileImage from "../../images/Profile.png";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import GoogleIcon from "../../images/Google__G__Logo.svg.webp";
-import { setToken } from "../../store/user";
+import { registerUser, setToken } from "../../store/user";
 import { useDispatch } from "react-redux";
 import signupValidationSchema from "../schema/schema";
+
 const Signup = () => {
   const [images, setImages] = useState("");
-  const [role, setRole] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { addToast } = useToasts();
+
   const photoupload = (event) => {
     let file = event.target.files[0];
     if (!file) {
       alert("Please upload an image first!");
     }
-
     const storageRef = addRef(storage, `/files/${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
     uploadTask.on(
@@ -60,9 +58,7 @@ const Signup = () => {
         googleAccessToken: tokenResponse.access_token,
       }
     );
-    console.log(data);
     const { token, id } = data;
-    console.log(token, id);
     localStorage.setItem("id", id);
     localStorage.setItem("token", token);
     dispatch(setToken(token));
@@ -86,35 +82,18 @@ const Signup = () => {
     validationSchema: signupValidationSchema,
     onSubmit: (values, { resetForm }) => {
       console.log("users");
-      const sendData = async () => {
-        try {
-          const response = await axios.post(
-            "http://localhost:8000/api/users/register",
-            {
-              name: values.fullName,
-              email: values.email,
-              password: values.password,
-              photo: images,
-              role: 0,
-            }
-          );
-          console.log(response);
-          addToast(response.data.message, {
-            appearance: "success",
-            autoDismiss: true,
-            autoDismissTimeout: 3000,
-          });
-          navigate("/login");
-        } catch (error) {
-          console.log(error);
-          addToast(error.message, {
-            appearance: "error",
-            autoDismiss: true,
-            autoDismissTimeout: 3000,
-          });
-        }
-      };
-      sendData();
+      dispatch(
+        registerUser({
+          name: values.fullName,
+          email: values.email,
+          password: values.password,
+          photo: images,
+          role: 0,
+          addToast,
+          navigate,
+        })
+      );
+      resetForm();
     },
   });
   return (
@@ -126,7 +105,6 @@ const Signup = () => {
         sx={{
           display: "flex",
           flexDirection: "column",
-          // alignItems: "center",
           justifyContent: "center",
           width: "40%",
           gap: "16px",
@@ -164,7 +142,6 @@ const Signup = () => {
             required
             id="outlined-required"
             name="photo"
-            // label="Upload Profile Photo"
             type="file"
             onChange={photoupload}
             onBlur={formik.handleBlur}
@@ -240,6 +217,9 @@ const Signup = () => {
                 width: "155px",
                 height: "63px",
                 fontSize: "19px",
+                "&:hover": {
+                  background: "red",
+                },
               }}
             >
               Submit

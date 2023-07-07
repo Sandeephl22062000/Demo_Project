@@ -115,7 +115,7 @@ const AddPost = ({ setNewPost }) => {
           },
         }
       );
-      console.log(data?.data?.post);
+      
       setNewPost(data?.data?.post);
       setVariant(undefined);
       setCaption("");

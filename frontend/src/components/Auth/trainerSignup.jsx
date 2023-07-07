@@ -1,4 +1,4 @@
-import { useFormik, Form, Field, ErrorMessage } from "formik";
+import { useFormik } from "formik";
 import {
   ref as addRef,
   uploadBytesResumable,
@@ -7,11 +7,19 @@ import {
 import storage from "../../utils/firebase";
 import React, { useState } from "react";
 import trainerValidationSchema from "../schema/trainerSchema";
-import { Avatar, Box, Button, Container, TextField } from "@mui/material";
-import axios from "axios";
+import {
+  Avatar,
+  Box,
+  Button,
+  Container,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import profileImage from "../../images/Profile.png";
-import Signup from "./signup";
 import { RegisterTrainer } from "../../store/trainer";
 import { useDispatch } from "react-redux";
 import { useToasts } from "react-toast-notifications";
@@ -58,7 +66,6 @@ const TrainerSignup = () => {
     validationSchema: trainerValidationSchema,
     onSubmit: (values, { resetForm }) => {
       console.log(values);
-      console.log(images);
       dispatch(
         RegisterTrainer({
           name: values.fullName,
@@ -84,7 +91,6 @@ const TrainerSignup = () => {
         sx={{
           display: "flex",
           flexDirection: "column",
-          // alignItems: "center",
           justifyContent: "center",
           width: "40%",
           gap: "16px",
@@ -188,43 +194,52 @@ const TrainerSignup = () => {
             sx={{ width: "100%", margin: "8px" }}
           />
 
-          <TextField
-            required
-            id="outlined-required"
-            name="specialization"
-            value={formik.values.specialization}
-            label="Specialization"
-            type="string"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={
-              formik.touched.specialization &&
-              Boolean(formik.errors.specialization)
-            }
-            helperText={
-              formik.touched.specialization && formik.errors.specialization
-            }
-            sx={{ width: "100%", margin: "8px" }}
-          />
-
-          <TextField
-            required
-            id="outlined-required"
-            name="experience"
-            value={formik.values.experience}
-            label="experience level"
-            multiline // Set multiline to true
-            rows={4}
-            type="string"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={
-              formik.touched.experience && Boolean(formik.errors.experience)
-            }
-            helperText={formik.touched.experience && formik.errors.experience}
-            sx={{ width: "100%", margin: "8px" }}
-          />
-
+          <FormControl sx={{ width: "100%" }}>
+            <InputLabel sx={{ margin: "8px" }}>Specialization</InputLabel>
+            <Select
+              name="specialization"
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={formik.values.specialization}
+              label="specialization"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={
+                formik.touched.specialization &&
+                Boolean(formik.errors.specialization)
+              }
+              helperText={
+                formik.touched.specialization && formik.errors.specialization
+              }
+              sx={{ width: "100%", margin: "8px" }}
+            >
+              <MenuItem value="cardio">Cardio </MenuItem>
+              <MenuItem value="weightGaining">Weight gaining</MenuItem>
+              <MenuItem value="weightLoss">Weight loss</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl sx={{ width: "100%" }}>
+            <InputLabel sx={{ margin: "8px" }}>Experinces</InputLabel>
+            <Select
+              name="experience"
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={formik.values.experience}
+              label="experience"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={
+                formik.touched.experience && Boolean(formik.errors.experience)
+              }
+              helperText={formik.touched.experience && formik.errors.experience}
+              sx={{ width: "100%", margin: "8px" }}
+            >
+              <MenuItem value="beginner">Beginner Level</MenuItem>
+              <MenuItem value="intermediate">Intermediate level</MenuItem>
+              <MenuItem value="advance">Advance level</MenuItem>
+              <MenuItem value="expert">Expert level</MenuItem>
+            </Select>
+          </FormControl>
           <Box sx={{ display: "flex", justifyContent: "center" }}>
             <Button
               type="submit"
@@ -234,6 +249,9 @@ const TrainerSignup = () => {
                 width: "155px",
                 height: "63px",
                 fontSize: "19px",
+                "&:hover": {
+                  background: "red",
+                },
               }}
             >
               Submit
