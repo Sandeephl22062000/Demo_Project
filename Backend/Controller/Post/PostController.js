@@ -5,6 +5,7 @@ const AppError = require("../../Error-Handling/error");
 // const deleteFile = require("../utils/deleteFile");
 const mongoose = require("mongoose");
 
+// Create New Post
 exports.newPost = catchAsync(async (req, res, next) => {
   try {
     const postData = {
@@ -14,13 +15,10 @@ exports.newPost = catchAsync(async (req, res, next) => {
       postedBy: req.user._id,
     };
 
-    const post = (await Post.create(postData)).populate(
-      "postedBy",
-      "name photo"
-    );
+    const post = await Post.create(postData);
     const user = await User.findById(req.user._id);
     console.log(post, user, "vadfdv", postData, "tbhrtgsrtd");
-    user?.posts?.push(post._id);
+    user.posts.push(post._id);
     console.log("post created");
     await user.save();
 

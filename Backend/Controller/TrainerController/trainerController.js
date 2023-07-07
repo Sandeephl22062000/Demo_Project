@@ -3,7 +3,7 @@ const Trainer = require("../../Model/Trainer/trianerModel");
 const User = require("../../Model/UserModel");
 const AppError = require("../../Error-Handling/error");
 
-const getTrainerById = async (req, res) => {
+const getTrainerById = async (req, res, next) => {
   console.log(req.params.id);
   const trainer = await User.findById({ _id: req.params.id }).populate("posts");
   console.log(trainer);
@@ -86,7 +86,7 @@ const getTrainerByfilter = async (req, res, next) => {
     .limit(limit);
   console.log("dsfbgtv ", trainers);
   if (trainers) {
-    res.json({  
+    res.json({
       message: "success",
       data: trainers,
       currentPage: page,

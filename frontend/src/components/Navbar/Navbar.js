@@ -53,6 +53,8 @@ function ResponsiveAppBar() {
 
   const token = useSelector((state) => state?.user?.token);
 
+  const user = useSelector((state) => state?.user?.FindUserByID);
+  console.log(user);
   useEffect(() => {}, [token, dispatch]);
 
   const handleOpenNavMenu = (event) => {
@@ -75,6 +77,7 @@ function ResponsiveAppBar() {
     setAnchorElUser(null);
   };
   const handleLogout = () => {
+    dispatch(UserByID());
     dispatch(logout());
   };
   return (
@@ -165,7 +168,7 @@ function ResponsiveAppBar() {
               </Tooltip>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                  <Avatar alt="" src={user?.photo} />
                 </IconButton>
               </Tooltip>
               <Menu

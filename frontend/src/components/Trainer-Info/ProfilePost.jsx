@@ -47,6 +47,7 @@ export default function RecipeReviewCard(props) {
 
   return (
     <Container>
+      {console.log(posts)}
       {!showPost &&
         posts?.map((post) => (
           <Box

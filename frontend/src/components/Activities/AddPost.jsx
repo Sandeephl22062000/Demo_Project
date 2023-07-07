@@ -58,7 +58,7 @@ const AddPost = ({ setNewPost }) => {
   };
 
   const videoupload = (event) => {
-    isLoading(true);
+    setIsLoading(true);
     let file = event.target.files[0];
     if (!file) {
       alert("Please upload a video first!");
@@ -115,7 +115,7 @@ const AddPost = ({ setNewPost }) => {
           },
         }
       );
-      
+
       setNewPost(data?.data?.post);
       setVariant(undefined);
       setCaption("");
@@ -208,7 +208,7 @@ const AddPost = ({ setNewPost }) => {
                       controls
                       style={{
                         width: "200px",
-                        height: "250px",
+                        height: "100px",
                         objectFit: "cover",
                       }}
                     />

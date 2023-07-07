@@ -81,6 +81,7 @@ const SearchInput = () => {
       const response = await axios.get(
         `/api/trainer/search/${specialization}/${experienceLevel}`
       );
+      console.log(response?.data?.data);
       setFilteredSearch(response.data.data);
     } catch (error) {
       throw error;
@@ -98,7 +99,7 @@ const SearchInput = () => {
   const handleInputChange = (e) => {
     setSearch(e.target.value);
   };
- 
+
   useEffect(() => {
     if (search) {
       submithandler();
