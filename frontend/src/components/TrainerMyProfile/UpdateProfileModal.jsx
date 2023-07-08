@@ -13,12 +13,9 @@ const UpdateProfileModal = (props) => {
   const dispatch = useDispatch();
   const { addToast } = useToasts();
   const user = useSelector((state) => state?.user?.FindUserByID);
-  console.log(user);
   const Userid = localStorage.getItem("id");
   const token = useSelector((state) => state.user.token);
-  console.log("user-id", Userid);
   const handleEditClick = () => {
-    console.log(name, email, experiences, specialization);
     dispatch(
       updateUser({
         name,
@@ -43,13 +40,6 @@ const UpdateProfileModal = (props) => {
       >
         Update Your Profile
       </Box>
-      <label htmlFor="profile-picture-upload">
-        <img
-          src={user?.data?.photo}
-          alt="Profile Picture"
-          style={{ cursor: "pointer" }}
-        />
-      </label>
       <Table aria-label="basic table" sx={{ marginTop: "30px" }}>
         <tbody>
           <tr>

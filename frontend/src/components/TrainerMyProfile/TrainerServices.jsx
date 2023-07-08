@@ -36,7 +36,6 @@ const TrainerServices = () => {
     setVariant(undefined);
   };
   const setEditHandle = (id) => {
-    console.log(id);
     setVariant("solid");
   };
 
@@ -138,7 +137,7 @@ const TrainerServices = () => {
             >
               <ModalDialog>
                 <ModalClose onClick={() => setVariant(undefined)} />
-                <UpdateServiceModal id={service._id} onClose={handleClose} />
+                <UpdateServiceModal id={service?._id} onClose={handleClose} />
               </ModalDialog>
             </Modal>
             <Modal
@@ -152,7 +151,7 @@ const TrainerServices = () => {
                   <b>Delete Confirmation</b>
                 </Box>
                 <ModalClose onClick={() => setVariant1(undefined)} />
-                <DeleteServiceModal id={service._id} onClose={handleClose1} />
+                <DeleteServiceModal id={service?._id} onClose={handleClose1} />
               </ModalDialog>
             </Modal>
           </Box>

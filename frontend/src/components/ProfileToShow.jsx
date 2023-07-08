@@ -16,9 +16,7 @@ const ProfilePage = () => {
   const params = useParams();
   const dispatch = useDispatch();
   const user = useSelector((state) => state?.user?.FindUserByID);
-  console.log("users", user);
   const id = params.id;
-  console.log(id);
   useEffect(() => {
     dispatch(UserByID(id));
   }, []);

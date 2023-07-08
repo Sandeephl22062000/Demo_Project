@@ -50,10 +50,6 @@ const TrainerSignup = () => {
     );
   };
 
-  const Userhandler = () => {
-    navigate("/signup");
-  };
-
   const formik = useFormik({
     initialValues: {
       fullName: "",

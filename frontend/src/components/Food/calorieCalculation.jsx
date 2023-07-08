@@ -130,20 +130,24 @@ const CalorieDetail = () => {
   const clickHandler = () => {
     setShowTrackPage(true);
     const sendResponse = async () => {
-      const data = await axios.post(
-        "http://localhost:8000/api/users/gettargetnutrition",
-        {
-          requireCalories: RequireCalories,
-          requireProtein: protein,
-          requireCarbs: carbs,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+      try {
+        const data = await axios.post(
+          "http://localhost:8000/api/users/gettargetnutrition",
+          {
+            requireCalories: RequireCalories,
+            requireProtein: protein,
+            requireCarbs: carbs,
           },
-        }
-      );
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      } catch (error) {
+        throw error;
+      }
     };
     sendResponse();
     navigate(`/calculatediet`);

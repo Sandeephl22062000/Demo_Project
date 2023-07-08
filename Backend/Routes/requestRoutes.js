@@ -2,58 +2,16 @@ const express = require("express");
 const { protectingRoutes } = require("../Controller/AuthController");
 const RequestController = require("../Controller/RequestController");
 const router = express.Router();
-
-router.get(
-  "/getallrequestofuser",
-  protectingRoutes,
-  RequestController.getAllRequestOFUser
-);
 router.post(
-  "/createrequest/:trainerID",
+  "/getclientsrequest",
   protectingRoutes,
-  RequestController.createRequest
+  RequestController.createClientsRequest
 );
 
 router.get(
-  "/getrequest",
+  "/getclientsrequest",
   protectingRoutes,
-  RequestController.getAllRequestOfTrainer
+  RequestController.getClients
 );
 
-router.get(
-  "/getacceptedrequest",
-  protectingRoutes,
-  RequestController.getAcceptedNoatifcation
-);
-
-
-router.get(
-  "/getrejectedrequest",
-  protectingRoutes,
-  RequestController.getRejectedNoatifcation
-);
-
-router.get(
-  "/readedmessage",
-  protectingRoutes,
-  RequestController.unReadMessages
-);
-
-router.get(
-  "/pendingRequest",
-  protectingRoutes,
-  RequestController.isPendingRequest
-);
-
-router.post(
-  "/acceptRequest/:requestID",
-  protectingRoutes,
-  RequestController.acceptRequest
-);
-
-router.get(
-  "/rejectRequest/:requestID",
-  protectingRoutes,
-  RequestController.rejectRequest
-);
 module.exports = router;

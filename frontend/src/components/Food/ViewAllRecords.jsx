@@ -48,7 +48,6 @@ export default function BasicTable() {
           },
         }
       );
-      console.log(response.data.data);
       setData(response.data.data);
     } catch (error) {
       console.log(error);

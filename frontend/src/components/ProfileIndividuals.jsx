@@ -36,9 +36,7 @@ const ProfilePage = () => {
   const { addToast } = useToasts();
   const Userid = localStorage.getItem("id");
   const token = useSelector((state) => state.user.token);
-  console.log("user-id", Userid);
   const handleEditClick = () => {
-    console.log(name, email, experiences, specialization);
     dispatch(
       updateUser({
         name,
@@ -61,8 +59,6 @@ const ProfilePage = () => {
   }, []);
 
   const user = useSelector((state) => state.user.user);
-  console.log("user", user?.data?.name);
-  console.log(user?.data?.posts);
 
   const getPostByID = async (postId) => {
     try {

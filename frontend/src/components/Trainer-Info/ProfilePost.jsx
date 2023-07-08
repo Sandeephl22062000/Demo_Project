@@ -27,27 +27,21 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-export default function RecipeReviewCard(props) {
-  const [expanded, setExpanded] = React.useState(false);
+export default function ProfilePost(props) {
   const [showPost, setShowPost] = React.useState(false);
   const [selectedPost, setSelectedPost] = React.useState("");
   const dispatch = useDispatch();
   const posts = props.post;
-  console.log(posts);
   const user = useSelector((state) => state?.user?.FindUserByID);
-  console.log(user);
   const post = useSelector((state) => state.post.postInfoById);
   const token = useSelector((state) => state.user.token);
-  console.log(token);
-  console.log(post, "Vrdfv");
-  console.log(selectedPost, "fvdf");
+ 
   useEffect(() => {
     dispatch(postByID({ id: selectedPost, token }));
   }, [selectedPost]);
 
   return (
     <Container>
-      {console.log(posts)}
       {!showPost &&
         posts?.map((post) => (
           <Box
@@ -66,7 +60,6 @@ export default function RecipeReviewCard(props) {
             }}
           >
             <Card sx={{ width: "20rem", height: "20rem" }}>
-              {console.log(props.post)}
               <CardHeader
                 avatar={
                   <Avatar

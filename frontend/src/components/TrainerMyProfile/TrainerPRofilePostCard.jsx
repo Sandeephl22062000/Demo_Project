@@ -7,7 +7,6 @@ import {
   CardHeader,
   CardMedia,
   Container,
-  Pagination,
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
@@ -136,16 +135,6 @@ const PRofilePostCard = (props) => {
               </Card>
             </>
           ))}
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          flexDirection: "center",
-          marginBottom: "1rem",
-        }}
-      >
-        <Pagination count={10} sx={{ baclground: "black", color: "white" }} />
       </Box>
     </Container>
   );

@@ -21,10 +21,6 @@ import { useParams } from "react-router-dom";
 
 const Post = (props) => {
   const token = useSelector((state) => state.user.token);
-  const dispatch = useDispatch();
-  const { postID } = useParams();
-  const propsPostID = useSelector((state) => state?.post?.postInfoById);
-
   const [likeCount, setLikeCount] = React.useState(props?.post?.likes?.length);
   const id = localStorage.getItem("id");
   const [isLiked, setIsLiked] = React.useState(
@@ -35,17 +31,20 @@ const Post = (props) => {
 
   const handleLike = () => {
     const addLike = async () => {
-      const data = await axios.post(
-        `/api/post/likepost/${props.post._id}`,
-        {},
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log(data);
+      try {
+        const data = await axios.post(
+          `/api/post/likepost/${props.post._id}`,
+          {},
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      } catch (error) {
+        throw error;
+      }
     };
 
     if (isLiked) {
@@ -60,21 +59,25 @@ const Post = (props) => {
 
   const addCommentHandler = async (e) => {
     e.preventDefault();
-    const { data } = await axios.post(
-      `/api/post/commentpost/${props.post._id}`,
-      {
-        comment,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+    try {
+      const { data } = await axios.post(
+        `/api/post/commentpost/${props.post._id}`,
+        {
+          comment,
         },
-      }
-    );
-    const newComment = data.success.comments[0];
-    setShowComment((prevComments) => [newComment, ...prevComments]);
-    setComment("");
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const newComment = data?.success?.comments[0];
+      setShowComment((prevComments) => [newComment, ...prevComments]);
+      setComment("");
+    } catch (error) {
+      throw error;
+    }
   };
 
   const calculateTime = Math.floor(
@@ -84,8 +87,6 @@ const Post = (props) => {
   useEffect(() => {
     setShowComment(props.post?.comments);
   }, []);
-
-  console.log("nsjfdnbotn", props?.post);
 
   return (
     <Container
@@ -194,7 +195,6 @@ const Post = (props) => {
             </Link>
             {props.post?.caption}
           </Typography>
-          {console.log(showComment)}
           {showComment
             ?.slice()
             .reverse()
@@ -212,7 +212,6 @@ const Post = (props) => {
             sx={{ color: "text.tertiary", my: 0.5 }}
           >
             <Typography fontSize="sm">
-              {console.log(calculateTime)}
               {calculateTime === 0 ? (
                 <Typography
                   color="neutral"

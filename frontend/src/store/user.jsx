@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import client from "../features/client";
 import axios from "axios";
 
 export const loginUser = createAsyncThunk(
@@ -38,7 +37,6 @@ export const registerUser = createAsyncThunk(
   "/user/registerUser",
   async ({ name, photo, email, password, addToast, navigate, role }) => {
     try {
-      console.log(" i am here");
       const response = await axios.post(
         "http://localhost:8000/api/users/register",
         {
@@ -49,7 +47,6 @@ export const registerUser = createAsyncThunk(
           role,
         }
       );
-      console.log(response);
       addToast(response.data.message, {
         appearance: "success",
         autoDismiss: true,
@@ -57,7 +54,6 @@ export const registerUser = createAsyncThunk(
       });
       navigate("/login");
     } catch (error) {
-      console.log(error);
       addToast(error.message, {
         appearance: "error",
         autoDismiss: true,
@@ -70,103 +66,47 @@ export const registerUser = createAsyncThunk(
 export const UserByID = createAsyncThunk("/user/userDetail", async () => {
   const Userid = localStorage.getItem("id");
   const postData = await axios.get(`http://localhost:8000/api/users/${Userid}`);
-  console.log(postData.data);
   return postData.data.data;
 });
 
-export const trainerToBeApproved = createAsyncThunk(
-  "/user/trainertoApprove",
-  async () => {
-    const getData = await axios.get(
-      `http://localhost:8000/api/trainer/trainertoapprove`
-    );
-    console.log(getData.data);
-    return getData.data.data;
-  }
-);
-export const approveRequest = createAsyncThunk(
-  "/user/approveRequest",
-  async (id) => {
-    const getData = await axios.post(
-      `http://localhost:8000/api/trainer/approverequest`,
-      {
-        id,
-      }
-    );
-    console.log(getData.data);
-    return getData.data;
+export const clientsRequest = createAsyncThunk(
+  "/user/clientsRequest",
+  async ({ trainerID, token, charges }) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/request/getclientsrequest",
+        { charges, token, trainerID },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   }
 );
 
-export const getNoatifcation = createAsyncThunk(
-  "/user/getAllNoatification",
+export const getClients = createAsyncThunk(
+  "/user/getCleintsRequest",
   async ({ token }) => {
-    console.log(token, "fvrsdvrt");
-    const getData = await axios.get(
-      `http://localhost:8000/api/request/getallrequestOfuser/`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    console.log(getData.data);
-    return getData.data;
-  }
-);
-
-export const getAcceptedNoatifcation = createAsyncThunk(
-  "/user/getacceptedrequest",
-  async ({ token }) => {
-    console.log("efwqefwe", token, "fvrsdvrt");
-    const getData = await axios.get(
-      `http://localhost:8000/api/request/getacceptedrequest`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    console.log("sasasasasasasa", getData?.data);
-    return getData?.data?.request;
-  }
-);
-
-export const getRejectedNoatifcation = createAsyncThunk(
-  "/user/getrejectedrequest",
-  async ({ token }) => {
-    console.log("efwqefwe", token, "fvrsdvrt");
-    const getData = await axios.get(
-      `http://localhost:8000/api/request/getrejectedrequest`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    console.log("sasasasasasasa", getData?.data);
-    return getData?.data?.request;
-  }
-);
-
-export const messageReaded = createAsyncThunk(
-  "/user/messageReaded",
-  async ({ token }) => {
-    console.log("efwqefwe", token, "fvrsdvrt");
-    const getData = await axios.get(
-      `http://localhost:8000/api/request/readedmessage`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    console.log(getData.data);
-    return getData?.data?.request;
+    try {
+      const response = await axios.get(
+        "http://localhost:8000/api/request/getclientsrequest",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response?.data?.clients;
+    } catch (error) {
+      throw error;
+    }
   }
 );
 
@@ -176,7 +116,6 @@ export const searchUserKeyword = createAsyncThunk(
     const getData = await axios.get(
       `http://localhost:8000/api/users/searchusers/${search}`
     );
-    console.log(getData.data);
     return getData.data.data;
   }
 );
@@ -193,7 +132,6 @@ export const updateUser = createAsyncThunk(
       token,
       addToast,
     } = details;
-    console.log(token);
     try {
       const postData = await axios.patch(
         `http://localhost:8000/api/users/updatedetails/${Userid}`,
@@ -210,7 +148,6 @@ export const updateUser = createAsyncThunk(
           },
         }
       );
-      console.log(postData.data);
       addToast(postData.data.message, {
         appearance: "success",
         autoDismiss: true,
@@ -230,6 +167,7 @@ const userSlice = createSlice({
     FindUserByID: null,
     loading: false,
     error: null,
+    getRequestedClients: [],
   },
   reducers: {
     setToken: (state, action) => {
@@ -279,30 +217,7 @@ const userSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
-      .addCase(approveRequest.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(approveRequest.fulfilled, (state, action) => {
-        state.loading = false;
-        state.ApprovedTrainer = action.payload;
-      })
-      .addCase(approveRequest.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
-      .addCase(trainerToBeApproved.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(trainerToBeApproved.fulfilled, (state, action) => {
-        state.loading = false;
-        state.TrainersYetToApproved = action.payload;
-      })
-      .addCase(trainerToBeApproved.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
+
       .addCase(searchUserKeyword.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -315,51 +230,15 @@ const userSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
-      .addCase(getNoatifcation.pending, (state) => {
+      .addCase(getClients.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(getNoatifcation.fulfilled, (state, action) => {
+      .addCase(getClients.fulfilled, (state, action) => {
         state.loading = false;
-        state.GetUserNoatification = action.payload;
+        state.getRequestedClients = action.payload;
       })
-      .addCase(getNoatifcation.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
-      .addCase(getAcceptedNoatifcation.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(getAcceptedNoatifcation.fulfilled, (state, action) => {
-        state.loading = false;
-        state.GetAcceptedNoatifcation = action.payload;
-      })
-      .addCase(getAcceptedNoatifcation.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
-      .addCase(getRejectedNoatifcation.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(getRejectedNoatifcation.fulfilled, (state, action) => {
-        state.loading = false;
-        state.GetRejectedNoatifcation = action.payload;
-      })
-      .addCase(getRejectedNoatifcation.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
-      .addCase(messageReaded.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(messageReaded.fulfilled, (state, action) => {
-        state.loading = false;
-        state.MessageReaded = action.payload;
-      })
-      .addCase(messageReaded.rejected, (state, action) => {
+      .addCase(getClients.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });
@@ -367,5 +246,4 @@ const userSlice = createSlice({
 });
 export const { logout } = userSlice.actions;
 export default userSlice.reducer;
-
 export const { setToken } = userSlice.actions;

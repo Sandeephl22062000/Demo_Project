@@ -48,7 +48,6 @@ export const RegisterTrainer = createAsyncThunk(
         experiences,
       }
     );
-    console.log(data.data);
     addToast(data?.message, {
       appearance: "success",
       autoDismiss: true,
@@ -63,7 +62,6 @@ export const requestTrainer = createAsyncThunk(
   "/trainer/requestTrainer",
   async (data) => {
     const { trainerID, token } = data;
-    console.log(trainerID, token);
     const postData = await axios.post(
       `http://localhost:8000/api/request/createrequest/${trainerID}`,
       {},
@@ -74,7 +72,6 @@ export const requestTrainer = createAsyncThunk(
         },
       }
     );
-    console.log(postData.data);
     return postData.data;
   }
 );
@@ -92,7 +89,6 @@ export const getRequestOfTrainer = createAsyncThunk(
         },
       }
     );
-    console.log(postData.data);
     return postData.data;
   }
 );
@@ -114,7 +110,6 @@ export const acceptRequest = createAsyncThunk(
         },
       }
     );
-    console.log(postData.data);
     return postData.data;
   }
 );
@@ -132,7 +127,6 @@ export const rejectRequest = createAsyncThunk(
         },
       }
     );
-    console.log(postData.data);
     return postData.data;
   }
 );
@@ -143,7 +137,6 @@ export const TrainerById = createAsyncThunk(
     const postData = await axios.get(
       `http://localhost:8000/api/trainer/trainerDetail/${id}`
     );
-    console.log(postData.data.data);
     return postData.data.data;
   }
 );
@@ -166,8 +159,6 @@ export const createServices = createAsyncThunk(
       autoDismiss: true,
       autoDismissTimeout: 3000,
     });
-    // navigate("/profile");
-    console.log(postData.data);
     return postData.data.service;
   }
 );
@@ -175,7 +166,6 @@ export const createServices = createAsyncThunk(
 export const getservices = createAsyncThunk(
   "/trainer/getServices",
   async ({ trainerID, token }) => {
-    console.log("SDfsdfs", trainerID, "fvdsfv", token);
     const postData = await axios.get(
       `http://localhost:8000/api/trainer/getallservice/${trainerID}`,
       {
@@ -186,7 +176,6 @@ export const getservices = createAsyncThunk(
       }
     );
 
-    console.log(postData.data.services);
     return postData?.data?.services;
   }
 );
@@ -224,7 +213,6 @@ export const deleteServices = createAsyncThunk(
         },
       }
     );
-    console.log(postData.data);
     return postData?.data?.services;
   }
 );

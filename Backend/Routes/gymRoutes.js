@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const sdk = require("api")("@fsq-developer/v1.0#78iknmrc2aljgfbp90");
-sdk.auth("fsq3mi67FjDcRIEQD8R528NyLFX6jboL7tu7+Jgx08jBpfQ=");
+sdk.auth(process.env.SDK_AUTH_GYM_KEY);
 router.get("/:latitude/:longitude", async (req, res) => {
   const { latitude, longitude } = req.params;
 

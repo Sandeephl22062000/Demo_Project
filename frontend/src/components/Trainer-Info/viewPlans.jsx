@@ -5,11 +5,10 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { getservices, requestTrainer } from "../../store/trainer";
 import { useDispatch, useSelector } from "react-redux";
-import { UserByID } from "../../store/user";
+import { UserByID, clientsRequest } from "../../store/user";
 
 export default function OverlayRadio(props) {
-  const { trainerID, setVariant } = props;
-  console.log(trainerID);
+  const { trainerID } = props;
   const { addToast } = useToasts();
   const [trainer, setTrainer] = useState("");
   const dispatch = useDispatch();
@@ -24,19 +23,17 @@ export default function OverlayRadio(props) {
 
   const initPayment = (data) => {
     const options = {
-      key: "rzp_test_8ryBijpHhTbHDx",
-      amount: data.amount,
-      currency: data.currency,
+      key: process.env.REACT_APP_RAZOR_PAY_KEY,
+      amount: data?.amount,
+      currency: data?.currency,
       name: user?.name,
       description: "Test Transaction",
       image: user?.photo,
       order_id: data.id,
       handler: async (response) => {
         try {
-          console.log(response);
           const verifyUrl = "http://localhost:8000/api/payment/verify";
           const { data } = await axios.post(verifyUrl, response);
-          console.log("verfiyx", data);
           if (data) {
             addToast(data.message, {
               appearance: "success",
@@ -47,7 +44,7 @@ export default function OverlayRadio(props) {
         } catch (error) {
           console.log(error);
         }
-        dispatch(requestTrainer({ trainerID, token }));
+        dispatch(clientsRequest({ trainerID, token, charges: data?.amount }));
       },
       theme: {
         color: "#000000",
@@ -65,22 +62,25 @@ export default function OverlayRadio(props) {
     try {
       const orderUrl = "http://localhost:8000/api/payment/order";
       const { data } = await axios.post(orderUrl, { amount: selectedOption });
-      console.log(data);
       initPayment(data.data);
     } catch (error) {
       console.log(error);
     }
   };
+
   const handleProceedClick = () => {
     handleSubmit(selectedOption);
   };
 
   const trainerDetail = async () => {
-    const { data } = await axios.get(
-      `http://localhost:8000/api/trainer/trainerDetail/${trainerID}`
-    );
-    console.log(data.data);
-    setTrainer(data.data);
+    try {
+      const { data } = await axios.get(
+        `http://localhost:8000/api/trainer/trainerDetail/${trainerID}`
+      );
+      setTrainer(data.data);
+    } catch (error) {
+      throw error;
+    }
   };
 
   useEffect(() => {
@@ -109,7 +109,7 @@ export default function OverlayRadio(props) {
           {services?.map((serviceOffered) => (
             <>
               <Card
-                key={serviceOffered._id}
+                key={serviceOffered?._id}
                 sx={{
                   minHeight: "100px",
                   width: "100%",

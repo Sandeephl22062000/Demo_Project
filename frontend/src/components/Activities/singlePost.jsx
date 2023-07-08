@@ -23,7 +23,6 @@ import { postByID } from "../../store/post";
 const Post = (props) => {
   const token = useSelector((state) => state.user.token);
   const propsPostID = useSelector((state) => state?.post?.postInfoById);
-  console.log(propsPostID?.likes?.length);
   const [likeCount, setLikeCount] = React.useState(propsPostID?.likes?.length);
   const id = localStorage.getItem("id");
   const [isLiked, setIsLiked] = React.useState(
@@ -33,21 +32,23 @@ const Post = (props) => {
   const [showComment, setShowComment] = useState([]);
   const dispatch = useDispatch();
   const { postID } = useParams();
-  console.log(propsPostID);
 
   const handleLike = () => {
     const addLike = async () => {
-      const data = await axios.post(
-        `/api/post/likepost/${propsPostID?._id}`,
-        {},
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log(data);
+      try {
+        const data = await axios.post(
+          `/api/post/likepost/${propsPostID?._id}`,
+          {},
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      } catch (error) {
+        throw error;
+      }
     };
 
     if (isLiked) {
@@ -62,21 +63,25 @@ const Post = (props) => {
 
   const addCommentHandler = async (e) => {
     e.preventDefault();
-    const { data } = await axios.post(
-      `/api/post/commentpost/${propsPostID?._id}`,
-      {
-        comment,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+    try {
+      const { data } = await axios.post(
+        `/api/post/commentpost/${propsPostID?._id}`,
+        {
+          comment,
         },
-      }
-    );
-    const newComment = data.success.comments[0];
-    setShowComment((prevComments) => [newComment, ...prevComments]);
-    setComment("");
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const newComment = data.success.comments[0];
+      setShowComment((prevComments) => [newComment, ...prevComments]);
+      setComment("");
+    } catch (error) {
+      throw error;
+    }
   };
 
   const calculateTime = Math.floor(

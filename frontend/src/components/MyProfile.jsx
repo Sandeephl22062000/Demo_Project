@@ -7,13 +7,12 @@ import Button from "@mui/joy/Button";
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
 import Typography from "@mui/joy/Typography";
-import Sheet from "@mui/joy/Sheet";
 import Posts from "./Trainer-Info/PRofilePostCard";
 import UpdateProfileModal from "./TrainerMyProfile/UpdateProfileModal";
 import { Modal, ModalClose, ModalDialog } from "@mui/joy";
 import { useDispatch, useSelector } from "react-redux";
 import { UserByID } from "../store/user";
-import RequestTable from "./TrainerMyProfile/trainingRequestTable";
+import ClientsTable from "./TrainerMyProfile/clientsRequests";
 import TrainerServices from "./TrainerMyProfile/TrainerServices";
 
 const style = {
@@ -38,12 +37,6 @@ const ProfilePage = () => {
   }, []);
 
   const user = useSelector((state) => state?.user?.FindUserByID);
-  console.log("user", user);
-
-  console.log(trainer._id);
-  const sendRequestHandler = () => {
-    // dispatch(requestTrainer({ token, message, trainer: trainer._id }));
-  };
 
   const toggleChallengesAndPosts = () => {
     if (showChallenges) {
@@ -212,7 +205,7 @@ const ProfilePage = () => {
                       },
                     }}
                   >
-                    View Requests
+                    View Clients
                   </Button>
                 )}
               </>
@@ -237,7 +230,7 @@ const ProfilePage = () => {
         </CardContent>
       </Card>
       {showRequests ? (
-        <RequestTable trainer={user?._id} />
+        <ClientsTable trainer={user?._id} />
       ) : showServices ? (
         <TrainerServices trainer={user?._id} />
       ) : (

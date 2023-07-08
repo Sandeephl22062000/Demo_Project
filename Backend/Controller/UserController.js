@@ -22,7 +22,6 @@ const registerUser = catchAsync(async (req, res, next) => {
     const photo = response.data.picture;
 
     const userFind = await User.find({ email });
-    console.log(userFind);
     if (userFind.length === 0) {
       const user = await User.create({
         name,
@@ -67,7 +66,6 @@ const registerUser = catchAsync(async (req, res, next) => {
     if (userFind) return next(new AppError("This Email is already registered"));
 
     const HashedPassword = await bcrypt.hash(password, 12);
-    console.log(HashedPassword);
     const user = await User.create({
       name,
       email,
@@ -112,7 +110,6 @@ const searchusersWithKeyword = catchAsync(async (req, res, next) => {
     : {};
   const users = await User.find(keyword);
   const usersExists = users.filter((user) => user.role === 0);
-  console.log(usersExists);
   if (usersExists) {
     res.json({
       message: "Success",
@@ -203,11 +200,10 @@ const loginUser = catchAsync(async (req, res, next) => {
         return next(new AppError("Please provide Correct Password", 401));
 
       const token = jwt.sign({ id: UserInfo._id }, process.env.SECRET_KEY);
-      console.log(token);
       if (UserInfo) {
         res.json({
           message: "Successfully login",
-          data: UserInfo._id,
+          data: UserInfo?._id,
           token,
         });
       } else {
@@ -219,7 +215,7 @@ const loginUser = catchAsync(async (req, res, next) => {
   }
 });
 
-const updatePassword = async (req, res) => {
+const updatePassword = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.params.id).select("+password");
   if (req.body.password === user.password) {
     user.password = req.body.NewPassword;
@@ -232,7 +228,7 @@ const updatePassword = async (req, res) => {
   } else {
     return next(new AppError("password invalid", 404));
   }
-};
+});
 
 module.exports = {
   registerUser,

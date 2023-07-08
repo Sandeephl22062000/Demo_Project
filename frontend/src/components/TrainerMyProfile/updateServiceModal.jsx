@@ -14,9 +14,6 @@ const UpdateServiceModal = ({ id, onClose }) => {
     e.preventDefault();
     dispatch(editServices({ id, token, charges, duration, description }));
     onClose();
-    console.log("Charges:", charges);
-    console.log("Duration:", duration);
-    console.log("Description:", description);
   };
   return (
     <Container sx={{ width: "60%" }}>

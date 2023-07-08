@@ -24,18 +24,9 @@ router.route("/new").post(protectingRoutes, newPost);
 
 router.route("/posts/all").get(allPosts);
 
-router.route("/posts").get(protectingRoutes, getPostsOfFollowing);
-
 router.route("/post/detail/:id").get(protectingRoutes, getPostDetails);
 
 router.route("/postperuser").get(protectingRoutes, getPostPerById);
-
-router
-  .route("/post/:id")
-  .get(protectingRoutes, likeUnlikePost)
-  .post(protectingRoutes, saveUnsavePost)
-  .put(protectingRoutes, updateCaption)
-  .delete(protectingRoutes, deletePost);
 
 router.route("/post/comment/:id").post(protectingRoutes, newComment);
 

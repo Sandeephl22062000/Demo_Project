@@ -16,7 +16,6 @@ const style = {
 };
 
 const ProfilePage = (props) => {
-  console.log(props);
   return (
     <Container
       sx={{
@@ -98,7 +97,6 @@ const ProfilePage = (props) => {
               justifyContent: "center",
             }}
           >
-            {console.log(props.user.posts.length)}
             {props.user.posts?.length === 0 ? (
               <Box>
                 <Typography sx={{ fontSize: "35px", height: "100%" }}>

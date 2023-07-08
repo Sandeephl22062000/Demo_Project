@@ -10,10 +10,8 @@ import {
   Select,
   Typography,
 } from "@mui/material";
-
 import { useState } from "react";
 import { useFormik } from "formik";
-
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { calculateCalories, priorFoodDetails } from "../../store/food";
@@ -31,7 +29,6 @@ const UserInput = () => {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user.token);
   const priorData = useSelector((state) => state?.food?.priorUserDetails);
-  console.log("priorData", priorData?.data);
 
   const formik = useFormik({
     initialValues: {
@@ -43,7 +40,6 @@ const UserInput = () => {
     },
     validationSchema: userInputValidation,
     onSubmit: (values, { resetForm }) => {
-      console.log(values);
       dispatch(
         calculateCalories({
           weight: values.weight,
@@ -225,7 +221,6 @@ const UserInput = () => {
             </Button>
           </Box>
         </form>
-        {console.log(priorData?.data !== null)}
         {!priorData?.data?.length == 0 && (
           <Box
             sx={{

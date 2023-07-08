@@ -4,9 +4,6 @@ const TrainerController = require("../Controller/TrainerController/trainerContro
 const serviceController = require("../Controller/servicesController");
 const { protectingRoutes } = require("../Controller/AuthController");
 
-router.route("/approverequest").post(TrainerController.approveRequest);
-router.route("/trainertoapprove").get(TrainerController.TrainerToApprove);
-
 router.route("/virtualtrainer").post(TrainerController.virtualTrainer);
 
 router
@@ -28,6 +25,7 @@ router
 router
   .route("/search/:specialization/:experienceLevel")
   .get(TrainerController.getTrainerByfilter);
+
 router.route("/trainerDetail/:id").get(TrainerController.getTrainerById);
 router.route("/:trainer/:page").get(TrainerController.getAlltrainer);
 router.route("/:page").get(TrainerController.getTrainers);

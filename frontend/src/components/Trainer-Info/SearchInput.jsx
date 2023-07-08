@@ -36,7 +36,6 @@ const SearchInput = () => {
   const [specialization, setSpecialization] = useState("");
   const [experienceLevel, setExperienceLevel] = useState("");
   const [filteredSearch, setFilteredSearch] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
   const submithandler = async (e) => {
     try {
@@ -49,7 +48,7 @@ const SearchInput = () => {
       setSearchResult(data.data);
       setLoading(false);
     } catch (error) {
-      throw new Error(error);
+      console.log(error);
     }
   };
 
@@ -244,60 +243,115 @@ const SearchInput = () => {
                 gap: "20px",
               }}
             >
-              {searchResult.map((trainer) => (
-                <Card
-                  sx={{
-                    width: 350,
-                    boxShadow: "0px 8px 12px rgba(0, 0, 0, 0.2)",
-                  }}
-                >
-                  <CardHeader
-                    avatar={
-                      <Avatar
-                        sx={{ bgcolor: red[500] }}
-                        src={trainer?.photo}
-                        aria-label="recipe"
-                      >
-                        {trainer?.name[0].toUpperCase()}
-                      </Avatar>
-                    }
-                    title={trainer.name}
-                  />
-                  <CardMedia
-                    component="img"
-                    height="194"
-                    image={trainer.photo}
-                    alt="Paella dish"
-                  />
-                  <CardContent>
-                    <Typography variant="body2" color="text.secondary">
-                      Email:{trainer.email}
-                      <br />
-                      specification:{trainer?.specialization}
-                    </Typography>
-                  </CardContent>
-                  <CardActions
-                    disableSpacing
-                    sx={{ display: "flex", justifyContent: "center" }}
-                  >
-                    <Button
+              {filteredSearch.length > 0
+                ? filteredSearch?.map((trainer) => (
+                    <Card
                       sx={{
-                        backgroundColor: "black",
-                        color: "white",
-                        "&:hover": {
-                          background: "black",
-                        },
-                        textDecoration: "none",
-                      }}
-                      onClick={() => {
-                        navigate(`/trainer/${trainer._id}`);
+                        width: 350,
+                        boxShadow: "0px 8px 12px rgba(0, 0, 0, 0.2)",
                       }}
                     >
-                      View Profile
-                    </Button>
-                  </CardActions>
-                </Card>
-              ))}
+                      <CardHeader
+                        avatar={
+                          <Avatar
+                            sx={{ bgcolor: red[500] }}
+                            src={trainer?.photo}
+                            aria-label="recipe"
+                          >
+                            {trainer?.name[0].toUpperCase()}
+                          </Avatar>
+                        }
+                        title={trainer.name}
+                      />
+                      <CardMedia
+                        component="img"
+                        height="194"
+                        image={trainer.photo}
+                        alt="Paella dish"
+                      />
+                      <CardContent>
+                        <Typography variant="body2" color="text.secondary">
+                          Email:{trainer.email}
+                          <br />
+                          specification:{trainer?.specialization}
+                        </Typography>
+                      </CardContent>
+                      <CardActions
+                        disableSpacing
+                        sx={{ display: "flex", justifyContent: "center" }}
+                      >
+                        <Button
+                          sx={{
+                            backgroundColor: "black",
+                            color: "white",
+                            "&:hover": {
+                              background: "black",
+                            },
+                            textDecoration: "none",
+                          }}
+                          onClick={() => {
+                            navigate(`/trainer/${trainer._id}`);
+                          }}
+                        >
+                          View Profile
+                        </Button>
+                      </CardActions>
+                    </Card>
+                  ))
+                : searchResult?.map((trainer) => (
+                    <Card
+                      sx={{
+                        width: 350,
+                        boxShadow: "0px 8px 12px rgba(0, 0, 0, 0.2)",
+                      }}
+                    >
+                      <CardHeader
+                        avatar={
+                          <Avatar
+                            sx={{ bgcolor: red[500] }}
+                            src={trainer?.photo}
+                            aria-label="recipe"
+                          >
+                            {trainer?.name[0].toUpperCase()}
+                          </Avatar>
+                        }
+                        title={trainer.name}
+                      />
+                      <CardMedia
+                        component="img"
+                        height="194"
+                        image={trainer.photo}
+                        alt="Paella dish"
+                      />
+                      <CardContent>
+                        <Typography variant="body2" color="text.secondary">
+                          Email:{trainer.email}
+                          <br />
+                          specification:{trainer?.specialization}
+                        </Typography>
+                      </CardContent>
+                      <CardActions
+                        disableSpacing
+                        sx={{ display: "flex", justifyContent: "center" }}
+                      >
+                        <Button
+                          sx={{
+                            backgroundColor: "black",
+                            color: "white",
+                            "&:hover": {
+                              background: "black",
+                            },
+                            textDecoration: "none",
+                          }}
+                          onClick={() => {
+                            navigate(`/trainer/${trainer._id}`);
+                          }}
+                        >
+                          View Profile
+                        </Button>
+                      </CardActions>
+                    </Card>
+                  ))}
             </Box>
           ) : (
             <Box sx={{ display: "flex" }}>

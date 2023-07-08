@@ -12,7 +12,6 @@ const initialFood = {
 export const calculateCalories = createAsyncThunk(
   "/food/foodDetail",
   async (data) => {
-    console.log(data);
     const { weight, height, age, gender, activity, token, addToast } = data;
     console.log(weight, height, age, gender, activity);
     const sendData = await axios.post(
@@ -31,7 +30,6 @@ export const calculateCalories = createAsyncThunk(
         },
       }
     );
-    console.log("sendData", sendData);
     addToast(sendData.data.message, {
       appearance: "success",
       autoDismiss: true,
@@ -56,7 +54,6 @@ export const priorFoodDetails = createAsyncThunk(
         }
       );
       const { data } = response;
-      console.log(data);
       return data;
     } catch (error) {
       console.log(error);
@@ -79,7 +76,6 @@ export const priorFoodCalory = createAsyncThunk(
         }
       );
       const { data } = response;
-      console.log(data?.maintainceCalory);
       return data?.maintainceCalory;
     } catch (error) {
       console.log(error);
@@ -107,7 +103,6 @@ export const updateNutritionValue = createAsyncThunk(
         }
       );
       const { data } = response;
-      console.log(data?.maintainceCalory);
       return data?.maintainceCalory;
     } catch (error) {
       console.log(error);
@@ -130,7 +125,6 @@ export const deleteCaloryTracked = createAsyncThunk(
         }
       );
       const { data } = response;
-      console.log(data);
       return recordID;
     } catch (error) {
       console.log(error);

@@ -2,8 +2,6 @@ import { Box, Button, Container, Typography } from "@mui/material";
 import React from "react";
 import { deleteCaloryTracked } from "../../store/food";
 import { useDispatch, useSelector } from "react-redux";
-
-
 const DeleteRecordModal = ({ id, onClose, onDelete }) => {
   const dispatch = useDispatch();
   const token = useSelector((state) => state?.user?.token);

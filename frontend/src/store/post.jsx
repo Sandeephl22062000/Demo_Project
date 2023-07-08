@@ -16,7 +16,6 @@ export const postByID = createAsyncThunk("/post/postDetail", async (data) => {
         },
       }
     );
-    console.log(postData.data);
     return postData.data.post;
   } catch (error) {
     console.log(error);

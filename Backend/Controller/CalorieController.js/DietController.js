@@ -45,11 +45,10 @@ const saveUserDetails = catchAsync(async (req, res, next) => {
     return next(new AppError("Something went wrong", 500));
   }
 });
-const calorieCounting = (req, res, next) => {
-  const { weight, height, age, gender, activityFactors } = req.body;
-  console.log(req.body);
-  let bmr;
 
+const calorieCounting = catchAsync((req, res, next) => {
+  const { weight, height, age, gender, activityFactors } = req.body;
+  let bmr;
   if (gender.toLowerCase() === "male") {
     bmr = 88.362 + 13.397 * weight + 4.799 * height - 5.677 * age;
   } else {
@@ -59,50 +58,46 @@ const calorieCounting = (req, res, next) => {
   const maintenanceCalories = bmr * activityFactors;
 
   if (maintenanceCalories) {
-    res.json({
+    res.status(200).json({
       message: "Success",
       data: maintenanceCalories,
     });
   } else {
     return next(new AppError("Something went wrong", 500));
   }
-};
+});
 
 const CaloriesPerFood = catchAsync(async (req, res, next) => {
-  // Function to fetch nutritional information for a given food
-  console.log(req.params.food);
-
   const response = await axios.get(
     "https://api.api-ninjas.com/v1/nutrition?query=" + req.params.food,
     {
       headers: {
-        "X-Api-Key": "GfUSyr5CqEOlf5KAfwxC7A==my5GQmnsj0pUQKgU",
+        "X-Api-Key": process.env.FOOD_API,
       },
     }
   );
-  console.log(response.data[0].calories);
   if (response.data[0].calories) {
     res.json({
       message: "Success",
-      data: response.data,
+      data: response?.data,
     });
   } else {
     return next(new AppError("Something went wrong", 500));
   }
 });
 
-const updatecalories = async (req, res, next) => {
+const updatecalories = catchAsync(async (req, res, next) => {
   const userId = req.user.id;
   const food = await Food.find({ user: userId });
   if (food) {
-    res.json({
+    res.status(200).json({
       message: "Success",
       data: food,
     });
   } else {
     res.status(500).json({ message: "Server Error" });
   }
-};
+});
 
 const updateNutrients = catchAsync(async (req, res, next) => {
   const userId = req?.user?._id;
@@ -145,7 +140,7 @@ const targetCalories = catchAsync(async (req, res, next) => {
       data: targetCalories,
     });
   } else {
-    return next(new AppError("Something went wrong", 404));
+    return next(new AppError("Something went wrong", 500));
   }
 });
 
@@ -166,11 +161,11 @@ const getMaintainceCalory = catchAsync(async (req, res, next) => {
   const UserID = req?.user?._id;
   const Data = await Food.find({ user: UserID }).sort({ createdAt: -1 });
   if (getMaintainceCalory.length > 0) {
-    res.json({
+    res.status(200).json({
       maintainceCalory: Data[0]?.requireCalories,
     });
   } else {
-    return next(new AppError("Someting Went wrong", 000));
+    return next(new AppError("Someting Went wrong", 500));
   }
 });
 

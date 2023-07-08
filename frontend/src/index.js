@@ -11,7 +11,7 @@ ReactDOM.render(
   <React.StrictMode>
     <ToastProvider>
       <Provider store={store}>
-        <GoogleOAuthProvider clientId="287561778466-ar0blpg31c7jem2s58bvr3tq7b19npdq.apps.googleusercontent.com">
+        <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
           <App />
         </GoogleOAuthProvider>
       </Provider>

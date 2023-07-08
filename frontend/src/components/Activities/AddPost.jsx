@@ -21,17 +21,13 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 
 const AddPost = ({ setNewPost }) => {
-  const [images, setImages] = useState("");
-  const [status, setStatus] = useState("");
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [caption, setCaption] = useState("");
   const [variant, setVariant] = useState(undefined);
   const [variant2, setVariant2] = useState(undefined);
   const [isLoading, setIsLoading] = useState(false);
-  const [post, newPost] = useState({});
   const token = useSelector((state) => state.user.token);
-  console.log(token);
 
   const photoupload = (event) => {
     setIsLoading(true);
@@ -45,7 +41,6 @@ const AddPost = ({ setNewPost }) => {
       "state_changed",
       (snapshot) => {},
       (err) => {
-        console.log(err);
         setIsLoading(false);
       },
       () => {
@@ -69,7 +64,6 @@ const AddPost = ({ setNewPost }) => {
       "state_changed",
       (snapshot) => {},
       (err) => {
-        console.log(err);
         setIsLoading(false);
       },
       () => {
@@ -125,7 +119,7 @@ const AddPost = ({ setNewPost }) => {
     try {
       createPost();
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   };
 
@@ -256,8 +250,6 @@ const AddPost = ({ setNewPost }) => {
                     </Button>
                   </div>
                 )}
-
-                {console.log(selectedPhoto)}
               </Box>
               <TextField
                 label="Caption"

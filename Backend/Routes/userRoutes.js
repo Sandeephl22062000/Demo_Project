@@ -27,6 +27,7 @@ router
   .post(protectingRoutes, DietController.calorieCounting);
 
 router.post("/updateCalories", protectingRoutes, DietController.updatecalories);
+
 router.post(
   "/saveTrackedCalories",
   protectingRoutes,

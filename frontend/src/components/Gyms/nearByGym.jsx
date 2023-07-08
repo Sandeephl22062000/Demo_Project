@@ -81,7 +81,7 @@ const NearByGym = () => {
           gyms={gyms}
           center={center}
           onMarkerClick={handleMarkerClick}
-          googleMapURL={`https://maps.googleapis.com/maps/api/js?key=AIzaSyBkA1fdPi5_I43IVxS4Zlw57iUrwlGdBv8&libraries=places`}
+          googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAP_API_KEY}&libraries=places`}
           loadingElement={<div style={{ height: `100%` }} />}
           containerElement={<div style={{ height: `500px`, width: "100%" }} />}
           mapElement={<div style={{ height: `100%` }} />}

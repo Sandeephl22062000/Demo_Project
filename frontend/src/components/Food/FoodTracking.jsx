@@ -48,19 +48,22 @@ const ExeprmientFoodApi = () => {
   const params = useParams();
 
   const getTargetData = async () => {
-    const { data } = await axios.get(
-      "http://localhost:8000/api/targetnutrients/targetnutritionofuser",
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    console.log(data);
-    setTargetCalories(data?.data?.requireCalories);
-    setTargetCarbs(data?.data?.requireCarbs);
-    setTargetProtein(data?.data?.requireProtein);
+    try {
+      const { data } = await axios.get(
+        "http://localhost:8000/api/targetnutrients/targetnutritionofuser",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setTargetCalories(data?.data?.requireCalories);
+      setTargetCarbs(data?.data?.requireCarbs);
+      setTargetProtein(data?.data?.requireProtein);
+    } catch (error) {
+      throw error;
+    }
   };
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -70,18 +73,21 @@ const ExeprmientFoodApi = () => {
   const navigate = useNavigate();
   const clickHandler = async () => {
     setIsLoading(true);
-    const data = await axios.get(
-      `https://api.api-ninjas.com/v1/nutrition?query=${search}`,
-      {
-        headers: {
-          "X-Api-Key": "PDs20MlEeQdZ6Ov8+dDUrg==eWlZU3bVZSFxWEHw",
-        },
-      }
-    );
-    console.log("data", data);
-    if (data?.data.length === 0) setNotFound(true);
-    setResult(data.data);
-    setIsLoading(false);
+    try {
+      const data = await axios.get(
+        `https://api.api-ninjas.com/v1/nutrition?query=${search}`,
+        {
+          headers: {
+            "X-Api-Key": "PDs20MlEeQdZ6Ov8+dDUrg==eWlZU3bVZSFxWEHw",
+          },
+        }
+      );
+      if (data?.data.length === 0) setNotFound(true);
+      setResult(data.data);
+      setIsLoading(false);
+    } catch (error) {
+      throw error;
+    }
   };
   const removeItem = (index) => {
     const updatedRows = [...rows];
@@ -162,7 +168,6 @@ const ExeprmientFoodApi = () => {
   const saveTrackedTable = async (e) => {
     e.preventDefault();
     try {
-      console.log(name);
       const response = await axios.post(
         "http://localhost:8000/api/users/saveTrackedCalories",
         {

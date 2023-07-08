@@ -11,21 +11,12 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { UserByID, logout } from "../../store/user";
-import Noatification from "./Noatifications";
 import { useEffect } from "react";
 import FitnessLogo from "./../../images/Fitness.jpg";
-const pages = [
-  "Food",
-  "Exercise",
-  "Trainer",
-  "Activities",
-  "Gyms",
-  "E-Trainer",
-];
+const pages = ["Food", "Exercise", "Trainer", "Activities", "Gyms"];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -161,11 +152,6 @@ function ResponsiveAppBar() {
           </Box>
           {token !== null ? (
             <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
-                <IconButton sx={{ color: "white" }}>
-                  <Noatification sx={{ color: "white" }} />
-                </IconButton>
-              </Tooltip>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar alt="" src={user?.photo} />

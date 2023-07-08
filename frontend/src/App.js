@@ -22,10 +22,8 @@ import ProfileToShow from "./components/ProfileToShow";
 import ViewAllRecords from "./components/Food/ViewAllRecords";
 import Gym from "./components/Gyms/nearByGym";
 import Createservices from "./components/createservices";
-import IntelligentDiet from "./components/Food/IntelligentDiet";
 import { useSelector } from "react-redux";
 import Protected from "./ProtectingRoutes";
-import VirtualTrainerChat from "./components/Virutal";
 import PageNotFound from "./components/Frontpage/PageNotFound";
 
 const App = () => {
@@ -73,14 +71,6 @@ const App = () => {
               </Protected>
             }
           />
-          <Route
-            path="/dietprovider"
-            element={
-              <Protected isLoggedIn={isLoggedIn}>
-                <IntelligentDiet />
-              </Protected>
-            }
-          />
 
           <Route
             path="/trainer"
@@ -114,7 +104,6 @@ const App = () => {
               </Protected>
             }
           />
-          <Route path="/e-trainer" element={<VirtualTrainerChat />} />
           <Route path="/gyms" element={<Gym />} />
           <Route path="/exercise" element={<Exercises />} />
 

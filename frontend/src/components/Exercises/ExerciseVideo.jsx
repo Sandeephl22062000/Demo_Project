@@ -55,7 +55,7 @@ const ExerciseVideo = () => {
     setVideos(data.items);
     setIsLoading(false);
   };
-  
+
   useEffect(() => {
     fetchVideos();
   }, []);
@@ -162,7 +162,7 @@ const ExerciseVideo = () => {
                   height: "80%",
                   maxWidth: "800px",
                   maxHeight: "80%",
-                  bgcolor: "background.paper",
+                  backgroundColor: "black",
                   boxShadow: 24,
                   p: 4,
                 }}

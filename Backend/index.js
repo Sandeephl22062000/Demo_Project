@@ -11,19 +11,14 @@ const gymRoutes = require("./Routes/gymRoutes");
 const requestRoutes = require("./Routes/requestRoutes");
 const paymentRoutes = require("./Routes/paymentRoutes");
 const targetNutrientsRoutes = require("./Routes/targetNutrition");
-const ExtraReviewRoutes = require("./Routes/extraReviewsRoutes")
+const ExtraReviewRoutes = require("./Routes/extraReviewsRoutes");
 const cors = require("cors");
 connectDB();
 
 const app = express();
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "http://127.0.0.1:3000",
-      "http://localhost:3001",
-      "http://127.0.0.1:3001",
-    ],
+    origin: ["http://localhost:3000", "http://127.0.0.1:3000"],
     credentials: true,
   })
 );

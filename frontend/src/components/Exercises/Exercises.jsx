@@ -22,13 +22,16 @@ export default function BasicSelect() {
 
   const clickHandler = async (currentPage) => {
     setIsLoading(true);
-    console.log("currentpage", currentPage);
-    const { data } = await axios.get(
-      `http://localhost:8000/api/exercise/sortedExercises?muscle=${muscle}&difficulty=${difficulty}&page=${currentPage}`
-    );
-    setTotalPage(data.totalPages);
-    setExercise(data.exercises);
-    setIsLoading(false);
+    try {
+      const { data } = await axios.get(
+        `http://localhost:8000/api/exercise/sortedExercises?muscle=${muscle}&difficulty=${difficulty}&page=${currentPage}`
+      );
+      setTotalPage(data.totalPages);
+      setExercise(data.exercises);
+      setIsLoading(false);
+    } catch (error) {
+      throw error;
+    }
   };
 
   const VideoHandler = (muscleName, exerciseName) => {
@@ -41,17 +44,22 @@ export default function BasicSelect() {
   };
 
   const fetchData = async () => {
-    setIsLoading(true);
-    const { data } = await axios.get("http://localhost:8000/api/exercise");
-    const dataToShow = data.exercises;
-    setData(dataToShow.slice(0, 4));
-    setIsLoading(false);
+    try {
+      setIsLoading(true);
+      const { data } = await axios.get("http://localhost:8000/api/exercise");
+      const dataToShow = data.exercises;
+      setData(dataToShow.slice(0, 4));
+      setIsLoading(false);
+    } catch (error) {
+      throw error;
+    }
   };
 
   useEffect(() => {
     window.scrollTo(0, 0);
     fetchData();
-  }, []);
+  }, [exercise]);
+
   return (
     <>
       <Container sx={{ minHeight: "80vh" }}>
@@ -117,15 +125,15 @@ export default function BasicSelect() {
                 background: "red",
               },
             }}
-            onClick={clickHandler}
+            onClick={() => clickHandler(currentPage)}
           >
             Search
           </Button>
         </Box>
         {!isLoading ? (
           <Container sx={{ margin: "4rem 0" }}>
-            {exercise.length > 0
-              ? exercise.map((e) => (
+            {exercise?.length > 0
+              ? exercise?.map((e) => (
                   <Box style={{ margin: "10px" }}>
                     <Card border="secondary" style={{ width: "100%" }}>
                       <Card.Header>{e.name}</Card.Header>
@@ -149,7 +157,7 @@ export default function BasicSelect() {
                     </Card>
                   </Box>
                 ))
-              : data.map((e) => (
+              : data?.map((e) => (
                   <Box style={{ margin: "10px" }}>
                     <Card border="secondary" style={{ width: "100%" }}>
                       <Card.Header>{e.name}</Card.Header>

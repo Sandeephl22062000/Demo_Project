@@ -2,36 +2,33 @@ const Post = require("../../Model/PostModel/PostModel");
 const User = require("../../Model/UserModel");
 const catchAsync = require("../../utils/catchAync");
 const AppError = require("../../Error-Handling/error");
-// const deleteFile = require("../utils/deleteFile");
 const mongoose = require("mongoose");
 
-// Create New Post
 exports.newPost = catchAsync(async (req, res, next) => {
-  try {
-    const postData = {
-      caption: req.body.caption,
-      image: req.body.image,
-      video: req.body.video,
-      postedBy: req.user._id,
-    };
+  const postData = {
+    caption: req.body.caption,
+    image: req.body.image,
+    video: req.body.video,
+    postedBy: req.user._id,
+  };
 
-    const post = await Post.create(postData);
-    const user = await User.findById(req.user._id);
-    console.log(post, user, "vadfdv", postData, "tbhrtgsrtd");
-    user.posts.push(post._id);
-    console.log("post created");
-    await user.save();
+  const post = await Post.create(postData);
+  const user = await User.findById(req.user._id);
+  console.log(post, user, "vadfdv", postData, "tbhrtgsrtd");
+  user.posts.push(post._id);
+  console.log("post created");
+  await user.save();
 
+  if (post) {
     res.status(201).json({
-      success: true,
+      message: "success",
       post,
     });
-  } catch (error) {
-    console.log(error);
+  } else {
+    return next(new AppError("Something went wrong", 500));
   }
 });
 
-// Like or Unlike Post
 exports.likeUnlikePost = catchAsync(async (req, res, next) => {
   const post = await Post.findById(req.params.id);
 
@@ -61,57 +58,6 @@ exports.likeUnlikePost = catchAsync(async (req, res, next) => {
   }
 });
 
-// Delete Post
-exports.deletePost = catchAsync(async (req, res, next) => {
-  const post = await Post.findById(req.params.id);
-
-  if (!post) {
-    return next(new AppError("Post Not Found", 404));
-  }
-
-  if (post.postedBy.toString() !== req.user._id.toString()) {
-    return next(new AppError("Unauthorized", 401));
-  }
-
-  //   await deleteFile("posts/", post.image);
-
-  await post.remove();
-
-  const user = await User.findById(req.user._id);
-
-  const index = user.posts.indexOf(req.params.id);
-  user.posts.splice(index, 1);
-  await user.save();
-
-  res.status(200).json({
-    success: true,
-    message: "Post Deleted",
-  });
-});
-
-// Update Caption
-exports.updateCaption = catchAsync(async (req, res, next) => {
-  const post = await Post.findById(req.params.id);
-
-  if (!post) {
-    return next(new AppError("Post Not Found", 404));
-  }
-
-  if (post.postedBy.toString() !== req.user._id.toString()) {
-    return next(new AppError("Unauthorized", 401));
-  }
-
-  post.caption = req.body.caption;
-
-  await post.save();
-
-  res.status(200).json({
-    success: true,
-    message: "Post Updated",
-  });
-});
-
-// Add Comment
 exports.newComment = catchAsync(async (req, res, next) => {
   const post = await Post.findById(req.params.postID);
 
@@ -130,10 +76,14 @@ exports.newComment = catchAsync(async (req, res, next) => {
 
   await post.save();
 
-  return res.status(200).json({
-    success: post,
-    message: "Comment Added",
-  });
+  if (post) {
+    res.status(200).json({
+      success: post,
+      message: "Comment Added",
+    });
+  } else {
+    return next(new AppError("Already Commented", 500));
+  }
 });
 
 exports.getPostPerById = async (req, res, next) => {
@@ -150,116 +100,32 @@ exports.getPostPerById = async (req, res, next) => {
       return data;
     })
   );
-  console.log("bsgvfgbf", postToshow);
   return res.status(200).json({
     postToshow,
     message: "Like Added",
   });
-  // return res.status(200).json({
-  //  postToshow,
-  //   message: "Like Added",
-  // });
 };
-exports.newLike = catchAsync(async (req, res, next) => {
-  console.log("user", req.user._id);
-  const post = await Post.findById(req.params.postID);
 
-  console.log(post);
+exports.newLike = catchAsync(async (req, res, next) => {
+  const post = await Post.findById(req.params.postID);
   if (!post) {
     return next(new AppError("Post Not Found", 404));
   }
-  console.log("post.likes", post.likes);
-  console.log(post.likes.includes(req.user._id));
   if (post.likes.includes(req.user._id)) {
     return next(new AppError("Already Liked", 500));
   }
   post.likes.push(req.user._id);
-
   await post.save();
-  console.log(post);
-
   return res.status(200).json({
     success: post,
     message: "Like Added",
   });
 });
 
-exports.existingLikes = async (req, res, next) => {
+exports.existingLikes = catchAsync(async (req, res, next) => {
   const post = await Post.findById(id);
   if (post.likes.includes(req.user._id)) {
     return next(new AppError("Already Liked", 500));
-  }
-};
-// Posts of Following
-exports.getPostsOfFollowing = catchAsync(async (req, res, next) => {
-  const user = await User.findById(req.user._id);
-
-  const currentPage = Number(req.query.page) || 1;
-
-  const skipPosts = 4 * (currentPage - 1);
-
-  const totalPosts = await Post.find({
-    postedBy: {
-      $in: user.following,
-    },
-  }).countDocuments();
-
-  const posts = await Post.find({
-    postedBy: {
-      $in: user.following,
-    },
-  })
-    .populate("postedBy likes")
-    .populate({
-      path: "comments",
-      populate: {
-        path: "user",
-      },
-    })
-    .sort({ $natural: -1 })
-    .limit(4)
-    .skip(skipPosts);
-
-  return res.status(200).json({
-    success: true,
-    posts: posts,
-    totalPosts,
-  });
-});
-
-// Save or Unsave Post
-exports.saveUnsavePost = catchAsync(async (req, res, next) => {
-  const user = await User.findById(req.user._id);
-
-  const post = await Post.findById(req.params.id);
-
-  if (!post) {
-    return next(new AppError("Post Not Found", 404));
-  }
-
-  if (user.saved.includes(post._id.toString())) {
-    user.saved = user.saved.filter((p) => p.toString() !== post._id.toString());
-    post.savedBy = post.savedBy.filter(
-      (p) => p.toString() !== req.user._id.toString()
-    );
-    await user.save();
-    await post.save();
-
-    return res.status(200).json({
-      success: true,
-      message: "Post Unsaved",
-    });
-  } else {
-    user.saved.push(post._id);
-    post.savedBy.push(req.user._id);
-
-    await user.save();
-    await post.save();
-
-    return res.status(200).json({
-      success: true,
-      message: "Post Saved",
-    });
   }
 });
 
@@ -273,13 +139,11 @@ exports.getPostDetails = catchAsync(async (req, res, next) => {
         path: "user",
       },
     });
-
   if (!post) {
     return next(new AppError("Post Not Found", 404));
   }
-
   res.status(200).json({
-    success: true,
+    message: "success",
     post,
   });
 });

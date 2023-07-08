@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const requestSchema = new mongoose.Schema(
+const clientsRequestSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
@@ -12,28 +12,15 @@ const requestSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-
-    isAccepted: {
-      type: Boolean,
-      default: false,
-    },
-    isRead: {
-      type: Boolean,
-      default: false,
-    },
-    isPending: {
-      type: Boolean,
-      default: true,
-    },
-    isRejected: {
-      type: Boolean,
-      default: false,
+    charges: {
+      type: "string",
+      required: "true",
     },
   },
   { timestamps: true },
   { toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
 
-const Request = mongoose.model("Request", requestSchema);
+const ClientsRequest = mongoose.model("Clients", clientsRequestSchema);
 
-module.exports = Request;
+module.exports = ClientsRequest;

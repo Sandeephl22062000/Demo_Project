@@ -14,7 +14,6 @@ import { useNavigate } from "react-router-dom";
 const PriorInfoModal = ({ open, handleClose, priorDataArray }) => {
   const navigate = useNavigate();
   const data = priorDataArray[priorDataArray.length - 1];
-  console.log(data);
   return (
     <Modal open={open} onClose={handleClose}>
       <Box
@@ -42,7 +41,6 @@ const PriorInfoModal = ({ open, handleClose, priorDataArray }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {/* {priorDataArray.map((data) => ( */}
               {
                 <>
                   {" "}
