@@ -17,7 +17,7 @@ const registerUser = catchAsync(async (req, res, next) => {
         },
       }
     );
-    const name = response.data.name;
+    const name = response?.data?.name;
     const email = response.data.email;
     const photo = response.data.picture;
 

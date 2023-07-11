@@ -4,7 +4,6 @@ import Navbar from "./components/Navbar/Navbar";
 import Homepage from "./components/Homepage";
 import Footer from "./components/Footer/Footer";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Food } from "./components/Food/Food";
 import TrainerCards from "./components/Trainer-Info/TrainerCards";
 import TrainerProfile from "./components/TrainerMyProfile/TrainerProfile";
 import Exercises from "./components/Exercises/Exercises";

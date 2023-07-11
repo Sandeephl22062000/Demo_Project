@@ -1,13 +1,12 @@
 import React from "react";
 import { Box, Button, Container, Typography } from "@mui/material";
-import backgroundImage from "../../images/backGorund.jpg";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const BackgroundImageContainer = ({ text }) => {
-  const navigate = useNavigate()
-  const handleActivities = () =>{
-    navigate("/activities")
-  }
+  const navigate = useNavigate();
+  const handleActivities = () => {
+    navigate("/activities");
+  };
   return (
     <Box
       sx={{

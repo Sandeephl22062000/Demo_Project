@@ -2,7 +2,6 @@ const Post = require("../../Model/PostModel/PostModel");
 const User = require("../../Model/UserModel");
 const catchAsync = require("../../utils/catchAync");
 const AppError = require("../../Error-Handling/error");
-const mongoose = require("mongoose");
 
 exports.newPost = catchAsync(async (req, res, next) => {
   const postData = {
@@ -69,7 +68,7 @@ exports.newComment = catchAsync(async (req, res, next) => {
     return next(new AppError("Already Commented", 500));
   }
 
-  post.comments.push({
+  post.comments.push({                                
     user: req.user._id,
     comment: req.body.comment,
   });
@@ -164,3 +163,5 @@ exports.allPosts = catchAsync(async (req, res, next) => {
     posts,
   });
 });
+
+

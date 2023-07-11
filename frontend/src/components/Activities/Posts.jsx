@@ -15,9 +15,8 @@ import ModeCommentOutlined from "@mui/icons-material/ModeCommentOutlined";
 import { Container, Button } from "@mui/material";
 import { useState } from "react";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { useParams } from "react-router-dom";
 
 const Post = (props) => {
   const token = useSelector((state) => state.user.token);

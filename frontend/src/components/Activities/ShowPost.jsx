@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Box, Container, TextField, Avatar } from "@mui/material";
-import Autocomplete from "@mui/material/Autocomplete";
+import { Box, Container } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import { UserByID, searchUserKeyword } from "../../store/user";
-import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { searchUserKeyword } from "../../store/user";
 import AddPost from "./AddPost";
 import Posts from "./Posts";
 

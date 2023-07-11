@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import ProfileCard from "./ProfileCard";
 
 import { useParams } from "react-router-dom";
 
 import { UserByID } from "../store/user";
 import { useDispatch, useSelector } from "react-redux";
-const handleCommentButtonClick = () => {};
 const style = {
   width: "100%",
   maxWidth: 360,

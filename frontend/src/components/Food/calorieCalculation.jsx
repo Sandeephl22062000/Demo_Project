@@ -16,13 +16,9 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  foodNutritionData,
-  priorFoodCalory,
-  updateNutritionValue,
-} from "../../store/food";
+import { priorFoodCalory } from "../../store/food";
 import axios from "axios";
 
 const CalorieDetail = () => {
@@ -290,3 +286,10 @@ const CalorieDetail = () => {
   );
 };
 export default CalorieDetail;
+
+
+//bas na bhai demo khatm ho gaya
+//abe kntl aa rha he bahot 
+// to warning nikl rha hu beth le waah bete kedar to gaya 
+// 
+//apne bhi chlte h 6:30 ko 

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import {
   Container,
   Grid,
@@ -9,15 +8,12 @@ import {
   Box,
   Table,
 } from "@mui/material";
-import { useParams } from "react-router-dom";
-import Stack from "@mui/joy/Stack";
 
 import Post from "./Trainer-Info/ProfilePost";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { UserByID, updateUser } from "../store/user";
 import { useToasts } from "react-toast-notifications";
-const handleCommentButtonClick = () => {};
 const style = {
   width: "100%",
   maxWidth: 360,

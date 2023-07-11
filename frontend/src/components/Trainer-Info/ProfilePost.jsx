@@ -13,7 +13,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { postByID } from "../../store/post";
 import { useEffect } from "react";
 
-import ZoomPost from "../Activities/Posts";
 import { Box, Container } from "@mui/material";
 
 const ExpandMore = styled((props) => {

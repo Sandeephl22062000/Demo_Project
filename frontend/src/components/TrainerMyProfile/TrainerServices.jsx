@@ -12,10 +12,10 @@ import ModalDialog from "@mui/joy/ModalDialog";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { editServices, getservices, deleteServices } from "../../store/trainer";
+import { getservices } from "../../store/trainer";
 import { useEffect } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
-import UpdateServicesDialog from "./updateServiceModal";
+
 import UpdateServiceModal from "./updateServiceModal";
 import DeleteServiceModal from "./DeleteServiceModal";
 const TrainerServices = () => {

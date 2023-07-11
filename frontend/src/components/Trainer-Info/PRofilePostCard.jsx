@@ -12,13 +12,12 @@ import {
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { UserByID } from "../../store/user";
 
 const PRofilePostCard = () => {
   const user = useSelector((state) => state?.user?.FindUserByID);
   const dispatch = useDispatch();
-  const params = useParams();
   const navigate = useNavigate();
   const [showImagesOnly, setShowImagesOnly] = useState(false);
   const [showVideosOnly, setShowVideosOnly] = useState(false);

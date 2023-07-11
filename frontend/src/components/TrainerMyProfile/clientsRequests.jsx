@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Avatar, Box, Button, Container, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import ClientsRequests from "./clientsRequestsTable";
 
 export default function BasicTable() {

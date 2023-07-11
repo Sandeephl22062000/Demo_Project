@@ -1,5 +1,3 @@
-const express = require("express");
-const Trainer = require("../../Model/Trainer/trianerModel");
 const User = require("../../Model/UserModel");
 const AppError = require("../../Error-Handling/error");
 const catchAsync = require("../../utils/catchAync");

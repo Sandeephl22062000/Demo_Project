@@ -4,14 +4,14 @@ const catchAsync = require("../utils/catchAync");
 const createServices = catchAsync(async (req, res, next) => {
   try {
     const { service } = req.body;
-    console.log(service);
+
     const newservice = await Services.create({
       trainer: req.user._id,
       duration: service.duration,
       description: service.description,
       charges: service.charges,
     });
-    console.log(newservice);
+
     res.status(201).json({ service: newservice, message: "success" });
   } catch (error) {
     return next(new AppError("Something went wrong", 500));
@@ -20,7 +20,7 @@ const createServices = catchAsync(async (req, res, next) => {
 
 const getServicesOfTrainer = async (req, res, next) => {
   const services = await Services.find({ trainer: req?.params?.trainerID });
-  console.log(services);
+
   res.status(200).json({
     message: "success",
     services,

@@ -7,7 +7,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useEffect } from "react";
-import { Avatar, Box, Button, Container, Typography } from "@mui/material";
+import { Avatar, Box, Container, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { getClients } from "../../store/user";
 

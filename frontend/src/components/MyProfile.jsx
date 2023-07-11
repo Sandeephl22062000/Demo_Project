@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Container, Grid, TextField } from "@mui/material";
-import { useParams } from "react-router-dom";
+import { Container, Grid } from "@mui/material";
+
 import AspectRatio from "@mui/joy/AspectRatio";
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
